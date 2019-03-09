@@ -1,0 +1,2 @@
+# cb-parallax
+WordPress Plugin
