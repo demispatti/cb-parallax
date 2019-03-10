@@ -50,6 +50,7 @@ class cb_parallax_help_tab {
 	 * and if so, it hooks the action to load the help tab.
 	 *
 	 * @param  $plugin_domain
+	 *
 	 * @return mixed | void
 	 */
 	public function __construct( $plugin_domain ) {
@@ -68,11 +69,7 @@ class cb_parallax_help_tab {
 	 */
 	private function initialize() {
 
-		// Show up on all following post type's edit screens:
-		if( (isset($_REQUEST['page']) || isset($_REQUEST['post']) || isset($_REQUEST['product'])) && $_REQUEST['action'] == 'edit' ) {
-
-			add_action( "load-{$GLOBALS['pagenow']}", array( $this, 'add_cbp_help_tab' ), 15 );
-		}
+			add_action( "load-{$GLOBALS['pagenow']}", array( $this, 'add_cb_parallax_help_tab' ), 15 );
 	}
 
 	/**
@@ -83,9 +80,9 @@ class cb_parallax_help_tab {
 	 * @since  0.1.0
 	 * @return mixed | void
 	 */
-	public function add_cbp_help_tab() {
+	public function add_cb_parallax_help_tab() {
 
-		foreach( $this->tabs as $id => $data ) {
+		foreach ( $this->tabs as $id => $data ) {
 
 			$title = __( $data['title'], $this->plugin_domain );
 

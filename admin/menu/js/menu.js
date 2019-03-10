@@ -25,6 +25,8 @@
 	var attachmentWidth = cbParallax.attachmentWidth != 'undefined' ? cbParallax.attachmentWidth : 0;
 	var attachmentHeight = cbParallax.attachmentHeight != 'undefined' ? cbParallax.attachmentHeight : 0;
 
+	var parallaxGlobalContainer = null;
+
 	var addMediaButton = null;
 	var removeMediaButton = null;
 
@@ -50,6 +52,30 @@
 	{
 		backgroundImage.attr( "src", (cbParallax.backgroundImageUrl) != 'undefined' ? cbParallax.backgroundImageUrl : '' );
 	}
+	function wrapOptionFields ()
+	{
+		var ids = cbParallax.defaults;
+
+		$( ids ).each( function ( i )
+		{
+			var tr = $( '.form-table tr' ).eq( i );
+			var id = $( this ).selector;
+
+			tr.wrap( '<div class="cb-parallax-table-row" id="' + id + '_container"></div>' );
+		} );
+
+		$( '.wp-picker-container:nth-of-type(1)' ).wrap( '<div class="cb-parallax-table-row" id="cb_parallax_background_color_container"></div>' );
+		$( '.wp-picker-container:nth-of-type(2)' ).wrap( '<div class="cb-parallax-table-row" id="cb_parallax_overlay_color_container"></div>' );
+
+	}
+	function wrapImage ()
+	{
+		backgroundImage.wrap( '<a class="cb-parallax-image-container" href="#"></a>' );
+	}
+	function wrapImageOptionsHeading ()
+	{
+		$( 'h2:nth-of-type(3)' ).wrap( '<a class="cb-parallax-image-options-heading-container"></a>' );
+	}
 	function setObjects ()
 	{
 		// Background image
@@ -66,14 +92,13 @@
 		addMediaButton = $( ".cb-parallax-add-media-button" );
 		// Remove media button
 		removeMediaButton = $( ".cb-parallax-remove-media-button" );
-
+		// Set this height to keep things in place
 	}
 	function assembleContainers ()
 	{
-
-		backgroundImageContainer = $( '#cb_parallax_background_image_container' );
 		backgroundAttachmentContainer = $( '#cb_parallax_background_attachment_container' );
 		//backgroundColorContainer = $( '#cb_parallax_background_color_container' );
+		backgroundImageContainer = $( '#cb_parallax_background_image_container' );
 
 		parallaxEnabledContainer = $( '#cb_parallax_parallax_enabled_container' );
 		directionContainer = $( '#cb_parallax_direction_container' );
@@ -87,17 +112,24 @@
 		overlayOpacityContainer = $( '#cb_parallax_overlay_opacity_container' );
 		overlayColorContainer = $( '#cb_parallax_overlay_color_container' );
 
+		parallaxGlobalContainer = $( '#cb_parallax_global_container' );
 
-		//imageOptionsContainer = $( '.cb-parallax-image-options-container' );
-		imageOptionsContainer = $( '#cb_parallax_background_repeat_container, #cb_parallax_background_attachment_container' );
+		imageOptionsContainer = $( '#cb_parallax_background_repeat_container, #cb_parallax_position_x_container, #cb_parallax_position_y_container, #cb_parallax_background_attachment_container' ).wrapAll( '<div class="cb-parallax-image-options-container"></div>' );
+		parallaxOptionsContainer = $( '#cb_parallax_vertical_scroll_direction_container, #cb_parallax_horizontal_scroll_direction_container, #cb_parallax_horizontal_alignment_container, #cb_parallax_vertical_alignment_container, #cb_parallax_overlay_image_container, #cb_parallax_overlay_opacity_container, #cb_parallax_overlay_color_container' ).wrapAll( '<div class="cb-parallax-parallax-options-container"></div>' );
+		overlayOptionsContainer = $( '#cb_parallax_overlay_image_container, #cb_parallax_overlay_opacity_container, #cb_parallax_overlay_color_container' ).wrapAll( '<div class="cb-parallax-overlay-options-container"></div>' );
 
-		parallaxOptionsContainer = $( '.cb-parallax-parallax-options-container' );
-		overlayOptionsContainer = $( '.cb-parallax-overlay-options-container' );
-
+	}
+	function insertPluginSectionHeading ()
+	{
+		parallaxGlobalContainer.before( '<div id="cb_parallax_plugin_options_heading_container"><h2>' + cbParallax.pluginSectionTitleText + '</h2></div>' );
+	}
+	function insertImageSectionHeading ()
+	{
+		$( '.cb-parallax-image-options-container' ).before( '<div id="cb_parallax_image_options_heading_container"><h2>' + cbParallax.imageSectionTitleText + '</h2></div>' );
 	}
 	function initColorpicker ()
 	{
-		$( '#cb_parallax_background_color, #cb_parallax_overlay_color, #background_color, #overlay_color' ).wpColorPicker();
+		$( '#cb_parallax_background_color, #cb_parallax_overlay_color' ).wpColorPicker();
 	}
 	function initFancySelect ()
 	{
@@ -107,12 +139,20 @@
 	{
 		if ( cbParallax.locale == 'de_DE' )
 		{
-			$( '<style>.cb-parallax-switch-label.cb_parallax_parallax_enabled:before{content:"' + cbParallax.switchesText.Off + '";}</style>' ).appendTo( 'head' );
-			$( '<style>.cb-parallax-switch-label.cb_parallax_parallax_enabled:after{content:"' + cbParallax.switchesText.On + '";}</style>' ).appendTo( 'head' );
-
-			// Localizes the text on the color picker.
-			$( '#cb-parallax-meta-box > div:nth-child(3) > p:nth-child(5) > div:nth-child(2) > a:nth-child(1)' ).prop( 'title', cbParallax.backgroundColorText );
-			$( '.cb-parallax-parallax-options-container > p:nth-child(8) > div:nth-child(2) > a:nth-child(1)' ).prop( 'title', cbParallax.overlayColorText );
+			$( '<style>.cb-parallax-switch-input ~ .cb-parallax-switch-label:before{content:"' + cbParallax.switchesText.Off + '";}</style>' ).appendTo( 'head' );
+			$( '<style>.cb-parallax-switch-input:checked ~ .cb-parallax-switch-label:after{content:"' + cbParallax.switchesText.On + '";}</style>' ).appendTo( 'head' );
+		}
+	}
+	function fixView()
+	{
+		if(backgroundAttachmentContainer.css('display') == 'none')
+		{
+			verticalAlignmentContainer.css('height', directionContainer.height() * 2);
+			horizontalAlignmentContainer.css( 'height', directionContainer.height() * 2 );
+		} else
+		{
+			verticalAlignmentContainer.css( 'height', 'auto' );
+			horizontalAlignmentContainer.css( 'height', 'auto' );
 		}
 	}
 
@@ -123,13 +163,10 @@
 	}
 	function toggleParallaxDirection ()
 	{
-
-		if ( backgroundImage.attr( 'src' ) != '' )
+		if ( parallaxOnOffCheckBox.prop( 'checked' ) )
 		{
-
-			if ( parallaxOnOffCheckBox.prop( 'checked' ) )
+			if ( backgroundImage.attr( 'src' ) != '' )
 			{
-
 				if ( parallaxDirectionSelectBox.val() === cbParallax.verticalString )
 				{
 					horizontalScrollDirectionContainer.hide();
@@ -150,10 +187,10 @@
 			else
 			{
 				verticalScrollDirectionContainer.hide();
-				horizontalAlignmentContainer.show();
+				horizontalAlignmentContainer.hide();
 
 				horizontalScrollDirectionContainer.hide();
-				verticalAlignmentContainer.show();
+				verticalAlignmentContainer.hide();
 			}
 
 		}
@@ -162,8 +199,8 @@
 			verticalScrollDirectionContainer.hide();
 			horizontalAlignmentContainer.hide();
 
-			horizontalScrollDirectionContainer.show();
-			verticalAlignmentContainer.show();
+			horizontalScrollDirectionContainer.hide();
+			verticalAlignmentContainer.hide();
 		}
 
 	}
@@ -189,23 +226,8 @@
 		{
 			overlayOpacityContainer.hide();
 			overlayColorContainer.hide();
-			overlayOptionsContainer.hide();
 		}
 
-	}
-	function fixView ()
-	{
-		if ( false == parallaxOnOffCheckBox.prop( 'checked' ) )
-		{
-			verticalAlignmentContainer.css( 'height', 'auto' );
-			horizontalAlignmentContainer.css( 'height', 'auto' );
-		}
-		else
-		{
-			var someContainer = $( '#cb_parallax_overlay_image_container' );
-			verticalAlignmentContainer.css( 'height', someContainer.height() * 2 + 12 + 'px' );
-			horizontalAlignmentContainer.css( 'height', someContainer.height() * 2 + 12 + 'px' );
-		}
 	}
 
 
@@ -217,9 +239,9 @@
 			// If parallax is not possible with this attachment...
 			if ( attachmentWidth < 1920 || attachmentHeight < 1200 )
 			{
-				directionContainer.hide();
-				parallaxEnabledContainer.hide();
 				parallaxOptionsContainer.hide();
+				parallaxEnabledContainer.hide();
+				directionContainer.hide();
 				imageOptionsContainer.show();
 
 				addMediaButton.hide();
@@ -230,9 +252,10 @@
 			else if ( ( attachmentWidth >= 1920 && attachmentHeight >= 1200 ) && false == parallaxOnOffCheckBox.prop( 'checked' ) )
 			{
 				directionContainer.hide();
-				parallaxEnabledContainer.show();
 				parallaxOptionsContainer.hide();
+				overlayOptionsContainer.hide();
 				imageOptionsContainer.show();
+				parallaxEnabledContainer.show();
 
 				addMediaButton.hide();
 				backgroundImage.show();
@@ -241,9 +264,9 @@
 			// else if parallax is possible AND "on"
 			else if ( true == attachmentWidth >= 1920 && attachmentHeight >= 1200 && parallaxOnOffCheckBox.prop( 'checked' ) )
 			{
-				directionContainer.show();
-				parallaxEnabledContainer.show();
 				parallaxOptionsContainer.show();
+				parallaxEnabledContainer.show();
+				directionContainer.show();
 				imageOptionsContainer.hide();
 
 				addMediaButton.hide();
@@ -254,10 +277,10 @@
 			else
 			{
 				directionContainer.hide();
-				parallaxEnabledContainer.show();
 				parallaxOptionsContainer.hide();
+				overlayOptionsContainer.hide();
 				imageOptionsContainer.show();
-
+				parallaxEnabledContainer.show();
 
 				addMediaButton.hide();
 				backgroundImage.show();
@@ -271,6 +294,7 @@
 			imageOptionsContainer.hide();
 			parallaxOptionsContainer.hide();
 			directionContainer.hide();
+			$( '#cb_parallax_image_options_heading_container' ).hide();
 
 			removeMediaButton.hide();
 			backgroundImage.hide();
@@ -281,7 +305,6 @@
 		toggleParallaxDirection();
 		fixView();
 	}
-
 
 
 	function listen ()
@@ -352,12 +375,34 @@
 	}
 
 
+	function dismissNotice ()
+	{
+		var notice = $( '.cb-parallax-admin-menu .notice' );
+
+		if ( notice.length )
+		{
+			notice.slideUp( 400 );
+		}
+	}
+
+
+	$( document ).one( 'ready', function ()
+	{
+		setTimeout( dismissNotice, 3600 );
+	} );
+
+
 	$( document ).ready( function ()
 	{
 		localizeScript();
+		wrapOptionFields();
 		setObjects();
+		wrapImage();
 		setImageUrl();
 		assembleContainers();
+		insertImageSectionHeading();
+		wrapImageOptionsHeading();
+		insertPluginSectionHeading();
 		initColorpicker();
 		initFancySelect();
 		setView();

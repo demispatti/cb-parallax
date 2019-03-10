@@ -25,8 +25,8 @@
  * Author URI:        http://demispatti.ch
  * License:           GPL-2.0+
  * License URI:       http://www.gnu.org/licenses/gpl-2.0.txt
- * Version:           0.5.0
- * Stable tag:        0.5.0
+ * Version:           0.6.0
+ * Stable tag:        0.6.0
  * Text Domain:       cb-parallax
  * Domain Path:       /languages
  */
@@ -34,7 +34,7 @@
 /**
  * If this file is called directly, abort.
  */
-if ( ! defined('WPINC')) {
+if ( ! defined( 'WPINC' ) ) {
 	die;
 }
 
@@ -47,7 +47,7 @@ if ( ! defined('WPINC')) {
  */
 function activate_cb_parallax() {
 
-	require_once plugin_dir_path(__FILE__) . 'includes/class-cb-parallax-activator.php';
+	require_once plugin_dir_path( __FILE__ ) . 'includes/class-cb-parallax-activator.php';
 
 	cb_parallax_activator::activate();
 }
@@ -61,7 +61,7 @@ function activate_cb_parallax() {
  */
 function deactivate_cb_parallax() {
 
-	require_once plugin_dir_path(__FILE__) . 'includes/class-cb-parallax-deactivator.php';
+	require_once plugin_dir_path( __FILE__ ) . 'includes/class-cb-parallax-deactivator.php';
 
 	cb_parallax_deactivator::deactivate();
 }
@@ -71,15 +71,15 @@ function deactivate_cb_parallax() {
  *
  * @since    0.1.0
  */
-register_activation_hook(__FILE__, 'activate_cb_parallax');
-register_deactivation_hook(__FILE__, 'deactivate_cb_parallax');
+register_activation_hook( __FILE__, 'activate_cb_parallax' );
+register_deactivation_hook( __FILE__, 'deactivate_cb_parallax' );
 
 /**
  * Include the core plugin class.
  *
  * @since    0.1.0
  */
-require plugin_dir_path(__FILE__) . 'includes/class-cb-parallax.php';
+require plugin_dir_path( __FILE__ ) . 'includes/class-cb-parallax.php';
 
 /**
  * Runs the plugin.

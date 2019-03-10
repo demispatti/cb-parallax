@@ -25,6 +25,25 @@ class cb_parallax_i18n {
 	 */
 	private $plugin_domain;
 
+	public function __construct( $plugin_domain ) {
+
+		$this->plugin_domain = $plugin_domain;
+
+		$this->add_hooks();
+	}
+
+	/**
+	 * Registers the hook with WordPress.
+	 *
+	 * @since    0.1.0
+	 * @return   void
+	 * @access   private
+	 */
+	private function add_hooks() {
+
+		add_action( 'init', array( $this, 'load_plugin_textdomain' ) );
+	}
+
 	/**
 	 * Load the plugin text domain for translation.
 	 *
@@ -39,16 +58,4 @@ class cb_parallax_i18n {
 		load_plugin_textdomain( $this->plugin_domain, false, dirname( dirname( plugin_basename( __FILE__ ) ) ) . '/languages/' );
 	}
 
-	/**
-	 * Set the domain equal to that of the specified domain.
-	 *
-	 * @since    0.1.0
-	 * @access   public
-	 * @param    string $plugin_domain
-	 * @return   void
-	 */
-	public function set_domain( $plugin_domain ) {
-
-		$this->plugin_domain = $plugin_domain;
-	}
 }

@@ -21,7 +21,7 @@ class cb_parallax_post_type_support {
 	 * @access   private
 	 * @var      array $post_types
 	 */
-	private $post_types = array( 'post', 'page', 'product', 'portfolio', 'books', 'movies' );
+	private $post_types = array( 'post', 'page', 'product', 'portfolio', 'books', 'movies', 'projects', 'work' );
 
 	/**
 	 * The feature we want the post types to work with.
@@ -71,7 +71,7 @@ class cb_parallax_post_type_support {
 	 */
 	public function add_post_type_support() {
 
-		foreach( $this->post_types as $post_type ) {
+		foreach ( $this->post_types as $post_type ) {
 
 			add_post_type_support( $post_type, $this->feature );
 		}

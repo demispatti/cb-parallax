@@ -4,8 +4,8 @@ Tags: image, background, fullscreen, parallax, Hintergrund, Bild, Hintergrundbil
 
 Requires at least: 4.2
 Tested up to: 4.6.1
-Stable tag: 0.5.0
-Version: 0.5.0
+Stable tag: 0.6.0
+Version: 0.6.0
 Contributors: demispatti
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -19,6 +19,7 @@ This plugin enables you to set a custom background image.  It supports vertical 
 == Features ==
 
 - Custom background image
+- One Image for all pages or individual images and effects on a per post basis
 - Compatible with posts, pages and products
 - Optional fullscreen background parallax effect
 - Works vertically and, for fun, horizontally
@@ -45,7 +46,8 @@ PHP version 5.3 or above.
 
 = Where do I interact with this plugin? =
 
-You will find the "cbParallax" meta box on edit screens for posts, pages and products.
+You find the plugin's settings page in the "Settings > cbParallax" menu.
+You will find the "cbParallax" meta box on edit screens of all supported posts, pages and products.
 
 = How does it work? =
 
@@ -56,6 +58,18 @@ Within the meta box, you could:
 3. Set the options below as you need.
 4. Turn on the switch.
 5. Set the options below as you need.
+
+Within the settings page, you could:
+
+1. Choose a background image. Depending on its dimensions you will be presented with a switch for enabling the parallax effect.
+2. Leave the switch off, since you should first set the options for a static state.
+3. Set the options below as you need.
+4. Turn on the switch.
+5. Set the options below as you need.
+6. Choose whether to use these settings globally for all pages (global).
+7. Choose whether to allow overriding these settings with the image you define on single posts and pages.
+8. Set the options for "scroll behaviour" and "mobile", and you're good to go :-)
+9. Enjoy!
 
 Save your work and visit the page :-)
 
@@ -101,10 +115,23 @@ Yes. If you're using the "Vantage" theme from SiteOrigin, the background image w
 == Screenshots ==
 
 1. Multiple background views of a single post.
-2. Custom background meta box on the edit post screen.
-3. Custom background meta box.
+2. Settings Page.
+3. Custom background meta box on the edit post screen.
 
 == Changelog ==
+
+= Version 0.6.0 =
+
+1. Fixed some bugs that occurred on Installations using the non-default locale.
+2. Fixed issue with overlay color.
+3. Fixed issue with static background image.
+4. Improved scroll behaviour.
+5. Added a feature to set one image for all supported posts and pages, including the possibility to override these global settings on a per-post basis (see "Settings" > "cbParallax").
+6. Moved the options from the general settings page to "Settings" > "cbParallax".
+7. Improved the performance of the parallaxing-script.
+8. Removed the option to set a background color.
+9. The interface is more user-friendly now.
+10.You may want to review your image overlay settings on the post edit screens since they work again.
 
 = Version 0.5.0 =
 1. Reduced required PHP-Version to 5.3 or above due to user requests.
@@ -115,25 +142,25 @@ Yes. If you're using the "Vantage" theme from SiteOrigin, the background image w
 
 = Version 0.4.0 =
 1. Completely rewritten the script for the public part.
-2. Static image is now also being handled by the public script, it's mobile ready now
+2. Static image is now also being handled by the public script, it's mobile ready now.
 3. Added an option to disable parallax on mobile ( View the "Settings / General" page). Will show the image as a static background.
 
 = Version 0.3.0 =
 1. Major bug fixes, the effect now works as expected.
 
 = Version 0.2.6 =
-1. The scripts for the frontend load only if needed
+1. The scripts for the frontend load only if needed.
 
 = Version 0.2.5 =
-1. Added support for the blog page
-2. Fixed support for single product page views
-3. The "preserve scrolling" option superseeds the "Nicescrollr" plugin settings on the frontend, if both plugins are enabled
-4. Code cleanup and some minor refactorings
+1. Added support for the blog page.
+2. Fixed support for single product page views.
+3. The "preserve scrolling" option superseeds the "Nicescrollr" plugin settings on the frontend, if both plugins are enabled.
+4. Code cleanup and some minor refactorings.
 
 = Version 0.2.4 =
-1. Optimized the script for the public part
-2. Added a section to the readme file regarding known issues
-3. Updated the readme file
+1. Optimized the script for the public part.
+2. Added a section to the readme file regarding known issues.
+3. Updated the readme file.
 
 = Version 0.2.3 =
 1. Fixed some bugs.
@@ -145,24 +172,24 @@ Yes. If you're using the "Vantage" theme from SiteOrigin, the background image w
 1. Removed display errors.
 
 = Version 0.2.1 =
-1. Resolved the translation bugs
-2. Optimized the scrolling behaviour
-3. Corrected the scroll ratio calculation
-4. Corrected the "static" background image display
-5. Corrected the meta box display behaviour
+1. Resolved the translation bugs.
+2. Optimized the scrolling behaviour.
+3. Corrected the scroll ratio calculation.
+4. Corrected the "static" background image display.
+5. Corrected the meta box display behaviour.
 6. Added the option to preserve the nice scrolling behaviour without the need to use the parallax feature ( see "Settings / General / cbParallax" ).
 
 = Version 0.2.0 =
-1. Optimized the script responsible for the parallax effect
-2. Added Nicescroll for smooth cross-browser scrolling
+1. Optimized the script responsible for the parallax effect.
+2. Added Nicescroll for smooth cross-browser scrolling.
 
 = Version 0.1.1 =
-1. Massively refactored the script responsible for the parallax effect
-2. Added the possibility to scroll the background image horizontally
-3. Added a function to reposition the image on window resize automaticly
-4. Improoved performance
-5. Improoved compatibility with webkit, opera and ie browsers
-6. Implemented a function that eases mousescroll
+1. Massively refactored the script responsible for the parallax effect.
+2. Added the possibility to scroll the background image horizontally.
+3. Added a function to reposition the image on window resize automaticly.
+4. Improoved performance.
+5. Improoved compatibility with webkit, opera and ie browsers.
+6. Implemented a function that eases mousescroll.
 
 = Version 0.1.0 =
 

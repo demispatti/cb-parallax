@@ -40,7 +40,7 @@ class cb_parallax_activator {
 		$role = get_role( 'administrator' );
 
 		// If the acting user has admin rights, the capability gets added.
-		if( !empty($role) ) {
+		if ( ! empty( $role ) ) {
 			$role->add_cap( self::$capability );
 		}
 	}

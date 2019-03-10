@@ -1,5 +1,5 @@
 /**
- * Slightly modified version. Added a custom class.
+ * Slightly modified version.
  */
 
 div.fancy-select .cb-parallax-fancy-select .cb-parallax-fancy-select
@@ -546,21 +546,19 @@ div.fancy-select ul.options li.hover
 	background: #4fb845;
 }
 
-#cb_parallax_overlay_image_container {
+#cb_parallax_overlay_image_container
+{
 	margin-bottom: 0;
 }
 
 /**
- * General options page.
  *
- * @link              https://github.com/demispatti/cb-parallax
- * @since             0.1.0
- * @package           cb-parallax
- * @subpackage        cb-parallax/admin/css
- * Author:            Demis Patti <demis@demispatti.ch>
- * Author URI:        http://demispatti.ch
- * License:           GPL-2.0+
- * License URI:       http://www.gnu.org/licenses/gpl-2.0.txt
+ *
+ *   /-------------\
+ *      Menu page
+ *   \-------------/
+ *
+ *
  */
 
 /* Label */
@@ -579,33 +577,121 @@ div.fancy-select ul.options li.hover
 	display: inline-block;
 }
 
-#cb-parallax-meta-box .cb-parallax-media-url {
-	display: block;
-	background: url('/wp-content/plugins/cb-parallax/admin/images/placeholder-small.jpg');
-	width: 254px;
-	height: 159px;
-	z-index: 10;
-	margin-bottom: 12px !important;
+.cb-parallax-page-title
+{
+	margin-top: 30px;
 }
 
-#cb-parallax-meta-box .cb-parallax-media-url:hover
+.cb-parallax-single-option-container
+{
+	display: block;
+	min-width: 100%;
+	width: 100%;
+	max-width: 100%;
+}
+
+#cb_parallax_form
+{
+	box-sizing: border-box;
+	display: inline-block;
+	width: auto;
+	padding-left: 60px;
+	padding-right: 60px;
+	padding-bottom: 20px;
+	background: #fff;
+	box-shadow: rgba(0, 0, 0, 0.2) 0px 0px 2px;
+	margin-top: 24px;
+}
+
+#cb_parallax_form h2
+{
+	background-color: #fff;
+	padding: 40px 20px 20px 0;
+	border-bottom: 1px solid #f2f2f2;
+	margin: 0;
+}
+
+#cb_parallax_form h2:not(first-of-type)
+{
+	border-top: 1px solid #f2f2f2;
+}
+
+#cb_parallax_form tbody .form-table
+{
+	display: block;
+	box-sizing: border-box;
+	padding: 20px;
+	margin: 0;
+}
+
+.form-table
+{
+	margin-top: 0;
+	background-color: #fcfcfc;
+	border-bottom: 1px solid #f2f2f2;
+}
+
+.cb-parallax-table-row
+{
+	border-left: 1px solid #f2f2f2;
+	border-right: 1px solid #f2f2f2;
+	border-bottom: 2px solid #fff;
+}
+
+.cb-parallax-table-row:last-of-type/*:not(#cb_parallax_overlay_color_container)*/ {
+	border-bottom: none !important;/*1px solid #f2f2f2*/;
+}
+
+#cb_parallax_form .form-table th
+{
+	box-sizing: border-box;
+	min-width: 240px;
+	padding-left: 20px;
+	padding-right: 20px;
+	font-weight: normal;
+
+}
+
+#cb_parallax_form .form-table td
+{
+	box-sizing: border-box;
+	display: block !important;
+	min-width: 361px;
+	padding-left: 20px;
+	padding-right: 20px;
+	margin-bottom: 0;
+
+}
+
+#cb_parallax_form p.submit
+{
+	padding-top: 30px;
+	padding-right: 0;
+	text-align: right;
+	margin: 0;
+}
+
+.cb-parallax-image-container
+{
+	display: block;
+	background: url('/wp-content/plugins/cb-parallax/admin/menu/images/placeholder.jpg');
+	width: 320px;
+	height: auto;
+	margin-bottom: 17px;
+	z-index: 10;
+}
+
+#cb_parallax_background_image_url {
+	width: inherit;
+	background-size: contain;
+}
+
+.cb-parallax-image-container:hover
 {
 	cursor: hand;
 }
 
-.cb-parallax-media-buttons-container {
-	text-align: center;
-}
-
-#cb_parallax_parallax_enabled_container {
-	text-align: center;
-}
-
-#cb_parallax_parallax_enabled_container > div {
-	display: block;
-}
-
-.image-bg {
-	background-color: #f9f9f9;
-	padding-bottom: 24px;
+.cb-parallax-settings-page .cb-parallax-admin-menu {
+	width: 100%;
+	max-width: 723px;
 }
