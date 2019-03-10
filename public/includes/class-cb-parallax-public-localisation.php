@@ -100,10 +100,10 @@ class cb_parallax_public_localisation {
 			'background_repeat' => 'no-repeat',
 			'position_x'        => 'left',
 			'position_y'        => 'top',
-			'attachment'        => 'fixed'
+			'attachment'        => 'fixed',
 		);
 	}
-
+	
 	/**
 	 * A whitelist of allowed options.
 	 *
@@ -113,67 +113,67 @@ class cb_parallax_public_localisation {
 	 * @return   void
 	 */
 	private function set_allowed_options() {
-
+		
 		// Image options for a static background image.
 		$this->allowed['position_x'] = array(
-			'left'   => __( 'left', $this->plugin_domain ),
-			'center' => __( 'center', $this->plugin_domain ),
-			'right'  => __( 'right', $this->plugin_domain ),
+			'left'   => 'left',
+			'center' => 'center',
+			'right'  => 'right',
 		);
-
+		
 		$this->allowed['position_y'] = array(
-			'top'    => __( 'top', $this->plugin_domain ),
-			'center' => __( 'center', $this->plugin_domain ),
-			'bottom' => __( 'bottom', $this->plugin_domain ),
+			'top'    => 'top',
+			'center' => 'center',
+			'bottom' => 'bottom',
 		);
-
+		
 		$this->allowed['attachment'] = array(
-			'fixed'  => __( 'fixed', $this->plugin_domain ),
-			'scroll' => __( 'scroll', $this->plugin_domain ),
+			'fixed'  => 'fixed',
+			'scroll' => 'scroll',
 		);
-
+		
 		$this->allowed['repeat'] = array(
-			'no-repeat' => __( 'no-repeat', $this->plugin_domain ),
-			'repeat'    => __( 'repeat', $this->plugin_domain ),
-			'repeat-x'  => __( 'repeat horizontally', $this->plugin_domain ),
-			'repeat-y'  => __( 'repeat vertically', $this->plugin_domain ),
+			'no-repeat' => 'no-repeat',
+			'repeat'    => 'repeat',
+			'repeat-x'  => 'repeat horizontally',
+			'repeat-y'  => 'repeat vertically',
 		);
-
+		
 		// Image options for a dynamic background image.
 		$this->allowed['parallax'] = array(
 			'off' => false,
-			'on'  => true
+			'on'  => true,
 		);
-
+		
 		$this->allowed['direction'] = array(
-			'vertical'   => __( 'vertical', $this->plugin_domain ),
-			'horizontal' => __( 'horizontal', $this->plugin_domain )
+			'vertical'   => 'vertical',
+			'horizontal' => 'horizontal',
 		);
-
+		
 		$this->allowed['vertical_scroll_direction'] = array(
-			'top'    => __( 'to top', $this->plugin_domain ),
-			'bottom' => __( 'to bottom', $this->plugin_domain )
+			'top'    => 'to top',
+			'bottom' => 'to bottom',
 		);
-
+		
 		$this->allowed['horizontal_scroll_direction'] = array(
-			'left'  => __( 'to the left', $this->plugin_domain ),
-			'right' => __( 'to the right', $this->plugin_domain )
+			'left'  => 'to the left',
+			'right' => 'to the right',
 		);
-
+		
 		$this->allowed['horizontal_alignment'] = array(
-			'left'   => __( 'left', $this->plugin_domain ),
-			'center' => __( 'center', $this->plugin_domain ),
-			'right'  => __( 'right', $this->plugin_domain ),
+			'left'   => 'left',
+			'center' => 'center',
+			'right'  => 'right',
 		);
-
+		
 		$this->allowed['vertical_alignment'] = array(
-			'top'    => __( 'top', $this->plugin_domain ),
-			'center' => __( 'center', $this->plugin_domain ),
-			'bottom' => __( 'bottom', $this->plugin_domain ),
+			'top'    => 'top',
+			'center' => 'center',
+			'bottom' => 'bottom',
 		);
-
+		
 		$this->allowed['overlay_image'] = array(
-			'none' => __( 'none', $this->plugin_domain ),
+			'none' => 'none',
 			'01'   => '01.png',
 			'02'   => '02.png',
 			'03'   => '03.png',
@@ -182,11 +182,11 @@ class cb_parallax_public_localisation {
 			'06'   => '06.png',
 			'07'   => '07.png',
 			'08'   => '08.png',
-			'09'   => '09.png'
+			'09'   => '09.png',
 		);
-
+		
 		$this->allowed['overlay_opacity'] = array(
-			'default' => __( 'default', $this->plugin_domain ),
+			'default' => 'default',
 			'0.1'     => '0.1',
 			'0.2'     => '0.2',
 			'0.3'     => '0.3',
@@ -195,7 +195,7 @@ class cb_parallax_public_localisation {
 			'0.6'     => '0.6',
 			'0.7'     => '0.7',
 			'0.8'     => '0.8',
-			'0.9'     => '0.9'
+			'0.9'     => '0.9',
 		);
 	}
 
@@ -211,11 +211,11 @@ class cb_parallax_public_localisation {
 	 */
 	public function __construct( $plugin_name, $plugin_domain, $plugin_version, $meta_key ) {
 
-		$this->plugin_name    = $plugin_name;
-		$this->plugin_domain  = $plugin_domain;
+		$this->plugin_name = $plugin_name;
+		$this->plugin_domain = $plugin_domain;
 		$this->plugin_version = $plugin_version;
-		$this->meta_key       = $meta_key;
-		$this->post_meta      = [ ];
+		$this->meta_key = $meta_key;
+		$this->post_meta = [ ];
 
 		$this->set_default_values();
 		$this->set_allowed_options();
@@ -231,9 +231,39 @@ class cb_parallax_public_localisation {
 	 */
 	public function init() {
 
-		add_action( 'wp_enqueue_scripts', array( &$this, 'get_image_meta' ), 1 );
-		add_action( 'template_redirect', array( &$this, 'get_post_meta' ), 100 );
+		add_action( 'wp_enqueue_scripts', array( &$this, 'get_image_meta' ), 12 );
+		add_action( 'template_redirect', array( &$this, 'get_post_meta' ) );
 		add_action( 'wp_enqueue_scripts', array( &$this, 'localize_public_area' ), 1000 );
+	}
+
+	/**
+	 * Gets the propper post meta data depending on the type of post resp. page.
+	 *
+	 * @since    0.2.5
+	 * @access   private
+	 *
+	 * @param object $post
+	 * @return mixe
+	 */
+	private function fetch_post_meta( $post ) {
+
+		// Here we need to check if $post is an object. If not, we bail.
+		if( (!is_object( $post ) || NULL === $post) && false == get_option( 'page_for_posts' ) ) {
+			return;
+		}
+
+		$page_for_posts = get_option( 'page_for_posts' );
+
+		if( (get_post_type( $post ) == 'product' || 'portfolio' || 'post' || 'page') && false == ( ! is_front_page() && is_home() ) ) {
+
+			return get_post_meta( $post->ID, $this->meta_key, true );
+		} else if( false != $page_for_posts ) {
+
+			return get_post_meta( $page_for_posts, $this->meta_key, true );
+		} else {
+
+			return get_post_meta( $post->ID, $this->meta_key, true );
+		}
 	}
 
 	/**
@@ -249,33 +279,36 @@ class cb_parallax_public_localisation {
 
 		global $post;
 
-		$this->image_meta = [ ];
-
-		if ( '' === get_post_meta( $post->ID, $this->meta_key, true ) ) {
+		// Here we need to check if $post is an object. If not, we bail.
+		if( (!is_object( $post ) || NULL === $post) && false == get_option( 'page_for_posts' ) ) {
 			return;
 		}
 
-		// Get the post meta data.
-		$post_meta = get_post_meta( $post->ID, $this->meta_key, true );
+		$post_meta = $this->fetch_post_meta( $post );
 
-		$image_attributes = null;
-		$attachment_id    = $post_meta['attachment_id'];
+		// If we have no related post meta data, we don't do anything here.
+		if( false == $post_meta || '' == $post_meta ) {
+			return;
+		}
+
+		$image_attributes = NULL;
+		$attachment_id = $post_meta['attachment_id'];
 
 		// If an attachment ID was found, get the image height.
-		if ( ! empty( $attachment_id ) ) {
+		if( !empty($attachment_id) ) {
 			$image_attributes = wp_get_attachment_image_src( $attachment_id, 'full' );
 
-			$this->image_meta['imageSrc']    = isset( $image_attributes[0] ) ? $image_attributes[0] : '';
-			$this->image_meta['imageWidth']  = $image_attributes[1];
+			$this->image_meta['imageSrc'] = isset($image_attributes[0]) ? $image_attributes[0] : '';
+			$this->image_meta['imageWidth'] = $image_attributes[1];
 			$this->image_meta['imageHeight'] = $image_attributes[2];
 		} else {
 
-			$this->image_meta['imageSrc']    = '';
-			$this->image_meta['imageWidth']  = 0;
+			$this->image_meta['imageSrc'] = '';
+			$this->image_meta['imageWidth'] = 0;
 			$this->image_meta['imageHeight'] = 0;
 		}
 		// Determines weather parallax is possible or not.
-		if ( $this->image_meta['imageWidth'] >= 1920 && $this->image_meta['imageHeight'] >= 1200 ) {
+		if( $this->image_meta['imageWidth'] >= 1920 && $this->image_meta['imageHeight'] >= 1200 ) {
 
 			$this->image_meta['parallaxPossible'] = true;
 		} else {
@@ -297,19 +330,25 @@ class cb_parallax_public_localisation {
 
 		global $post;
 
-		$this->post_meta = [ ];
-
-		if ( '' === get_post_meta( $post->ID, $this->meta_key, true ) ) {
+		// Here we need to check if $post is an object. If not, we bail.
+		if( (!is_object( $post ) || NULL === $post) && false == get_option( 'page_for_posts' ) ) {
 			return;
 		}
 
-		// Get the post meta data.
-		$post_meta = get_post_meta( $post->ID, $this->meta_key, true );
+		$post_meta = $this->fetch_post_meta( $post );
 
-		// Translates parameters into the default locale to propperly serve the script.
-		$post_meta = $this->translate_to_default_locale( $post_meta );
+		// If we have no related post meta data, we don't do anything here.
+		if( false == $post_meta || '' == $post_meta ) {
+			return;
+		}
+
+		if( 'en_US' != get_locale() ) {
+			// Translates parameters into the default locale to propperly serve the script.
+			$post_meta = $this->translate_to_default_locale( $post_meta );
+		}
 
 		// Below we sort of cache the values and make sure they have been white-listed. Otherwise, we set the default value.
+		$this->post_meta['backgroundColor'] = !empty($post_meta['background_color']) ? $post_meta['background_color'] : '';
 
 		// Image options.
 		$this->post_meta['backgroundRepeat'] = in_array( $post_meta['background_repeat'], $this->allowed['repeat'] ) ? $post_meta['background_repeat'] : array_values( $this->allowed['repeat'] )[0];
@@ -324,7 +363,7 @@ class cb_parallax_public_localisation {
 
 		$this->post_meta['direction'] = in_array( $post_meta['direction'], $this->allowed['direction'] ) ? $post_meta['direction'] : array_values( $this->allowed['direction'] )[0];
 
-		$this->post_meta['verticalScrollDirection']   = in_array( $post_meta['vertical_scroll_direction'], $this->allowed['vertical_scroll_direction'] ) ? $post_meta['vertical_scroll_direction'] : array_values( $this->allowed['vertical_scroll_direction'] )[0];
+		$this->post_meta['verticalScrollDirection'] = in_array( $post_meta['vertical_scroll_direction'], $this->allowed['vertical_scroll_direction'] ) ? $post_meta['vertical_scroll_direction'] : array_values( $this->allowed['vertical_scroll_direction'] )[0];
 		$this->post_meta['horizontalScrollDirection'] = in_array( $post_meta['horizontal_scroll_direction'], $this->allowed['horizontal_scroll_direction'] ) ? $post_meta['horizontal_scroll_direction'] : array_values( $this->allowed['horizontal_scroll_direction'] )[0];
 
 		$this->post_meta['horizontalAlignment'] = in_array( $post_meta['horizontal_alignment'], $this->allowed['horizontal_alignment'] ) ? $post_meta['horizontal_alignment'] : array_values( $this->allowed['horizontal_alignment'] )[0];
@@ -334,6 +373,38 @@ class cb_parallax_public_localisation {
 		$this->post_meta['overlayImage'] = in_array( $post_meta['overlay_image'], $this->allowed['overlay_image'] ) ? $post_meta['overlay_image'] : array_values( $this->allowed['overlay_image'] )[0];
 
 		$this->post_meta['overlayOpacity'] = in_array( $post_meta['overlay_opacity'], $this->allowed['overlay_opacity'] ) ? $post_meta['overlay_opacity'] : array_values( $this->allowed['overlay_opacity'] )[3];
+
+		$this->post_meta['overlayColor'] = !empty($post_meta['overlay_color']) ? $post_meta['overlay_color'] : '';
+	}
+
+	/**
+	 * Localizes the public part of the plugin.
+	 *
+	 * @hooked_action
+	 * @since    0.1.0
+	 * @access   public
+	 * @return   void
+	 */
+	public function localize_public_area() {
+
+		global $post;
+
+		// Here we need to check if $post is an object. If not, we're not on a singular thus we bail.
+		if( ( !is_object( $post ) || NULL === $post ) && false == get_option( 'page_for_posts' ) ) {
+			return;
+		}
+
+		// Passes the parameters to the script.
+		wp_localize_script(
+			$this->plugin_name . '-public-js',
+			'cbParallax',
+			array_merge(
+				$this->image_meta,
+				$this->post_meta,
+				$this->get_path_to_overlay_images(),
+				$this->get_preserve_scrolling_behaviour_option()
+			)
+		);
 	}
 
 	/**
@@ -349,23 +420,23 @@ class cb_parallax_public_localisation {
 
 		$output = [ ];
 
-		foreach ( $post_meta as $option => $value ) {
+		foreach( $post_meta as $option => $value ) {
 
-			switch ( $option ) {
+			switch( $option ) {
 
 				// Custom background options.
-				case( $option === 'background_repeat' );
+				case($option === 'background_repeat');
 
-					if ( isset( $value ) && $value == __( 'no-repeat', $this->plugin_domain ) ) {
+					if( isset($value) && $value == __( 'no-repeat', $this->plugin_domain ) ) {
 
 						$output[ $option ] = 'no-repeat';
-					} else if ( isset( $value ) && $value == __( 'repeat', $this->plugin_domain ) ) {
+					} else if( isset($value) && $value == __( 'repeat', $this->plugin_domain ) ) {
 
 						$output[ $option ] = 'repeat';
-					} else if ( isset( $value ) && $value == __( 'horizontal', $this->plugin_domain ) ) {
+					} else if( isset($value) && $value == __( 'horizontal', $this->plugin_domain ) ) {
 
 						$output[ $option ] = 'horizontal';
-					} else if ( isset( $value ) && $value == __( 'vertical', $this->plugin_domain ) ) {
+					} else if( isset($value) && $value == __( 'vertical', $this->plugin_domain ) ) {
 
 						$output[ $option ] = 'vertical';
 					} else {
@@ -374,15 +445,15 @@ class cb_parallax_public_localisation {
 
 					break;
 
-				case( $option === 'vertical_alignment' || $option === 'position_y' );
+				case($option === 'vertical_alignment' || $option === 'position_y');
 
-					if ( isset( $value ) && $value == __( 'top', $this->plugin_domain ) ) {
+					if( isset($value) && $value == __( 'top', $this->plugin_domain ) ) {
 
 						$output[ $option ] = 'top';
-					} else if ( isset( $value ) && $value == __( 'center', $this->plugin_domain ) ) {
+					} else if( isset($value) && $value == __( 'center', $this->plugin_domain ) ) {
 
 						$output[ $option ] = 'center';
-					} else if ( isset( $value ) && $value == __( 'bottom', $this->plugin_domain ) ) {
+					} else if( isset($value) && $value == __( 'bottom', $this->plugin_domain ) ) {
 
 						$output[ $option ] = 'bottom';
 					} else {
@@ -390,15 +461,15 @@ class cb_parallax_public_localisation {
 					}
 					break;
 
-				case( $option === 'horizontal_alignment' || $option === 'position_x' );
+				case($option === 'horizontal_alignment' || $option === 'position_x');
 
-					if ( isset( $value ) && $value == __( 'left', $this->plugin_domain ) ) {
+					if( isset($value) && $value == __( 'left', $this->plugin_domain ) ) {
 
 						$output[ $option ] = 'left';
-					} else if ( isset( $value ) && $value == __( 'center', $this->plugin_domain ) ) {
+					} else if( isset($value) && $value == __( 'center', $this->plugin_domain ) ) {
 
 						$output[ $option ] = 'center';
-					} else if ( isset( $value ) && $value == __( 'right', $this->plugin_domain ) ) {
+					} else if( isset($value) && $value == __( 'right', $this->plugin_domain ) ) {
 
 						$output[ $option ] = 'right';
 					} else {
@@ -406,12 +477,12 @@ class cb_parallax_public_localisation {
 					}
 					break;
 
-				case( $option === 'background_attachment' );
+				case($option === 'background_attachment');
 
-					if ( isset( $value ) && $value == __( 'fixed', $this->plugin_domain ) ) {
+					if( isset($value) && $value == __( 'fixed', $this->plugin_domain ) ) {
 
 						$output[ $option ] = 'fixed';
-					} else if ( isset( $value ) && $value == __( 'scroll', $this->plugin_domain ) ) {
+					} else if( isset($value) && $value == __( 'scroll', $this->plugin_domain ) ) {
 
 						$output[ $option ] = 'scroll';
 					} else {
@@ -421,12 +492,12 @@ class cb_parallax_public_localisation {
 					break;
 
 				// Parallax background options.
-				case( $option === 'direction' );
+				case($option === 'direction');
 
-					if ( isset( $value ) && $value == __( 'vertical', $this->plugin_domain ) ) {
+					if( isset($value) && $value == __( 'vertical', $this->plugin_domain ) ) {
 
 						$output[ $option ] = 'vertical';
-					} else if ( isset( $value ) && $value == __( 'horizontal', $this->plugin_domain ) ) {
+					} else if( isset($value) && $value == __( 'horizontal', $this->plugin_domain ) ) {
 
 						$output[ $option ] = 'horizontal';
 					} else {
@@ -435,12 +506,12 @@ class cb_parallax_public_localisation {
 					}
 					break;
 
-				case( $option === 'vertical_scroll_direction' );
+				case($option === 'vertical_scroll_direction');
 
-					if ( isset( $value ) && $value == __( 'to top', $this->plugin_domain ) ) {
+					if( isset($value) && $value == __( 'to top', $this->plugin_domain ) ) {
 
 						$output[ $option ] = 'to top';
-					} else if ( isset( $value ) && $value == __( 'to bottom', $this->plugin_domain ) ) {
+					} else if( isset($value) && $value == __( 'to bottom', $this->plugin_domain ) ) {
 
 						$output[ $option ] = 'to bottom';
 					} else {
@@ -449,12 +520,12 @@ class cb_parallax_public_localisation {
 					}
 					break;
 
-				case( $option === 'horizontal_scroll_direction' );
+				case($option === 'horizontal_scroll_direction');
 
-					if ( isset( $value ) && $value == __( 'to the left', $this->plugin_domain ) ) {
+					if( isset($value) && $value == __( 'to the left', $this->plugin_domain ) ) {
 
 						$output[ $option ] = 'to the left';
-					} else if ( isset( $value ) && $value == __( 'to the right', $this->plugin_domain ) ) {
+					} else if( isset($value) && $value == __( 'to the right', $this->plugin_domain ) ) {
 
 						$output[ $option ] = 'to the right';
 					} else {
@@ -463,9 +534,9 @@ class cb_parallax_public_localisation {
 					}
 					break;
 
-				case( $option === 'overlay' );
+				case($option === 'overlay_image');
 
-					if ( isset( $value ) && $value == __( 'none', $this->plugin_domain ) ) {
+					if( isset($value) && $value == __( 'none', $this->plugin_domain ) ) {
 
 						$output[ $option ] = 'none';
 					} else {
@@ -473,9 +544,9 @@ class cb_parallax_public_localisation {
 					}
 					break;
 
-				case( $option === 'overlay_opacity' );
+				case($option === 'overlay_opacity');
 
-					if ( isset( $value ) && $value == __( 'default', $this->plugin_domain ) ) {
+					if( isset($value) && $value == __( 'default', $this->plugin_domain ) ) {
 
 						$output[ $option ] = 'default';
 					} else {
@@ -506,24 +577,16 @@ class cb_parallax_public_localisation {
 	}
 
 	/**
-	 * Localizes the public part of the plugin.
+	 * Retrieves the option.
 	 *
-	 * @hooked_action
-	 * @since    0.1.0
-	 * @access   public
-	 * @return   void
+	 * @since    0.2.1
+	 * @access   private
+	 * @return   array
 	 */
-	public function localize_public_area() {
+	private function get_preserve_scrolling_behaviour_option() {
 
-		// Passes the parameters to the script.
-		wp_localize_script(
-			$this->plugin_name . '-public-js',
-			'cbParallax',
-			array_merge(
-				$this->image_meta,
-				$this->post_meta,
-				$this->get_path_to_overlay_images()
-			)
-		);
+		$value = get_option( $this->meta_key );
+
+		return array( 'scrollingPreserved' => $value );
 	}
 }

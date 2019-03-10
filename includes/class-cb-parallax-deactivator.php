@@ -40,7 +40,7 @@ class cb_parallax_deactivator {
 		$role = get_role( 'administrator' );
 
 		// If the acting user has admin rights, the capability gets removed.
-		if ( ! empty( $role ) ) {
+		if( !empty($role) ) {
 			$role->remove_cap( self::$capability );
 		}
 	}

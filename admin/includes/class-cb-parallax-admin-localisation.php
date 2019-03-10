@@ -72,10 +72,10 @@ class cb_parallax_admin_localisation {
 	 */
 	public function __construct( $plugin_name, $plugin_domain, $plugin_version, $meta_key ) {
 
-		$this->plugin_name    = $plugin_name;
-		$this->plugin_domain  = $plugin_domain;
+		$this->plugin_name = $plugin_name;
+		$this->plugin_domain = $plugin_domain;
 		$this->plugin_version = $plugin_version;
-		$this->meta_key       = $meta_key;
+		$this->meta_key = $meta_key;
 
 		$this->init();
 	}
@@ -91,14 +91,15 @@ class cb_parallax_admin_localisation {
 
 		if( is_admin() ) {
 
-			add_action( 'admin_enqueue_scripts', array( &$this, 'get_background_options' ), 1 );
+			add_action( 'admin_enqueue_scripts', array( &$this, 'get_background_image_options' ), 1 );
 			add_action( 'admin_enqueue_scripts', array( &$this, 'localize_meta_box' ), 1000 );
 			add_action( 'admin_enqueue_scripts', array( &$this, 'localize_media_frame' ), 1000 );
 		}
 	}
 
 	/**
-	 * Retrieves the source, width and and height of the custom background image, as well as the possible directions and the actually selected direction ( for "mode").
+	 * Retrieves the source, width and and height of the custom background image,
+	 * as well as the possible directions and the actually selected direction ( for "mode").
 	 * This is used to control display of the elements inside the meta box.
 	 *
 	 * @hooked_action
@@ -107,19 +108,19 @@ class cb_parallax_admin_localisation {
 	 * @access   public
 	 * @return   void
 	 */
-	public function get_background_options() {
+	public function get_background_image_options() {
 
-		$this->image_options = [];
-		$image_options_attributes = null;
+		$this->image_options = [ ];
+		$image_options_attributes = NULL;
 
 		// Get the background image attachment ID.
 		$post_meta = get_post_meta( get_the_ID(), $this->meta_key, true );
 
-		if ( ! empty( $post_meta['attachment_id'] ) ) {
+		if( !empty($post_meta['attachment_id']) ) {
 			$image_options_attributes = wp_get_attachment_image_src( absint( $post_meta['attachment_id'] ), false );
 
 			$this->image_options['attachmentUrl'] = $image_options_attributes[0];
-			$this->image_options['imageWidth']  = $image_options_attributes[1];
+			$this->image_options['imageWidth'] = $image_options_attributes[1];
 			$this->image_options['imageHeight'] = $image_options_attributes[2];
 
 			if( $this->image_options['imageWidth'] >= 1920 && $this->image_options['imageHeight'] >= 1200 ) {
@@ -130,11 +131,11 @@ class cb_parallax_admin_localisation {
 				$this->image_options['parallaxPossible'] = false;
 			}
 
-			$this->image_options['parallaxEnabled'] = ! empty( $post_meta['parallax_enabled'] ) ? $post_meta['parallax_enabled'] : false;
+			$this->image_options['parallaxEnabled'] = !empty($post_meta['parallax_enabled']) ? $post_meta['parallax_enabled'] : false;
 
 			// Below we retrieve localized strings - the actual value and the allowed options for that value to check against inside the script.
-			$direction = ! empty( $post_meta['direction'] ) ? $post_meta['direction'] : false;
-			if( false !== $direction && $direction === __('vertical', $this->plugin_domain ) ) {
+			$direction = !empty($post_meta['direction']) ? $post_meta['direction'] : false;
+			if( false !== $direction && $direction === __( 'vertical', $this->plugin_domain ) ) {
 
 				$this->image_options['actualDirection'] = __( 'vertical', $this->plugin_domain );
 			} else {
@@ -142,7 +143,7 @@ class cb_parallax_admin_localisation {
 				$this->image_options['actualDirection'] = __( 'horizontal', $this->plugin_domain );
 			}
 
-			$this->image_options['verticalDirection']   = __( 'vertical', $this->plugin_domain );
+			$this->image_options['verticalDirection'] = __( 'vertical', $this->plugin_domain );
 			$this->image_options['horizontalDirection'] = __( 'horizontal', $this->plugin_domain );
 		}
 	}
@@ -162,15 +163,22 @@ class cb_parallax_admin_localisation {
 
 		$locale = $this->get_locale();
 
-		switch ( $locale ) {
+		switch( $locale ) {
 
-			case( $locale == 'de_DE' );
+			case($locale == 'de_DE');
 
-				$labels = array( 'locale' => $locale, 'switchesText' => array( 'On' => 'Ein', 'Off' => 'Aus' ) );
+				$labels = array(
+					'locale'       => $locale,
+					'switchesText' => array( 'On' => 'Ein', 'Off' => 'Aus' ),
+				);
 				break;
+
 			default:
 
-				$labels = array( 'locale' => 'default', 'switchesText' => array( 'On' => 'On', 'Off' => 'Off' ) );
+				$labels = array(
+					'locale'       => 'default',
+					'switchesText' => array( 'On' => 'On', 'Off' => 'Off' ),
+				);
 		}
 
 		return $labels;
@@ -185,7 +193,11 @@ class cb_parallax_admin_localisation {
 	 */
 	private function background_color_text() {
 
-		return array( 'backgroundColorText' => __( 'Background Color', $this->plugin_domain ) );
+		return array(
+			'backgroundColorText' => __( 'Background Color', $this->plugin_domain ),
+			'overlayColorText'    => __( 'Overlay Color', $this->plugin_domain ),
+			'noneString'          => __( 'none', $this->plugin_domain ),
+		);
 	}
 
 	/**
@@ -205,21 +217,21 @@ class cb_parallax_admin_localisation {
 	 *
 	 * @hooked_action
 	 *
-     * @since    0.1.0
+	 * @since    0.1.0
 	 * @access   public
 	 * @return   void
 	 */
 	public function localize_meta_box() {
 
- 		wp_localize_script(
-		    $this->plugin_name . '-admin-js',
-		    'cbParallax',
-		    array_merge(
-			    $this->switches_texts(),
-			    $this->background_color_text(),
-			    $this->image_options
-		    )
-	    );
+		wp_localize_script(
+			$this->plugin_name . '-admin-js',
+			'cbParallax',
+			array_merge(
+				$this->switches_texts(),
+				$this->background_color_text(),
+				$this->image_options
+			)
+		);
 	}
 
 	/**
@@ -238,7 +250,7 @@ class cb_parallax_admin_localisation {
 			'cbParallaxMediaFrame',
 			array(
 				'title'  => __( 'Set Background Image', $this->plugin_domain ),
-				'button' => __( 'Set background image', $this->plugin_domain )
+				'button' => __( 'Set background image', $this->plugin_domain ),
 			)
 		);
 	}

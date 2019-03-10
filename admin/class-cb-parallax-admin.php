@@ -79,17 +79,18 @@ class cb_parallax_admin {
 	 */
 	public function __construct( $plugin_name, $plugin_domain, $plugin_version, $loader, $meta_key ) {
 
-		$this->plugin_name    = $plugin_name;
-		$this->plugin_domain  = $plugin_domain;
+		$this->plugin_name = $plugin_name;
+		$this->plugin_domain = $plugin_domain;
 		$this->plugin_version = $plugin_version;
-		$this->loader         = $loader;
-		$this->meta_key       = $meta_key;
+		$this->loader = $loader;
+		$this->meta_key = $meta_key;
 
 		$this->load_dependencies();
 		$this->define_post_type_support();
 		$this->define_admin_localisation();
 		$this->define_custom_background();
 		$this->define_help_tab();
+		$this->define_general_setting();
 	}
 
 	/**
@@ -117,6 +118,8 @@ class cb_parallax_admin {
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . "admin/includes/class-cb-parallax-help-tab.php";
 
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . "admin/includes/class-cb-parallax-meta-box.php";
+
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . "admin/includes/class-cb-parallax-general-settings.php";
 	}
 
 	/**
@@ -130,31 +133,12 @@ class cb_parallax_admin {
 	 */
 	public function enqueue_styles( $hook_suffix ) {
 
-		if ( ! in_array( $hook_suffix, array( 'post-new.php', 'post.php' ) ) || ! current_user_can( 'cb_parallax_edit' ) ) {
+		if( !in_array( $hook_suffix, array( 'post-new.php', 'post.php', 'options-general.php' ) ) || !current_user_can( 'cb_parallax_edit' ) ) {
 			return;
 		}
 
 		// Color picker.
 		wp_enqueue_style( 'wp-color-picker' );
-
-		// Fancy Select.
-		wp_enqueue_style(
-			$this->plugin_name . '-inc-fancy-select-css',
-			plugin_dir_url( __FILE__ ) . '../vendor/fancy-select/fancySelect.css',
-			array(
-				'jquery'
-			),
-			$this->plugin_version,
-			true
-		);
-
-		wp_enqueue_style(
-			$this->plugin_name . '-inc-switch-css',
-			plugin_dir_url( __FILE__ ) . 'css/switch.css',
-			array(),
-			$this->plugin_version,
-			'all'
-		);
 
 		wp_enqueue_style(
 			$this->plugin_name . '-admin-css',
@@ -183,7 +167,7 @@ class cb_parallax_admin {
 	 */
 	public function enqueue_scripts( $hook_suffix ) {
 
-		if ( ! in_array( $hook_suffix, array( 'post-new.php', 'post.php' ) ) || ! current_user_can( 'cb_parallax_edit' ) ) {
+		if( !in_array( $hook_suffix, array( 'post-new.php', 'post.php' ) ) || !current_user_can( 'cb_parallax_edit' ) ) {
 			return;
 		}
 
@@ -210,7 +194,7 @@ class cb_parallax_admin {
 				'jquery',
 				'wp-color-picker',
 				'media-views',
-				$this->plugin_name . '-inc-fancy-select-js'
+				$this->plugin_name . '-inc-fancy-select-js',
 			),
 			$this->plugin_version,
 			true
@@ -229,7 +213,7 @@ class cb_parallax_admin {
 	 */
 	public function check_cap() {
 
-		if ( ! current_user_can( 'cb_parallax_edit' ) ) {
+		if( !current_user_can( 'cb_parallax_edit' ) ) {
 			return;
 		}
 
@@ -281,7 +265,7 @@ class cb_parallax_admin {
 	/**
 	 * Instanciates the class responsible localizing the admin part of the plugin.
 	 *
-     * @since    0.1.0
+	 * @since    0.1.0
 	 * @access   private
 	 * @return   void
 	 */
@@ -289,9 +273,23 @@ class cb_parallax_admin {
 
 		$admin_localisation = new cb_parallax_admin_localisation( $this->get_plugin_name(), $this->get_plugin_domain(), $this->get_plugin_version(), $this->get_meta_key() );
 
-		$this->loader->add_action( 'admin_enqueue_scripts', $admin_localisation, 'get_background_options', 1 );
+		$this->loader->add_action( 'admin_enqueue_scripts', $admin_localisation, 'get_background_image_options', 1 );
 		$this->loader->add_action( 'admin_enqueue_scripts', $admin_localisation, 'localize_meta_box', 1000 );
 		$this->loader->add_action( 'admin_enqueue_scripts', $admin_localisation, 'localize_media_frame', 1000 );
+	}
+
+	/**
+	 * Instanciates the class responsible for registering and displaying the "general option".
+	 *
+	 * @since    0.1.0
+	 * @access   private
+	 * @return   void
+	 */
+	private function define_general_setting() {
+
+		$general_settings = new cb_parallax_general_settings( $this->get_plugin_domain(), $this->get_meta_key() );
+
+		$this->loader->add_action( 'admin_init', $general_settings, 'add_general_option', 1 );
 	}
 
 	/**
@@ -305,7 +303,7 @@ class cb_parallax_admin {
 	private function define_help_tab() {
 
 		// Show up on all following post type's edit screens:
-		if ( ( isset( $_REQUEST['page'] ) || isset( $_REQUEST['post'] ) || isset( $_REQUEST['product'] ) ) && isset( $_REQUEST['action'] ) && $_REQUEST['action'] == 'edit' ) {
+		if( (isset($_REQUEST['page']) || isset($_REQUEST['post']) || isset($_REQUEST['product'])) && isset($_REQUEST['action']) && $_REQUEST['action'] == 'edit' ) {
 
 			$Help_Tab = new cb_parallax_help_tab( $this->get_plugin_domain() );
 
@@ -333,7 +331,7 @@ class cb_parallax_admin {
 
 		$plugin = plugin_basename( 'cb-parallax/cb-parallax.php' );
 
-		if ( $file == $plugin ) {
+		if( $file == $plugin ) {
 			$meta[] = '<a href="https://github.com/demispatti/cb-parallax" target="_blank">' . __( 'Plugin support', $this->plugin_domain ) . '</a>';
 			$meta[] = '<a href="http://wordpress.org/plugins/cb-parallax" target="_blank">' . __( 'Rate plugin', $this->plugin_domain ) . '</a>';
 			$meta[] = '<a href="http://demispatti.ch/plugins" target="_blank">' . __( 'Donate', $this->plugin_domain ) . '</a>';

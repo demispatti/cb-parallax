@@ -54,7 +54,7 @@ class cb_parallax {
 	 * The loader that's responsible for maintaining
 	 * and registering all hooks that power the plugin.
 	 *
-     * @since    0.1.0
+	 * @since    0.1.0
 	 * @access   private
 	 * @var      cb_parallax_loader $loader
 	 */
@@ -72,10 +72,10 @@ class cb_parallax {
 	 */
 	public function __construct() {
 
-		$this->plugin_name    = 'cb-parallax';
-		$this->plugin_domain  = $this->get_plugin_domain();
+		$this->plugin_name = 'cb-parallax';
+		$this->plugin_domain = $this->get_plugin_domain();
 		$this->plugin_version = '0.1.0';
-		$this->meta_key       = 'cb_parallax';
+		$this->meta_key = 'cb_parallax';
 
 		$this->load_dependencies();
 		$this->set_i18n();
@@ -151,8 +151,11 @@ class cb_parallax {
 
 		$public = new cb_parallax_public( $this->get_plugin_name(), $this->get_plugin_domain(), $this->get_plugin_version(), $this->get_loader(), $this->get_meta_key() );
 
-		$this->loader->add_action( 'wp_enqueue_scripts', $public, 'enqueue_styles' );
-		$this->loader->add_action( 'wp_enqueue_scripts', $public, 'enqueue_scripts' );
+		$this->loader->add_action( 'wp_enqueue_scripts', $public, 'check_for_nicescrollr_plugin', 10 );
+		$this->loader->add_action( 'admin_enqueue_scripts', $public, 'check_for_nicescrollr_plugin', 10 );
+		$this->loader->add_action( 'wp', $public, 'define_public_localisation' );
+		$this->loader->add_action( 'wp_enqueue_scripts', $public, 'enqueue_styles', 11 );
+		$this->loader->add_action( 'wp_enqueue_scripts', $public, 'enqueue_scripts', 12 );
 	}
 
 	/**

@@ -128,7 +128,7 @@ class cb_parallax_custom_background {
 
 		$this->allowed['parallax'] = array(
 			'off' => 'off',
-			'on'  => 'on'
+			'on'  => 'on',
 		);
 
 		// Set up an array of allowed values for the repeat option.
@@ -163,27 +163,27 @@ class cb_parallax_custom_background {
 			'auto'   => __( 'auto', $this->plugin_domain ),
 			'slow'   => 'slow',
 			'medium' => 'medium',
-			'fast'   => 'fast'
+			'fast'   => 'fast',
 		);
 
 		$this->allowed['type'] = array(
 			'background' => __( 'background', $this->plugin_domain ),
-			'foreground' => __( 'foreground', $this->plugin_domain )
+			'foreground' => __( 'foreground', $this->plugin_domain ),
 		);
 
 		$this->allowed['direction'] = array(
 			'vertical'   => __( 'vertical', $this->plugin_domain ),
-			'horizontal' => __( 'horizontal', $this->plugin_domain )
+			'horizontal' => __( 'horizontal', $this->plugin_domain ),
 		);
 
 		$this->allowed['vertical_scroll_direction'] = array(
 			'top'    => __( 'top', $this->plugin_domain ),
-			'bottom' => __( 'bottom', $this->plugin_domain )
+			'bottom' => __( 'bottom', $this->plugin_domain ),
 		);
 
 		$this->allowed['horizontal_scroll_direction'] = array(
 			'left'  => __( 'left', $this->plugin_domain ),
-			'right' => __( 'right', $this->plugin_domain )
+			'right' => __( 'right', $this->plugin_domain ),
 		);
 	}
 
@@ -200,10 +200,10 @@ class cb_parallax_custom_background {
 	 */
 	public function __construct( $plugin_name, $plugin_domain, $plugin_version, $meta_key ) {
 
-		$this->plugin_name    = $plugin_name;
-		$this->plugin_domain  = $plugin_domain;
+		$this->plugin_name = $plugin_name;
+		$this->plugin_domain = $plugin_domain;
 		$this->plugin_version = $plugin_version;
-		$this->meta_key       = $meta_key;
+		$this->meta_key = $meta_key;
 
 		$this->set_allowed_options();
 		$this->init();
@@ -245,7 +245,7 @@ class cb_parallax_custom_background {
 		$wp_head_callback = get_theme_support( 'custom-background', 'wp-head-callback' );
 
 		// If the theme hasn't set up a custom callback, let's roll our own with a few extra options.
-		if ( empty( $wp_head_callback ) || '_custom_background_cb' === $wp_head_callback ) {
+		if( false === $wp_head_callback || '_custom_background_cb' === $wp_head_callback ) {
 
 			add_theme_support( 'custom-background', array( 'wp-head-callback' => array( &$this, 'echo_custom_background' ) ) );
 		}
@@ -263,7 +263,7 @@ class cb_parallax_custom_background {
 	public function setup_background() {
 
 		// If this isn't a singular view, bail.
-		if ( ! is_singular() ) {
+		if( !is_singular() ) {
 			return;
 		}
 
@@ -271,30 +271,38 @@ class cb_parallax_custom_background {
 		global $post;
 
 		// If the post type doesn't support 'custom-background', bail.
-		if ( ! post_type_supports( $post->post_type, 'custom-background' ) ) {
+		if( !post_type_supports( $post->post_type, 'custom-background' ) ) {
 			return;
 		}
 
 		// If the theme doesn't support 'custom-background', bail.
-		if ( ! current_theme_supports( 'custom-background' ) ) {
+		if( !current_theme_supports( 'custom-background' ) ) {
 			return;
 		}
 
 		// Get the post meta.
 		$post_meta = get_post_meta( $post->ID, $this->meta_key, true );
 
+		// If there is no post meta stored yet, we bail.
+		if( false === $post_meta || '' === $post_meta ) {
+
+			return;
+		}
+
+		$post_meta = $this->translate_to_default_locale( $post_meta );
+
 		// Get the background color.
-		$this->color = ! empty( $post_meta['background_color'] ) ? $post_meta['background_color'] : '';
+		$this->color = !empty($post_meta['background_color']) ? $post_meta['background_color'] : '';
 
 		// Get the background image attachment ID.
-		$attachment_id = ! empty( $post_meta['attachment_id'] ) ? $post_meta['attachment_id'] : false;
+		$attachment_id = !empty($post_meta['attachment_id']) ? $post_meta['attachment_id'] : false;
 
 		// If an attachment ID was found, get the image source.
-		if ( false !== $attachment_id ) {
+		if( false !== $attachment_id ) {
 
 			$image = wp_get_attachment_image_src( $attachment_id, 'full' );
 
-			$this->image = ! empty( $image ) && isset( $image[0] ) ? esc_url( $image[0] ) : '';
+			$this->image = !empty($image) && isset($image[0]) ? esc_url( $image[0] ) : '';
 		}
 
 		// Filter the background color and image theme mods.
@@ -302,12 +310,12 @@ class cb_parallax_custom_background {
 		add_filter( 'theme_mod_background_image', array( &$this, 'background_image' ), 25 );
 
 		// If an image was found, filter image-related theme mods.
-		if ( ! empty( $this->image ) ) {
+		if( !empty($this->image) ) {
 
-			$this->repeat     = ! empty( $post_meta['background_repeat'] ) ? $post_meta['background_repeat'] : $this->allowed['background_repeat'];
-			$this->position_x = ! empty( $post_meta['position_x'] ) ? $post_meta['position_x'] : $this->allowed['position_x'];
-			$this->position_y = ! empty( $post_meta['position_y'] ) ? $post_meta['position_y'] : $this->allowed['position_y'];
-			$this->attachment = ! empty( $post_meta['background_attachment'] ) ? $post_meta['background_attachment'] : $this->allowed['background_attachment'];
+			$this->repeat = !empty($post_meta['background_repeat']) ? $post_meta['background_repeat'] : $this->allowed['background_repeat'];
+			$this->position_x = !empty($post_meta['position_x']) ? $post_meta['position_x'] : $this->allowed['position_x'];
+			$this->position_y = !empty($post_meta['position_y']) ? $post_meta['position_y'] : $this->allowed['position_y'];
+			$this->attachment = !empty($post_meta['background_attachment']) ? $post_meta['background_attachment'] : $this->allowed['background_attachment'];
 
 			add_filter( 'theme_mod_background_repeat', array( &$this, 'background_repeat' ), 25 );
 			add_filter( 'theme_mod_position_x', array( &$this, 'position_x' ), 25 );
@@ -319,33 +327,31 @@ class cb_parallax_custom_background {
 	/**
 	 * Sets the background color. Only exectued if using a background image.
 	 *
-     * @since  0.1.0
+	 * @since  0.1.0
 	 * @access public
 	 * @return string
-
 	 * @param  string $color
 	 */
 	public function background_color( $color ) {
 
-		return ! empty( $this->color ) ? preg_replace( '/[^0-9a-fA-F]/', '', $this->color ) : $color;
+		return !empty($this->color) ? preg_replace( '/[^0-9a-fA-F]/', '', $this->color ) : $color;
 	}
 
 	/**
 	 * Sets the background image. Only exectued if using a background image.
 	 *
-     * @since  0.1.0
+	 * @since  0.1.0
 	 * @access public
 	 * @return string
-
 	 * @param  string $image The background image property.
 	 */
 	public function background_image( $image ) {
 
 		// Return the image if it has been set.
-		if ( ! empty( $this->image ) ) {
+		if( !empty($this->image) ) {
 			$image = $this->image;
 			// If no image is set but a color is, disable the WP image.
-		} elseif ( ! empty( $this->color ) ) {
+		} elseif( !empty($this->color) ) {
 			$image = '';
 		}
 
@@ -363,7 +369,7 @@ class cb_parallax_custom_background {
 	 */
 	public function background_repeat( $repeat ) {
 
-		return ! empty( $this->repeat ) ? $this->repeat : $repeat;
+		return !empty($this->repeat) ? $this->repeat : $repeat;
 	}
 
 	/**
@@ -377,21 +383,112 @@ class cb_parallax_custom_background {
 	 */
 	public function position_x( $position_x ) {
 
-		return ! empty( $this->position_x ) ? $this->position_x : $position_x;
+		return !empty($this->position_x) ? $this->position_x : $position_x;
 	}
 
 	/**
 	 * Sets the background vertical position. Only exectued if using a background image.
 	 *
-     * @since  0.1.0
+	 * @since  0.1.0
 	 * @access public
 	 * @return string
-
 	 * @param  string $position_y The background vertical position.
 	 */
 	public function position_y( $position_y ) {
 
-		return ! empty( $this->position_y ) ? $this->position_y : $position_y;
+		return !empty($this->position_y) ? $this->position_y : $position_y;
+	}
+
+	/**
+	 * Helper function, that translates "non-default-locale strings" into strings of the default locale,
+	 * to propperly serve the script.
+	 *
+	 * @since  0.1.0
+	 * @access private
+	 * @param  $post_meta
+	 * @return mixed|void
+	 */
+	private function translate_to_default_locale( $input ) {
+
+		$output = [ ];
+
+		foreach( $input as $option => $value ) {
+
+			switch( $option ) {
+
+				// Custom background options.
+				case($option === 'background_repeat');
+
+					if( isset($value) && $value == __( 'no-repeat', $this->plugin_domain ) ) {
+
+						$output[ $option ] = 'no-repeat';
+					} else if( isset($value) && $value == __( 'repeat', $this->plugin_domain ) ) {
+
+						$output[ $option ] = 'repeat';
+					} else if( isset($value) && $value == __( 'horizontal', $this->plugin_domain ) ) {
+
+						$output[ $option ] = 'horizontal';
+					} else if( isset($value) && $value == __( 'vertical', $this->plugin_domain ) ) {
+
+						$output[ $option ] = 'vertical';
+					} else {
+						$output[ $option ] = $value;
+					}
+
+					break;
+
+				case($option === 'position_y');
+
+					if( isset($value) && $value == __( 'top', $this->plugin_domain ) ) {
+
+						$output[ $option ] = 'top';
+					} else if( isset($value) && $value == __( 'center', $this->plugin_domain ) ) {
+
+						$output[ $option ] = 'center';
+					} else if( isset($value) && $value == __( 'bottom', $this->plugin_domain ) ) {
+
+						$output[ $option ] = 'bottom';
+					} else {
+						$output[ $option ] = $value;
+					}
+					break;
+
+				case($option === 'position_x');
+
+					if( isset($value) && $value == __( 'left', $this->plugin_domain ) ) {
+
+						$output[ $option ] = 'left';
+					} else if( isset($value) && $value == __( 'center', $this->plugin_domain ) ) {
+
+						$output[ $option ] = 'center';
+					} else if( isset($value) && $value == __( 'right', $this->plugin_domain ) ) {
+
+						$output[ $option ] = 'right';
+					} else {
+						$output[ $option ] = $value;
+					}
+					break;
+
+				case($option === 'background_attachment');
+
+					if( isset($value) && $value == __( 'fixed', $this->plugin_domain ) ) {
+
+						$output[ $option ] = 'fixed';
+					} else if( isset($value) && $value == __( 'scroll', $this->plugin_domain ) ) {
+
+						$output[ $option ] = 'scroll';
+					} else {
+
+						$output[ $option ] = $value;
+					}
+					break;
+
+				default:
+					$output[ $option ] = $value;
+			}
+		}
+
+		return apply_filters( 'translate_to_default_locale', $output, $input );
 	}
 
 	/**
@@ -405,13 +502,13 @@ class cb_parallax_custom_background {
 	 */
 	public function background_attachment( $attachment ) {
 
-		return ! empty( $this->attachment ) ? $this->attachment : $attachment;
+		return !empty($this->attachment) ? $this->attachment : $attachment;
 	}
 
 	/**
 	 * Outputs the custom background style in the header, if an image is set.
 	 *
-     * @since  0.1.0
+	 * @since  0.1.0
 	 * @access public
 	 * @return void
 	 */
@@ -419,13 +516,29 @@ class cb_parallax_custom_background {
 
 		global $post;
 
-		$post_meta = get_post_meta( $post->ID, $this->meta_key, true);
+		// Here we need to check if $post is an object. If not, we bail.
+		if( !is_object( $post ) || NULL === $post ) {
+			return;
+		}
+
+		$post_meta = get_post_meta( $post->ID, $this->meta_key, true );
+
+		// If we have no related post meta data, we don't do anything here.
+		if( false == $post_meta || '' == $post_meta ) {
+			return;
+		}
+
+		// We do only proceed if the parallax option is enabled or if there is meta data stored.
+		if( isset($post_meta['parallax_enabled']) && $post_meta['parallax_enabled'] == '1' || false === $post_meta ) {
+			return;
+		}
 
 		// Get the background image.
 		$image = set_url_scheme( get_background_image() );
 
 		// We do only proceed if an image is set.
-		if ( $image === '' ) {
+		if( $image === '' ) {
+
 			return;
 		}
 
@@ -433,7 +546,8 @@ class cb_parallax_custom_background {
 		$color = get_background_color();
 
 		// If there is no image or color, bail.
-		if ( empty( $image ) && empty( $color ) ) {
+		if( empty($image) && empty($color) ) {
+
 			return;
 		}
 
@@ -441,14 +555,19 @@ class cb_parallax_custom_background {
 		$style = $color ? "background-color: #{$color};" : '';
 
 		// If there's a background image, add it and set these properties.
-		if ( $image ) {
+		if( $image ) {
 
 			// Background image.
 			$style .= " background-image: url('{$image}');";
 
 			// Background repeat.
-			$mod_repeat = get_theme_mod( 'background_repeat', 'background_repeat' );
-			$repeat = in_array( $post_meta['background_repeat'], array( 'no-repeat', 'repeat-x', 'repeat-y', 'background_repeat' ) ) ? $post_meta['background_repeat'] : $mod_repeat;
+			$mod_repeat = get_theme_mod( 'background_repeat', 'no-repeat' );
+			$repeat = in_array( $post_meta['background_repeat'], array(
+				'no-repeat',
+				'repeat-x',
+				'repeat-y',
+				'background_repeat',
+			) ) ? $post_meta['background_repeat'] : $mod_repeat;
 
 			$style .= " background-repeat: {$repeat};";
 
@@ -469,6 +588,7 @@ class cb_parallax_custom_background {
 		}
 
 		$parallax_enabled = true == $post_meta['parallax_enabled'] ? $post_meta['parallax_enabled'] : false;
+
 		// We bail, if the parallax option is enabled and the image is served trough the jQuery script. Else we echo the style for the custom background,
 		// while the script won't be executed.
 		if( $parallax_enabled ) {

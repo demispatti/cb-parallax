@@ -47,15 +47,14 @@ class cb_parallax_loader {
 	/**
 	 * Add a new action to the collection to be registered with WordPress.
 	 *
-     * @since    0.1.0
+	 * @since    0.1.0
 	 * @access   public
 	 * @return   void
-
-	 * @param      string $hook                      The name of the WordPress action that is being registered.
-	 * @param      object $component                 A reference to the instance of the object on which the action is defined.
-	 * @param      string $callback                  The name of the function definition on the $component.
-	 * @param      int $priority      optional       The priority at which the function should be fired.
-	 * @param      int $accepted_args optional       The number of arguments that should be passed to the $callback.
+	 * @param      string $hook The name of the WordPress action that is being registered.
+	 * @param      object $component A reference to the instance of the object on which the action is defined.
+	 * @param      string $callback The name of the function definition on the $component.
+	 * @param      int    $priority optional       The priority at which the function should be fired.
+	 * @param      int    $accepted_args optional       The number of arguments that should be passed to the $callback.
 	 */
 	public function add_action( $hook, $component, $callback, $priority = 10, $accepted_args = 1 ) {
 
@@ -65,15 +64,14 @@ class cb_parallax_loader {
 	/**
 	 * Add a new filter to the collection to be registered with WordPress.
 	 *
-     * @since    0.1.0
+	 * @since    0.1.0
 	 * @access   public
 	 * @return   void
-
-	 * @param      string $hook                      The name of the WordPress filter that is being registered.
-	 * @param      object $component                 A reference to the instance of the object on which the filter is defined.
-	 * @param      string $callback                  The name of the function definition on the $component.
-	 * @param      int $priority      optional       The priority at which the function should be fired.
-	 * @param      int $accepted_args optional       The number of arguments that should be passed to the $callback.
+	 * @param      string $hook The name of the WordPress filter that is being registered.
+	 * @param      object $component A reference to the instance of the object on which the filter is defined.
+	 * @param      string $callback The name of the function definition on the $component.
+	 * @param      int    $priority optional       The priority at which the function should be fired.
+	 * @param      int    $accepted_args optional       The number of arguments that should be passed to the $callback.
 	 */
 	public function add_filter( $hook, $component, $callback, $priority = 10, $accepted_args = 1 ) {
 
@@ -88,12 +86,12 @@ class cb_parallax_loader {
 	 * @access   private
 	 * @return   type     The collection of actions and filters registered with WordPress.
 	 *
-	 * @param      array  $hooks                          The collection of hooks that is being registered (that is, actions or filters).
-	 * @param      string $hook                           The name of the WordPress filter that is being registered.
-	 * @param      object $component                      A reference to the instance of the object on which the filter is defined.
-	 * @param      string $callback                       The name of the function definition on the $component.
-	 * @param      int    $priority        optional       The priority at which the function should be fired.
-	 * @param      int    $accepted_args   optional       The number of arguments that should be passed to the $callback.
+	 * @param      array  $hooks The collection of hooks that is being registered (that is, actions or filters).
+	 * @param      string $hook The name of the WordPress filter that is being registered.
+	 * @param      object $component A reference to the instance of the object on which the filter is defined.
+	 * @param      string $callback The name of the function definition on the $component.
+	 * @param      int    $priority optional       The priority at which the function should be fired.
+	 * @param      int    $accepted_args optional       The number of arguments that should be passed to the $callback.
 	 */
 	private function add( $hooks, $hook, $component, $callback, $priority, $accepted_args ) {
 
@@ -102,7 +100,7 @@ class cb_parallax_loader {
 			'component'     => $component,
 			'callback'      => $callback,
 			'priority'      => $priority,
-			'accepted_args' => $accepted_args
+			'accepted_args' => $accepted_args,
 		);
 
 		return $hooks;
@@ -117,20 +115,20 @@ class cb_parallax_loader {
 	 */
 	public function run() {
 
-		foreach ( $this->filters as $hook ) {
+		foreach( $this->filters as $hook ) {
 			add_filter(
 				$hook['hook'], array(
 				$hook['component'],
-				$hook['callback']
+				$hook['callback'],
 			), $hook['priority'], $hook['accepted_args']
 			);
 		}
 
-		foreach ( $this->actions as $hook ) {
+		foreach( $this->actions as $hook ) {
 			add_action(
 				$hook['hook'], array(
 				$hook['component'],
-				$hook['callback']
+				$hook['callback'],
 			), $hook['priority'], $hook['accepted_args']
 			);
 		}

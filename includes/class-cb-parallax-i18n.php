@@ -2,10 +2,8 @@
 
 /**
  * Define the internationalization functionality
-
  * Loads and defines the internationalization files for this plugin
  * so that it is ready for translation.
-
  *
  * @link              https://github.com/demispatti/cb-parallax/
  * @since             0.1.0
