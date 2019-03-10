@@ -7,10 +7,10 @@
  * @since             0.1.0
  * @package           cb_parallax
  * @subpackage        cb_parallax/public/includes
- *                    Author:            Demis Patti <demis@demispatti.ch>
- *                    Author URI:        http://demispatti.ch
- *                    License:           GPL-2.0+
- *                    License URI:       http://www.gnu.org/licenses/gpl-2.0.txt
+ * Author:            Demis Patti <demis@demispatti.ch>
+ * Author URI:        http://demispatti.ch
+ * License:           GPL-2.0+
+ *  License URI:       http://www.gnu.org/licenses/gpl-2.0.txt
  */
 class cb_parallax_public_localisation {
 
@@ -215,7 +215,7 @@ class cb_parallax_public_localisation {
 		$this->plugin_domain = $plugin_domain;
 		$this->plugin_version = $plugin_version;
 		$this->meta_key = $meta_key;
-		$this->post_meta = [ ];
+		$this->post_meta = array();
 
 		$this->set_default_values();
 		$this->set_allowed_options();
@@ -243,7 +243,7 @@ class cb_parallax_public_localisation {
 	 * @access   private
 	 *
 	 * @param object $post
-	 * @return mixe
+	 * @return mixed / void
 	 */
 	private function fetch_post_meta( $post ) {
 
@@ -273,7 +273,7 @@ class cb_parallax_public_localisation {
 	 *
 	 * @since    0.1.0
 	 * @access   public
-	 * @return   void
+	 * @return   mixed / void
 	 */
 	public function get_image_meta() {
 
@@ -281,14 +281,14 @@ class cb_parallax_public_localisation {
 
 		// Here we need to check if $post is an object. If not, we bail.
 		if( (!is_object( $post ) || NULL === $post) && false == get_option( 'page_for_posts' ) ) {
-			return;
+			return array();
 		}
 
 		$post_meta = $this->fetch_post_meta( $post );
 
 		// If we have no related post meta data, we don't do anything here.
 		if( false == $post_meta || '' == $post_meta ) {
-			return;
+			return array();
 		}
 
 		$image_attributes = NULL;
@@ -351,28 +351,28 @@ class cb_parallax_public_localisation {
 		$this->post_meta['backgroundColor'] = !empty($post_meta['background_color']) ? $post_meta['background_color'] : '';
 
 		// Image options.
-		$this->post_meta['backgroundRepeat'] = in_array( $post_meta['background_repeat'], $this->allowed['repeat'] ) ? $post_meta['background_repeat'] : array_values( $this->allowed['repeat'] )[0];
+		$this->post_meta['backgroundRepeat'] = in_array( $post_meta['background_repeat'], $this->allowed['repeat'] ) ? $post_meta['background_repeat'] : $this->allowed['repeat']['no-repeat'];
 
-		$this->post_meta['positionX'] = in_array( $post_meta['position_x'], $this->allowed['position_x'] ) ? $post_meta['position_x'] : array_values( $this->allowed['position_x'] )[0];
+		$this->post_meta['positionX'] = in_array( $post_meta['position_x'], $this->allowed['position_x'] ) ? $post_meta['position_x'] : $this->allowed['position_x']['center'];
 
-		$this->post_meta['positionY'] = in_array( $post_meta['position_y'], $this->allowed['position_y'] ) ? $post_meta['position_y'] : array_values( $this->allowed['position_y'] )[0];
+		$this->post_meta['positionY'] = in_array( $post_meta['position_y'], $this->allowed['position_y'] ) ? $post_meta['position_y'] : $this->allowed['position_y']['center'];
 
-		$this->post_meta['backgroundAttachment'] = in_array( $post_meta['background_attachment'], $this->allowed['attachment'] ) ? $post_meta['background_attachment'] : array_values( $this->allowed['attachment'] )[0];
+		$this->post_meta['backgroundAttachment'] = in_array( $post_meta['background_attachment'], $this->allowed['attachment'] ) ? $post_meta['background_attachment'] : $this->allowed['attachment']['fixed'];
 		// Parallax options.
-		$this->post_meta['parallaxEnabled'] = $post_meta['parallax_enabled'] == true ? $post_meta['parallax_enabled'] : array_values( $this->allowed['parallax'] )[0];
+		$this->post_meta['parallaxEnabled'] = $post_meta['parallax_enabled'] == true ? $post_meta['parallax_enabled'] : $this->allowed['parallax']['off'];
 
-		$this->post_meta['direction'] = in_array( $post_meta['direction'], $this->allowed['direction'] ) ? $post_meta['direction'] : array_values( $this->allowed['direction'] )[0];
+		$this->post_meta['direction'] = in_array( $post_meta['direction'], $this->allowed['direction'] ) ? $post_meta['direction'] : $this->allowed['direction']['vertical'];
 
-		$this->post_meta['verticalScrollDirection'] = in_array( $post_meta['vertical_scroll_direction'], $this->allowed['vertical_scroll_direction'] ) ? $post_meta['vertical_scroll_direction'] : array_values( $this->allowed['vertical_scroll_direction'] )[0];
-		$this->post_meta['horizontalScrollDirection'] = in_array( $post_meta['horizontal_scroll_direction'], $this->allowed['horizontal_scroll_direction'] ) ? $post_meta['horizontal_scroll_direction'] : array_values( $this->allowed['horizontal_scroll_direction'] )[0];
+		$this->post_meta['verticalScrollDirection'] = in_array( $post_meta['vertical_scroll_direction'], $this->allowed['vertical_scroll_direction'] ) ? $post_meta['vertical_scroll_direction'] : $this->allowed['vertical_scroll_direction']['top'];
+		$this->post_meta['horizontalScrollDirection'] = in_array( $post_meta['horizontal_scroll_direction'], $this->allowed['horizontal_scroll_direction'] ) ? $post_meta['horizontal_scroll_direction'] : $this->allowed['horizontal_scroll_direction']['left'];
 
-		$this->post_meta['horizontalAlignment'] = in_array( $post_meta['horizontal_alignment'], $this->allowed['horizontal_alignment'] ) ? $post_meta['horizontal_alignment'] : array_values( $this->allowed['horizontal_alignment'] )[0];
+		$this->post_meta['horizontalAlignment'] = in_array( $post_meta['horizontal_alignment'], $this->allowed['horizontal_alignment'] ) ? $post_meta['horizontal_alignment'] : $this->allowed['horizontal_alignment']['center'];
 
-		$this->post_meta['verticalAlignment'] = in_array( $post_meta['vertical_alignment'], $this->allowed['vertical_alignment'] ) ? $post_meta['vertical_alignment'] : array_values( $this->allowed['vertical_alignment'] )[0];
+		$this->post_meta['verticalAlignment'] = in_array( $post_meta['vertical_alignment'], $this->allowed['vertical_alignment'] ) ? $post_meta['vertical_alignment'] : $this->allowed['vertical_alignment']['center'];
 
-		$this->post_meta['overlayImage'] = in_array( $post_meta['overlay_image'], $this->allowed['overlay_image'] ) ? $post_meta['overlay_image'] : array_values( $this->allowed['overlay_image'] )[0];
+		$this->post_meta['overlayImage'] = in_array( $post_meta['overlay_image'], $this->allowed['overlay_image'] ) ? $post_meta['overlay_image'] : $this->allowed['overlay_image']['none'];
 
-		$this->post_meta['overlayOpacity'] = in_array( $post_meta['overlay_opacity'], $this->allowed['overlay_opacity'] ) ? $post_meta['overlay_opacity'] : array_values( $this->allowed['overlay_opacity'] )[3];
+		$this->post_meta['overlayOpacity'] = in_array( $post_meta['overlay_opacity'], $this->allowed['overlay_opacity'] ) ? $post_meta['overlay_opacity'] : $this->allowed['overlay_opacity']['0.3'];
 
 		$this->post_meta['overlayColor'] = !empty($post_meta['overlay_color']) ? $post_meta['overlay_color'] : '';
 	}
@@ -391,6 +391,10 @@ class cb_parallax_public_localisation {
 
 		// Here we need to check if $post is an object. If not, we're not on a singular thus we bail.
 		if( ( !is_object( $post ) || NULL === $post ) && false == get_option( 'page_for_posts' ) ) {
+			return;
+		}
+
+		if($this->image_meta == null){
 			return;
 		}
 
@@ -414,11 +418,11 @@ class cb_parallax_public_localisation {
 	 * @since  0.1.0
 	 * @access private
 	 * @param  $post_meta
-	 * @return mixed|void
+	 * @return array
 	 */
 	private function translate_to_default_locale( $post_meta ) {
 
-		$output = [ ];
+		$output = array();
 
 		foreach( $post_meta as $option => $value ) {
 

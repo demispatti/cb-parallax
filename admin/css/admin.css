@@ -40,7 +40,6 @@ div.fancy-select .cbp-fancy-select .cbp-fancy-select div.trigger {
     transition: all 240ms ease-out;
     -webkit-transition: all 240ms ease-out;
     -moz-transition: all 240ms ease-out;
-    -ms-transition: all 240ms ease-out;
     -o-transition: all 240ms ease-out;
 }
 
@@ -87,7 +86,6 @@ div.fancy-select .cbp-fancy-select .cbp-fancy-select ul.options {
     transition: opacity 300ms ease-out, top 300ms ease-out, visibility 300ms ease-out;
     -webkit-transition: opacity 300ms ease-out, top 300ms ease-out, visibility 300ms ease-out;
     -moz-transition: opacity 300ms ease-out, top 300ms ease-out, visibility 300ms ease-out;
-    -ms-transition: opacity 300ms ease-out, top 300ms ease-out, visibility 300ms ease-out;
     -o-transition: opacity 300ms ease-out, top 300ms ease-out, visibility 300ms ease-out;
 }
 
@@ -101,7 +99,6 @@ div.fancy-select .cbp-fancy-select .cbp-fancy-select ul.options.open {
     transition: opacity 300ms ease-out, top 300ms ease-out;
     -webkit-transition: opacity 300ms ease-out, top 300ms ease-out;
     -moz-transition: opacity 300ms ease-out, top 300ms ease-out;
-    -ms-transition: opacity 300ms ease-out, top 300ms ease-out;
     -o-transition: opacity 300ms ease-out, top 300ms ease-out;
 }
 
@@ -112,7 +109,6 @@ div.fancy-select .cbp-fancy-select .cbp-fancy-select ul.options.overflowing {
     transition: opacity 300ms ease-out, bottom 300ms ease-out, visibility 300ms ease-out;
     -webkit-transition: opacity 300ms ease-out, bottom 300ms ease-out, visibility 300ms ease-out;
     -moz-transition: opacity 300ms ease-out, bottom 300ms ease-out, visibility 300ms ease-out;
-    -ms-transition: opacity 300ms ease-out, bottom 300ms ease-out, visibility 300ms ease-out;
     -o-transition: opacity 300ms ease-out, bottom 300ms ease-out, visibility 300ms ease-out;
 }
 
@@ -123,7 +119,6 @@ div.fancy-select .cbp-fancy-select .cbp-fancy-select ul.options.overflowing.open
     transition: opacity 300ms ease-out, bottom 300ms ease-out;
     -webkit-transition: opacity 300ms ease-out, bottom 300ms ease-out;
     -moz-transition: opacity 300ms ease-out, bottom 300ms ease-out;
-    -ms-transition: opacity 300ms ease-out, bottom 300ms ease-out;
     -o-transition: opacity 300ms ease-out, bottom 300ms ease-out;
 }
 
@@ -136,7 +131,6 @@ div.fancy-select .cbp-fancy-select .cbp-fancy-select ul.options li {
     transition: all 150ms ease-out;
     -webkit-transition: all 150ms ease-out;
     -moz-transition: all 150ms ease-out;
-    -ms-transition: all 150ms ease-out;
     -o-transition: all 150ms ease-out;
 }
 
@@ -268,7 +262,6 @@ div.fancy-select ul.options {
     transition: opacity 200ms ease-out, top 200ms ease-out, visibility 200ms ease-out;
     -webkit-transition: opacity 200ms ease-out, top 200ms ease-out, visibility 200ms ease-out;
     -moz-transition: opacity 200ms ease-out, top 200ms ease-out, visibility 200ms ease-out;
-    -ms-transition: opacity 200ms ease-out, top 200ms ease-out, visibility 200ms ease-out;
     -o-transition: opacity 200ms ease-out, top 200ms ease-out, visibility 200ms ease-out;
     border: 1px solid rgb(226, 226, 226);
     -webkit-box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.4), 0 0 40px rgba(0, 0, 0, 0.1) inset;
@@ -285,7 +278,6 @@ div.fancy-select ul.options.open {
     transition: opacity 300ms ease-out, top 300ms ease-out;
     -webkit-transition: opacity 300ms ease-out, top 300ms ease-out;
     -moz-transition: opacity 300ms ease-out, top 300ms ease-out;
-    -ms-transition: opacity 300ms ease-out, top 300ms ease-out;
     -o-transition: opacity 300ms ease-out, top 300ms ease-out;
     border: 1px solid rgb(226, 226, 226);
     -webkit-box-shadow: 0 1px 4px rgba(0, 0, 0, 0.5), 0 0 40px rgba(0, 0, 0, 0.06) inset;
@@ -299,7 +291,6 @@ div.fancy-select ul.options.overflowing {
     transition: opacity 200ms ease-out, bottom 200ms ease-out, visibility 200ms ease-out;
     -webkit-transition: opacity 200ms ease-out, bottom 200ms ease-out, visibility 200ms ease-out;
     -moz-transition: opacity 200ms ease-out, bottom 200ms ease-out, visibility 200ms ease-out;
-    -ms-transition: opacity 200ms ease-out, bottom 200ms ease-out, visibility 200ms ease-out;
     -o-transition: opacity 200ms ease-out, bottom 200ms ease-out, visibility 200ms ease-out;
 }
 
@@ -309,7 +300,6 @@ div.fancy-select ul.options.overflowing.open {
     transition: opacity 200ms ease-out, bottom 200ms ease-out;
     -webkit-transition: opacity 200ms ease-out, bottom 200ms ease-out;
     -moz-transition: opacity 200ms ease-out, bottom 200ms ease-out;
-    -ms-transition: opacity 200ms ease-out, bottom 200ms ease-out;
     -o-transition: opacity 200ms ease-out, bottom 200ms ease-out;
 }
 
@@ -322,7 +312,6 @@ div.fancy-select ul.options li {
     transition: all 150ms ease-out;
     -webkit-transition: all 150ms ease-out;
     -moz-transition: all 150ms ease-out;
-    -ms-transition: all 150ms ease-out;
     -o-transition: all 150ms ease-out;
 }
 
@@ -340,7 +329,7 @@ div.fancy-select ul.options li.hover {
 }
 
 .cbp-single-option-container:last-of-type {
-    margin: 12px auto 0px auto;
+    margin: 12px auto 0 auto;
 }
 
 /* labels */
@@ -415,10 +404,10 @@ div.fancy-select ul.options li.hover {
     -moz-transition: 0.15s ease-out;
     -o-transition: 0.15s ease-out;
     transition: 0.15s ease-out;
-    -webkit-transition-property: opacity background;
-    -moz-transition-property: opacity background;
-    -o-transition-property: opacity background;
-    transition-property: opacity background;
+    -webkit-transition-property: opacity, background;
+    -moz-transition-property: opacity, background;
+    -o-transition-property: opacity, background;
+    transition-property: opacity, background;
 }
 
 .cbp-switch-label:before, .cbp-switch-label:after {

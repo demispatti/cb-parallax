@@ -110,7 +110,7 @@ class cb_parallax_admin_localisation {
 	 */
 	public function get_background_image_options() {
 
-		$this->image_options = [ ];
+		$this->image_options = array();
 		$image_options_attributes = NULL;
 
 		// Get the background image attachment ID.

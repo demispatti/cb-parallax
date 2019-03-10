@@ -206,6 +206,90 @@ class cb_parallax_meta_box {
 	/**
 	 * Add actions for the edit post screen.
 	 *
+	 * @since  0.5.0
+	 * @access private
+	 * @return array
+	 */
+	private function get_args( $post ) {
+
+		// Get the post meta.
+		$post_meta = get_post_meta( $post->ID, $this->meta_key, true );
+		if ( $post_meta == '' ) {
+
+			// Get the background color.
+			$args['background_color'] = '';
+			// Get the image URL.
+			$args['url'] = isset( $image[0] ) ? $image[0] : '';
+			// Default image options.
+			$args['background_repeat'] = $this->allowed['repeat']['no-repeat'];
+
+			$args['position_x'] = $this->allowed['position_x']['center'];
+
+			$args['position_y'] = $this->allowed['position_y']['center'];
+
+			$args['background_attachment'] = $this->allowed['attachment']['scroll'];
+			// Parallax options.
+			$args['parallax_enabled'] = $this->allowed['parallax']['off'];
+
+			$args['direction'] = $this->allowed['direction']['vertical'];
+
+			$args['vertical_scroll_direction'] = $this->allowed['vertical_scroll_direction']['top'];
+
+			$args['horizontal_scroll_direction'] = $this->allowed['horizontal_scroll_direction']['left'];
+
+			$args['vertical_alignment'] = $this->allowed['vertical_alignment']['center'];
+
+			$args['horizontal_alignment'] = $this->allowed['horizontal_alignment']['center'];
+
+			$args['overlay_image'] = $this->allowed['overlay_image']['none'];
+
+			$args['overlay_opacity'] = $this->allowed['overlay_opacity']['0.3'];
+
+			$args['overlay_color'] = '';
+
+		} else {
+
+			// Get the background color.
+			$args['background_color'] = $post_meta['background_color'];
+			// Get the image URL.
+			$args['url'] = isset( $image[0] ) ? $image[0] : '';
+
+			// Default image options.
+			$args['background_repeat'] = $post_meta['background_repeat'];
+
+			$args['position_x'] = $post_meta['position_x'];
+
+			$args['position_y'] = $post_meta['position_y'];
+
+			$args['background_attachment'] = $post_meta['background_attachment'];
+
+			// Parallax options.
+			$args['parallax_enabled'] = $post_meta['parallax_enabled'];
+
+			$args['direction'] = $post_meta['direction'];
+
+			$args['vertical_scroll_direction'] = $post_meta['vertical_scroll_direction'];
+
+			$args['horizontal_scroll_direction'] = $post_meta['horizontal_scroll_direction'];
+
+			$args['vertical_alignment'] = $post_meta['vertical_alignment'];
+
+			$args['horizontal_alignment'] = $post_meta['horizontal_alignment'];
+
+			$args['overlay_image'] = $post_meta['overlay_image'];
+
+			$args['overlay_opacity'] = $post_meta['overlay_opacity'];
+
+			$args['overlay_color'] = $post_meta['overlay_color'];
+		}
+
+		return $args;
+
+	}
+
+	/**
+	 * Add actions for the edit post screen.
+	 *
 	 * @since  0.1.0
 	 * @access public
 	 * @return void
@@ -258,58 +342,23 @@ class cb_parallax_meta_box {
 	 */
 	public function display_meta_box( $post ) {
 
-		// Get the post meta.
+
+		$args = $this->get_args( $post );
+		$image = null;
+
 		$post_meta = get_post_meta( $post->ID, $this->meta_key, true );
-
-		// Get the background color.
-		$background_color = !empty($post_meta['background_color']) ? $post_meta['background_color'] : '';
-
 		// Get the background image attachment ID.
-		$attachment_id = isset($post_meta['attachment_id']) ? $post_meta['attachment_id'] : false;
+		$attachment_id = isset( $post_meta['attachment_id'] ) ? $post_meta['attachment_id'] : false;
 
 		// If an attachment ID was found, get the image source.
-		if( false !== $attachment_id ) {
+		if ( false !== $attachment_id ) {
 			$image = wp_get_attachment_image_src( absint( $attachment_id ), 'full' );
 		}
-
 		// Get the image URL.
-		$url = !empty($image) && isset($image[0]) ? $image[0] : '';
-
-		/**
-		 * Make sure values are set for the "static" image options. This should always be set so that we can
-		 * be sure that the user's background image overwrites the default/WP custom background settings.
-		 * With one theme, this doesn't matter, but we need to make sure that the background stays
-		 * consistent between different themes and different WP custom background settings.  The data
-		 * will only be stored if the user selects a background image.
-		 */
-		// Default image options.
-		$background_repeat = !empty($post_meta['background_repeat']) ? $post_meta['background_repeat'] : array_values( $this->allowed['repeat'] )[0];
-
-		$position_x = !empty($post_meta['position_x']) ? $post_meta['position_x'] : array_values( $this->allowed['position_x'] )[1];
-
-		$position_y = !empty($post_meta['position_y']) ? $post_meta['position_y'] : array_values( $this->allowed['position_y'] )[1];
-
-		$background_attachment = !empty($post_meta['background_attachment']) ? $post_meta['background_attachment'] : array_values( $this->allowed['attachment'] )[0];
-
-		// Parallax options.
-		$parallax_enabled = !empty($post_meta['parallax_enabled']) ? $post_meta['parallax_enabled'] : array_values( $this->allowed['parallax'] )[0];
-
-		$direction = !empty($post_meta['direction']) ? $post_meta['direction'] : array_values( $this->allowed['direction'] )[0];
-
-		$vertical_scroll_direction = !empty($post_meta['vertical_scroll_direction']) ? $post_meta['vertical_scroll_direction'] : array_values( $this->allowed['vertical_scroll_direction'] )[0];
-
-		$horizontal_scroll_direction = !empty($post_meta['horizontal_scroll_direction']) ? $post_meta['horizontal_scroll_direction'] : array_values( $this->allowed['horizontal_scroll_direction'] )[0];
-
-		$vertical_alignment = !empty($post_meta['vertical_alignment']) ? $post_meta['vertical_alignment'] : array_values( $this->allowed['vertical_alignment'] )[1];
-
-		$horizontal_alignment = !empty($post_meta['horizontal_alignment']) ? $post_meta['horizontal_alignment'] : array_values( $this->allowed['horizontal_alignment'] )[1];
-
-		$overlay_image = !empty($post_meta['overlay_image']) ? $post_meta['overlay_image'] : array_values( $this->allowed['overlay_image'] )[0];
-
-		$overlay_opacity = !empty($post_meta['overlay_opacity']) ? $post_meta['overlay_opacity'] : array_values( $this->allowed['overlay_opacity'] )[3];
-
-		$overlay_color = !empty($post_meta['overlay_color']) ? $post_meta['overlay_color'] : '';
+		$url = isset( $image[0] ) ? $image[0] : '';
 		?>
+
+
 
 		<!-- hidden fields. -->
 		<?php wp_nonce_field( 'cb_parallax_nonce_field', 'cb_parallax_nonce' ); ?>
@@ -323,7 +372,7 @@ class cb_parallax_meta_box {
 		<p>
 			<label for="cbp_background_color"><?php _e( 'Background Color', $this->plugin_domain ); ?></label>
 			<input type="text" name="cbp_background_color" id="cbp_background_color"
-			       class="wp-color-picker cbp-color-picker" value="#<?php echo esc_attr( $background_color ); ?>"/>
+			       class="wp-color-picker cbp-color-picker" value="#<?php echo esc_attr( $args['background_color'] ); ?>"/>
 		</p>
 		<!-- # background color. -->
 
@@ -352,7 +401,7 @@ class cb_parallax_meta_box {
 			<label class="cbp-switch">
 				<input type="checkbox" id="cbp_parallax_enabled" class="cbp-switch-input cbp_parallax_enabled"
 				       name="cbp_parallax_enabled" value="1"
-					<?php checked( 1, isset($parallax_enabled) ? $parallax_enabled : 0, true ); ?>>
+					<?php checked( 1, isset($args['parallax_enabled']) ? $args['parallax_enabled'] : 0, true ); ?>>
 				<span class="cbp-switch-label cbp_parallax_enabled" data-on="On" data-off="Off"></span>
 				<span class="cbp-switch-handle"></span>
 			</label>
@@ -367,7 +416,7 @@ class cb_parallax_meta_box {
 				        class="widefat cbp_background_repeat fancy-select cbp-fancy-select">
 					<?php foreach( $this->allowed['repeat'] as $key => $value ) { ?>
 						<option
-							value="<?php echo esc_attr( $value ); ?>" <?php selected( $value, $background_repeat ); ?> ><?php echo esc_html( $value ); ?></option>
+							value="<?php echo esc_attr( $value ); ?>" <?php selected( $value, $args['background_repeat'] ); ?> ><?php echo esc_html( $value ); ?></option>
 					<?php } ?>
 				</select>
 			</p>
@@ -377,7 +426,7 @@ class cb_parallax_meta_box {
 				        class="widefat cbp_position_y fancy-select cbp-fancy-select">
 					<?php foreach( $this->allowed['position_y'] as $key => $value ) { ?>
 						<option
-							value="<?php echo esc_attr( $value ); ?>" <?php selected( $value, $position_y ); ?> ><?php echo esc_html( $value ); ?></option>
+							value="<?php echo esc_attr( $value ); ?>" <?php selected( $value, $args['position_y'] ); ?> ><?php echo esc_html( $value ); ?></option>
 					<?php } ?>
 				</select>
 			</p>
@@ -387,7 +436,7 @@ class cb_parallax_meta_box {
 				        class="widefat cbp_position_x fancy-select cbp-fancy-select">
 					<?php foreach( $this->allowed['position_x'] as $key => $value ) { ?>
 						<option
-							value="<?php echo esc_attr( $value ); ?>" <?php selected( $value, $position_x ); ?> ><?php echo esc_html( $value ); ?></option>
+							value="<?php echo esc_attr( $value ); ?>" <?php selected( $value, $args['position_x'] ); ?> ><?php echo esc_html( $value ); ?></option>
 					<?php } ?>
 				</select>
 			</p>
@@ -397,7 +446,7 @@ class cb_parallax_meta_box {
 				        class="widefat cbp_background_attachment fancy-select cbp-fancy-select">
 					<?php foreach( $this->allowed['attachment'] as $key => $value ) { ?>
 						<option
-							value="<?php echo esc_attr( $value ); ?>" <?php selected( $value, $background_attachment ); ?> ><?php echo esc_html( $value ); ?></option>
+							value="<?php echo esc_attr( $value ); ?>" <?php selected( $value, $args['background_attachment'] ); ?> ><?php echo esc_html( $value ); ?></option>
 					<?php } ?>
 				</select>
 			</p>
@@ -412,7 +461,7 @@ class cb_parallax_meta_box {
 				        class="widefat cbp_direction fancy-select cbp-fancy-select">
 					<?php foreach( $this->allowed['direction'] as $key => $value ) { ?>
 						<option
-							value="<?php echo esc_attr( $value ); ?>" <?php selected( $value, $direction ); ?> ><?php echo esc_html( $value ); ?></option>
+							value="<?php echo esc_attr( $value ); ?>" <?php selected( $value, $args['direction'] ); ?> ><?php echo esc_html( $value ); ?></option>
 					<?php } ?>
 				</select>
 			</p>
@@ -423,7 +472,7 @@ class cb_parallax_meta_box {
 				        class="widefat cbp_vertical_scroll_direction fancy-select cbp-fancy-select">
 					<?php foreach( $this->allowed['vertical_scroll_direction'] as $key => $value ) { ?>
 						<option
-							value="<?php echo esc_attr( $value ); ?>" <?php selected( $value, $vertical_scroll_direction ); ?> ><?php echo esc_html( $value ); ?></option>
+							value="<?php echo esc_attr( $value ); ?>" <?php selected( $value, $args['vertical_scroll_direction'] ); ?> ><?php echo esc_html( $value ); ?></option>
 					<?php } ?>
 				</select>
 			</p>
@@ -434,7 +483,7 @@ class cb_parallax_meta_box {
 				        class="widefat cbp_horizontal_scroll_direction fancy-select cbp-fancy-select">
 					<?php foreach( $this->allowed['horizontal_scroll_direction'] as $key => $value ) { ?>
 						<option
-							value="<?php echo esc_attr( $value ); ?>" <?php selected( $value, $horizontal_scroll_direction ); ?> ><?php echo esc_html( $value ); ?></option>
+							value="<?php echo esc_attr( $value ); ?>" <?php selected( $value, $args['horizontal_scroll_direction'] ); ?> ><?php echo esc_html( $value ); ?></option>
 					<?php } ?>
 				</select>
 			</p>
@@ -444,7 +493,7 @@ class cb_parallax_meta_box {
 				        class="widefat cbp_horizontal_alignment fancy-select cbp-fancy-select">
 					<?php foreach( $this->allowed['horizontal_alignment'] as $key => $value ) { ?>
 						<option
-							value="<?php echo esc_attr( $value ); ?>" <?php selected( $value, $horizontal_alignment ); ?> ><?php echo esc_html( $value ); ?></option>
+							value="<?php echo esc_attr( $value ); ?>" <?php selected( $value, $args['horizontal_alignment'] ); ?> ><?php echo esc_html( $value ); ?></option>
 					<?php } ?>
 				</select>
 			</p>
@@ -454,7 +503,7 @@ class cb_parallax_meta_box {
 				        class="widefat cbp_vertical_alignment fancy-select cbp-fancy-select">
 					<?php foreach( $this->allowed['vertical_alignment'] as $key => $value ) { ?>
 						<option
-							value="<?php echo esc_attr( $value ); ?>" <?php selected( $value, $vertical_alignment ); ?> ><?php echo esc_html( $value ); ?></option>
+							value="<?php echo esc_attr( $value ); ?>" <?php selected( $value, $args['vertical_alignment'] ); ?> ><?php echo esc_html( $value ); ?></option>
 					<?php } ?>
 				</select>
 			</p>
@@ -464,7 +513,7 @@ class cb_parallax_meta_box {
 				        class="widefat cbp_overlay_image fancy-select cbp-fancy-select">
 					<?php foreach( $this->allowed['overlay_image'] as $key => $value ) { ?>
 						<option
-							value="<?php echo esc_attr( $value ); ?>" <?php selected( $value, $overlay_image ); ?> ><?php echo esc_html( $value ); ?></option>
+							value="<?php echo esc_attr( $value ); ?>" <?php selected( $value, $args['overlay_image'] ); ?> ><?php echo esc_html( $value ); ?></option>
 					<?php } ?>
 				</select>
 			</p>
@@ -474,14 +523,14 @@ class cb_parallax_meta_box {
 				        class="widefat cbp_overlay_opacity fancy-select cbp-fancy-select">
 					<?php foreach( $this->allowed['overlay_opacity'] as $key => $value ) { ?>
 						<option
-							value="<?php echo esc_attr( $value ); ?>" <?php selected( $value, $overlay_opacity ); ?> ><?php echo esc_html( $value ); ?></option>
+							value="<?php echo esc_attr( $value ); ?>" <?php selected( $value, $args['overlay_opacity'] ); ?> ><?php echo esc_html( $value ); ?></option>
 					<?php } ?>
 				</select>
 			</p>
 			<p class="cbp-single-option-container" id="cbp_overlay_color_container">
 				<label for="cbp_overlay_color"><?php _e( 'Overlay Color', $this->plugin_domain ); ?></label>
 				<input type="text" name="cbp_overlay_color" id="cbp_overlay_color"
-				       class="wp-color-picker cbp-color-picker" value="#<?php echo esc_attr( $overlay_color ); ?>"/>
+				       class="wp-color-picker cbp-color-picker" value="#<?php echo esc_attr( $args['overlay_color'] ); ?>"/>
 			</p>
 		</div>
 		<!-- # parallax options. -->
@@ -494,7 +543,7 @@ class cb_parallax_meta_box {
 	 *
 	 * @since  0.1.0
 	 * @access public
-	 * @return void / mixed
+	 * @return mixed
 	 *
 	 * @param  int    $post_id
 	 * @param  object $post
@@ -522,7 +571,7 @@ class cb_parallax_meta_box {
 		// Parallax
 		$meta['parallax_enabled'] = isset($_POST['cbp_parallax_enabled']) ? $_POST['cbp_parallax_enabled'] : false;
 
-		$meta['direction'] = in_array( $_POST['cbp_direction'], $this->allowed['direction'] ) ? $_POST['cbp_direction'] : array_values( $this->allowed['direction'] )[0];
+		$meta['direction'] = in_array( $_POST['cbp_direction'], $this->allowed['direction'] ) ? $_POST['cbp_direction'] : array_values( $this->allowed['direction'][0] );
 		// Sanitize the value for the color.
 		$meta['background_color'] = !empty($_POST['cbp_background_color']) ? preg_replace( '/[^0-9a-fA-F]/', '', $_POST['cbp_background_color'] ) : '';
 
@@ -533,25 +582,25 @@ class cb_parallax_meta_box {
 		$meta['attachment_id'] = $_POST['cbp_background_image'] != '' ? absint( $_POST['cbp_background_image'] ) : '';
 
 		// Make sure the values have been white-listed. Otherwise, set the default value.
-		$meta['background_repeat'] = in_array( $_POST['cbp_background_repeat'], $this->allowed['repeat'] ) ? $_POST['cbp_background_repeat'] : array_values( $this->allowed['repeat'] )[0];
+		$meta['background_repeat'] = in_array( $_POST['cbp_background_repeat'], $this->allowed['repeat'] ) ? $_POST['cbp_background_repeat'] : array_values( $this->allowed['repeat'][0] );
 
-		$meta['position_x'] = in_array( $_POST['cbp_position_x'], $this->allowed['position_x'] ) ? $_POST['cbp_position_x'] : array_values( $this->allowed['position_x'] )[1];
+		$meta['position_x'] = in_array( $_POST['cbp_position_x'], $this->allowed['position_x'] ) ? $_POST['cbp_position_x'] : array_values( $this->allowed['position_x'][1] );
 
-		$meta['position_y'] = in_array( $_POST['cbp_position_y'], $this->allowed['position_y'] ) ? $_POST['cbp_position_y'] : array_values( $this->allowed['position_y'] )[1];
+		$meta['position_y'] = in_array( $_POST['cbp_position_y'], $this->allowed['position_y'] ) ? $_POST['cbp_position_y'] : array_values( $this->allowed['position_y'][1] );
 
-		$meta['background_attachment'] = in_array( $_POST['cbp_background_attachment'], $this->allowed['attachment'] ) ? $_POST['cbp_background_attachment'] : array_values( $this->allowed['attachment'] )[0];
+		$meta['background_attachment'] = in_array( $_POST['cbp_background_attachment'], $this->allowed['attachment'] ) ? $_POST['cbp_background_attachment'] : array_values( $this->allowed['attachment'][0] );
 
-		$meta['vertical_scroll_direction'] = in_array( $_POST['cbp_vertical_scroll_direction'], $this->allowed['vertical_scroll_direction'] ) ? $_POST['cbp_vertical_scroll_direction'] : array_values( $this->allowed['vertical_scroll_direction'] )[0];
+		$meta['vertical_scroll_direction'] = in_array( $_POST['cbp_vertical_scroll_direction'], $this->allowed['vertical_scroll_direction'] ) ? $_POST['cbp_vertical_scroll_direction'] : array_values( $this->allowed['vertical_scroll_direction'][0] );
 
-		$meta['horizontal_scroll_direction'] = in_array( $_POST['cbp_horizontal_scroll_direction'], $this->allowed['horizontal_scroll_direction'] ) ? $_POST['cbp_horizontal_scroll_direction'] : array_values( $this->allowed['horizontal_scroll_direction'] )[0];
+		$meta['horizontal_scroll_direction'] = in_array( $_POST['cbp_horizontal_scroll_direction'], $this->allowed['horizontal_scroll_direction'] ) ? $_POST['cbp_horizontal_scroll_direction'] : array_values( $this->allowed['horizontal_scroll_direction'][0] );
 
-		$meta['horizontal_alignment'] = in_array( $_POST['cbp_horizontal_alignment'], $this->allowed['horizontal_alignment'] ) ? $_POST['cbp_horizontal_alignment'] : array_values( $this->allowed['horizontal_alignment'] )[0];
+		$meta['horizontal_alignment'] = in_array( $_POST['cbp_horizontal_alignment'], $this->allowed['horizontal_alignment'] ) ? $_POST['cbp_horizontal_alignment'] : array_values( $this->allowed['horizontal_alignment'][0] );
 
-		$meta['vertical_alignment'] = in_array( $_POST['cbp_vertical_alignment'], $this->allowed['vertical_alignment'] ) ? $_POST['cbp_vertical_alignment'] : array_values( $this->allowed['vertical_alignment'] )[0];
+		$meta['vertical_alignment'] = in_array( $_POST['cbp_vertical_alignment'], $this->allowed['vertical_alignment'] ) ? $_POST['cbp_vertical_alignment'] : array_values( $this->allowed['vertical_alignment'][0] );
 
-		$meta['overlay_image'] = in_array( $_POST['cbp_overlay_image'], $this->allowed['overlay_image'] ) ? $_POST['cbp_overlay_image'] : array_values( $this->allowed['overlay_image'] )[0];
+		$meta['overlay_image'] = in_array( $_POST['cbp_overlay_image'], $this->allowed['overlay_image'] ) ? $_POST['cbp_overlay_image'] : array_values( $this->allowed['overlay_image'][0] );
 
-		$meta['overlay_opacity'] = in_array( $_POST['cbp_overlay_opacity'], $this->allowed['overlay_opacity'] ) ? $_POST['cbp_overlay_opacity'] : array_values( $this->allowed['overlay_opacity'] )[3];
+		$meta['overlay_opacity'] = in_array( $_POST['cbp_overlay_opacity'], $this->allowed['overlay_opacity'] ) ? $_POST['cbp_overlay_opacity'] : array_values( $this->allowed['overlay_opacity'][3] );
 
 		$meta['overlay_color'] = !empty($_POST['cbp_overlay_color']) ? preg_replace( '/[^0-9a-fA-F]/', '', $_POST['cbp_overlay_color'] ) : '';
 

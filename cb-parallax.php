@@ -25,8 +25,8 @@
  * Author URI:        http://demispatti.ch
  * License:           GPL-2.0+
  * License URI:       http://www.gnu.org/licenses/gpl-2.0.txt
- * Version:           0.4.0
- * Stable tag:        0.4.0
+ * Version:           0.5.0
+ * Stable tag:        0.5.0
  * Text Domain:       cb-parallax
  * Domain Path:       /languages
  */

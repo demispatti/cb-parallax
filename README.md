@@ -1,11 +1,11 @@
 === cbParallax ===
 
-Tags: image, background, fullscreen, parallax, Hintergrund, Bild, Hintergrundbild  
+Tags: image, background, fullscreen, parallax, Hintergrund, Bild, Hintergrundbild, Fullscreen
 
-Requires at least: 3.9  
-Tested up to: 4.4.2  
-Stable tag: 0.4.0  
-Version: 0.4.0  
+Requires at least: 4.2  
+Tested up to: 4.6.1  
+Stable tag: 0.5.0
+Version: 0.5.0
 Contributors: demispatti  
 License: GPLv2 or later  
 License URI: http://www.gnu.org/licenses/gpl-2.0.html  
@@ -33,7 +33,7 @@ In order to use the parallax feature, I decided to set the minimum required imag
 
 Your theme's layout must be "boxed" somehow or an opacity should be added to the page content container for the background image to be seen.
 
-PHP version 5.4 or above.
+PHP version 5.3 or above.
 
 == Installation ==
 
@@ -106,46 +106,45 @@ Yes. If you're using the "Vantage" theme from SiteOrigin, the background image w
 
 == Changelog ==
 
-= Version 0.4.0 =
+= Version 0.5.0 =
+1. Reduced required PHP-Version to 5.3 or above due to user requests.
+2. Minor bug fixes regarding errors on activation.
 
+= Version 0.4.2 =
+1. Increased required PHP-Version to 5.4 or above.
+
+= Version 0.4.0 =
 1. Completely rewritten the script for the public part.
 2. Static image is now also being handled by the public script, it's mobile ready now
 3. Added an option to disable parallax on mobile ( View the "Settings / General" page). Will show the image as a static background.
 
 = Version 0.3.0 =
-
 1. Major bug fixes, the effect now works as expected.
 
 = Version 0.2.6 =
-
 1. The scripts for the frontend load only if needed
 
 = Version 0.2.5 =
-
 1. Added support for the blog page
 2. Fixed support for single product page views
 3. The "preserve scrolling" option superseeds the "Nicescrollr" plugin settings on the frontend, if both plugins are enabled
 4. Code cleanup and some minor refactorings
 
 = Version 0.2.4 =
-
 1. Optimized the script for the public part
 2. Added a section to the readme file regarding known issues
 3. Updated the readme file
 
 = Version 0.2.3 =
-
 1. Fixed some bugs.
 2. Added a background color to the image container to kind of simulate a "color" for the overlay.
 3. Slightly enhanced meta box display behaviour.
 4. Added support for "portfolio" post type / entries for web- and media workers :)
 
 = Version 0.2.2 =
-
 1. Removed display errors.
 
 = Version 0.2.1 =
-
 1. Resolved the translation bugs
 2. Optimized the scrolling behaviour
 3. Corrected the scroll ratio calculation
@@ -154,12 +153,10 @@ Yes. If you're using the "Vantage" theme from SiteOrigin, the background image w
 6. Added the option to preserve the nice scrolling behaviour without the need to use the parallax feature ( see "Settings / General / cbParallax" ).
 
 = Version 0.2.0 =
-
 1. Optimized the script responsible for the parallax effect
 2. Added Nicescroll for smooth cross-browser scrolling
 
 = Version 0.1.1 =
-
 1. Massively refactored the script responsible for the parallax effect
 2. Added the possibility to scroll the background image horizontally
 3. Added a function to reposition the image on window resize automaticly

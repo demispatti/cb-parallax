@@ -406,11 +406,11 @@ class cb_parallax_custom_background {
 	 * @since  0.1.0
 	 * @access private
 	 * @param  $post_meta
-	 * @return mixed|void
+	 * @return array
 	 */
 	private function translate_to_default_locale( $input ) {
 
-		$output = [ ];
+		$output = array();
 
 		foreach( $input as $option => $value ) {
 

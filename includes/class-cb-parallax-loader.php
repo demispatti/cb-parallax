@@ -84,7 +84,7 @@ class cb_parallax_loader {
 	 *
 	 * @since    0.1.0
 	 * @access   private
-	 * @return   type     The collection of actions and filters registered with WordPress.
+	 * @return   array     The collection of actions and filters registered with WordPress.
 	 *
 	 * @param      array  $hooks The collection of hooks that is being registered (that is, actions or filters).
 	 * @param      string $hook The name of the WordPress filter that is being registered.
