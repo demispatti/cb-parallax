@@ -32,8 +32,8 @@ if ( ! defined( 'WPINC' ) ) {
  * Author URI:        https://demispatti.ch
  * License:           GPL-2.0+
  * License URI:       https://www.gnu.org/licenses/gpl-2.0.txt
- * Version:           0.9.0
- * Stable tag:        0.9.0
+ * Version:           0.9.1
+ * Stable tag:        0.9.1
  * Requires at least: 4.9
  * Tested up to:      5.1
  * Requires PHP:      5.6
