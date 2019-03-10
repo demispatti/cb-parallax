@@ -20,13 +20,15 @@ class cb_parallax_deactivator {
 	 *
 	 * @since    0.1.0
 	 * @access   public
-	 * @var      string $capability The name of the capability.
+	 * @var      string $capability
 	 */
 	public static $capability = 'cb_parallax_edit';
 
 	/**
 	 * Fired during deactivation of the plugin.
 	 * Removes the capability to edit custom backgrounds from the administrator role.
+	 *
+	 * @hooked_action
 	 *
 	 * @since    0.1.0
 	 * @access   static

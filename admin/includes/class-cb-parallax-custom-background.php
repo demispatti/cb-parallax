@@ -1,7 +1,7 @@
 <?php
 
 /**
- * This class is based on Justin Tadlocks functionality for handling the front end display of the custom backgrounds.
+ * This class is based on Justin Tadlocks functionality for handling the front end display of custom backgrounds.
  * This class will check if a post has a custom background assigned to it
  * and filter the custom background theme mods if so on singular post views.
  * It also rolls its own handling of the 'wp_head' callback but only if the current theme isn't
@@ -16,14 +16,14 @@
  * License:           GPL-2.0+
  * License URI:       http://www.gnu.org/licenses/gpl-2.0.txt
  */
-class cb_parallax_filters {
+class cb_parallax_custom_background {
 
 	/**
 	 * The ID of this plugin.
 	 *
 	 * @since    0.1.0
 	 * @access   private
-	 * @var      string $plugin_name The ID of this plugin.
+	 * @var      string $plugin_name
 	 */
 	private $plugin_name;
 
@@ -32,7 +32,7 @@ class cb_parallax_filters {
 	 *
 	 * @since    0.1.0
 	 * @access   private
-	 * @var      string $plugin_domain The domain of this plugin.
+	 * @var      string $plugin_domain
 	 */
 	private $plugin_domain;
 
@@ -41,7 +41,7 @@ class cb_parallax_filters {
 	 *
 	 * @since    0.1.0
 	 * @access   private
-	 * @var      string $plugin_version The current version of this plugin.
+	 * @var      string $plugin_version
 	 */
 	private $plugin_version;
 
@@ -64,13 +64,13 @@ class cb_parallax_filters {
 	public $image = '';
 
 	/**
-	 * The background repeat property.  Allowed: 'no-repeat', 'repeat', 'repeat-x', 'repeat-y'.
+	 * The background repeat property.  Allowed: 'no-repeat', 'background_repeat', 'repeat-x', 'repeat-y'.
 	 *
 	 * @since  0.1.0
 	 * @access public
 	 * @var    string
 	 */
-	public $repeat = 'repeat';
+	public $repeat = 'background_repeat';
 
 	/**
 	 * The vertical value of the background position property.  Allowed: 'top', 'bottom', 'center'.
@@ -100,7 +100,95 @@ class cb_parallax_filters {
 	public $attachment = 'scroll';
 
 	/**
-	 * Set up this plugins main functionality.
+	 * The name of the meta key for accessing post meta data.
+	 *
+	 * @since    0.1.0
+	 * @access   private
+	 * @var      string $meta_key
+	 */
+	private $meta_key;
+
+	/**
+	 * Maintains the allowed option values.
+	 *
+	 * @since  0.1.0
+	 * @access public
+	 * @var    array $allowed
+	 */
+	private $allowed;
+
+	/**
+	 * A whitelist of allowed options.
+	 *
+	 * @since    0.1.0
+	 * @access   private
+	 * @return   void
+	 */
+	private function set_allowed_options() {
+
+		$this->allowed['parallax'] = array(
+			'off' => 'off',
+			'on'  => 'on'
+		);
+
+		// Set up an array of allowed values for the repeat option.
+		$this->allowed['repeat'] = array(
+			'no-repeat'         => __( 'no repeat', $this->plugin_domain ),
+			'background_repeat' => __( 'repeat', $this->plugin_domain ),
+			'repeat-x'          => __( 'repeat horizontally', $this->plugin_domain ),
+			'repeat-y'          => __( 'repeat vertically', $this->plugin_domain ),
+		);
+
+		// Set up an array of allowed values for the position-x option.
+		$this->allowed['position_x'] = array(
+			'left'   => __( 'left', $this->plugin_domain ),
+			'right'  => __( 'right', $this->plugin_domain ),
+			'center' => __( 'center', $this->plugin_domain ),
+		);
+
+		// Set up an array of allowed values for the position-x option.
+		$this->allowed['position_y'] = array(
+			'top'    => __( 'top', $this->plugin_domain ),
+			'bottom' => __( 'bottom', $this->plugin_domain ),
+			'center' => __( 'center', $this->plugin_domain ),
+		);
+
+		// Set up an array of allowed values for the attachment option.
+		$this->allowed['attachment'] = array(
+			'scroll' => __( 'scroll', $this->plugin_domain ),
+			'fixed'  => __( 'fixed', $this->plugin_domain ),
+		);
+
+		$this->allowed['ratio'] = array(
+			'auto'   => __( 'auto', $this->plugin_domain ),
+			'slow'   => 'slow',
+			'medium' => 'medium',
+			'fast'   => 'fast'
+		);
+
+		$this->allowed['type'] = array(
+			'background' => __( 'background', $this->plugin_domain ),
+			'foreground' => __( 'foreground', $this->plugin_domain )
+		);
+
+		$this->allowed['direction'] = array(
+			'vertical'   => __( 'vertical', $this->plugin_domain ),
+			'horizontal' => __( 'horizontal', $this->plugin_domain )
+		);
+
+		$this->allowed['vertical_scroll_direction'] = array(
+			'top'    => __( 'top', $this->plugin_domain ),
+			'bottom' => __( 'bottom', $this->plugin_domain )
+		);
+
+		$this->allowed['horizontal_scroll_direction'] = array(
+			'left'  => __( 'left', $this->plugin_domain ),
+			'right' => __( 'right', $this->plugin_domain )
+		);
+	}
+
+	/**
+	 * Sets up the default custom background.
 	 *
 	 * @since    0.1.0
 	 * @access   public
@@ -108,13 +196,16 @@ class cb_parallax_filters {
 	 * @param    string $plugin_name
 	 * @param    string $plugin_domain
 	 * @param    string $plugin_version
+	 * @param    string $meta_key
 	 */
-	public function __construct( $plugin_name, $plugin_domain, $plugin_version ) {
+	public function __construct( $plugin_name, $plugin_domain, $plugin_version, $meta_key ) {
 
 		$this->plugin_name    = $plugin_name;
 		$this->plugin_domain  = $plugin_domain;
 		$this->plugin_version = $plugin_version;
+		$this->meta_key       = $meta_key;
 
+		$this->set_allowed_options();
 		$this->init();
 	}
 
@@ -128,7 +219,7 @@ class cb_parallax_filters {
 	private function init() {
 
 		// Run a check for 'custom-background' support late. Themes should've already registered support.
-		add_action( 'after_setup_theme', array( &$this, 'add_theme_support' ), 95 );
+		add_action( 'init', array( &$this, 'add_theme_support' ), 95 );
 	}
 
 	/**
@@ -136,16 +227,16 @@ class cb_parallax_filters {
 	 * If the theme does support it, we'll add a custom background callback on 'wp_head' if the theme
 	 * hasn't defined a custom callback.  This will allow us to add a few extra options for users.
 	 *
+	 * @hooked_action
+	 *
+	 * @uses   setup_background()
+	 * @uses   echo_custom_background()
+	 *
 	 * @since  0.1.0
 	 * @access publc
 	 * @return void
 	 */
 	public function add_theme_support() {
-
-		// If the current theme doesn't support custom backgrounds, bail.
-		if ( ! current_theme_supports( 'custom-background' ) ) {
-			return;
-		}
 
 		// Run on 'template_redirect' to make sure conditional tags are set.
 		add_action( 'template_redirect', array( &$this, 'setup_background' ) );
@@ -154,9 +245,9 @@ class cb_parallax_filters {
 		$wp_head_callback = get_theme_support( 'custom-background', 'wp-head-callback' );
 
 		// If the theme hasn't set up a custom callback, let's roll our own with a few extra options.
-		if ( empty( $wp_head_callback ) || '_cb_parallax_cb' === $wp_head_callback ) {
+		if ( empty( $wp_head_callback ) || '_custom_background_cb' === $wp_head_callback ) {
 
-			add_theme_support( 'custom-background', array( 'wp-head-callback' => array( &$this, 'custom_background_callback' ) ) );
+			add_theme_support( 'custom-background', array( 'wp-head-callback' => array( &$this, 'echo_custom_background' ) ) );
 		}
 	}
 
@@ -177,22 +268,29 @@ class cb_parallax_filters {
 		}
 
 		// Get the post variables.
-		$post    = get_queried_object();
-		$post_id = get_queried_object_id();
+		global $post;
 
 		// If the post type doesn't support 'custom-background', bail.
 		if ( ! post_type_supports( $post->post_type, 'custom-background' ) ) {
 			return;
 		}
 
+		// If the theme doesn't support 'custom-background', bail.
+		if ( ! current_theme_supports( 'custom-background' ) ) {
+			return;
+		}
+
+		// Get the post meta.
+		$post_meta = get_post_meta( $post->ID, $this->meta_key, true );
+
 		// Get the background color.
-		$this->color = get_post_meta( $post_id, '_cb_parallax_color', true );
+		$this->color = ! empty( $post_meta['background_color'] ) ? $post_meta['background_color'] : '';
 
 		// Get the background image attachment ID.
-		$attachment_id = get_post_meta( $post_id, '_cb_parallax_image_id', true );
+		$attachment_id = ! empty( $post_meta['attachment_id'] ) ? $post_meta['attachment_id'] : false;
 
 		// If an attachment ID was found, get the image source.
-		if ( ! empty( $attachment_id ) ) {
+		if ( false !== $attachment_id ) {
 
 			$image = wp_get_attachment_image_src( $attachment_id, 'full' );
 
@@ -206,26 +304,26 @@ class cb_parallax_filters {
 		// If an image was found, filter image-related theme mods.
 		if ( ! empty( $this->image ) ) {
 
-			$this->repeat     = get_post_meta( $post_id, '_cb_parallax_repeat', true );
-			$this->position_x = get_post_meta( $post_id, '_cb_parallax_position_x', true );
-			$this->position_y = get_post_meta( $post_id, '_cb_parallax_position_y', true );
-			$this->attachment = get_post_meta( $post_id, '_cb_parallax_attachment', true );
+			$this->repeat     = ! empty( $post_meta['background_repeat'] ) ? $post_meta['background_repeat'] : $this->allowed['background_repeat'];
+			$this->position_x = ! empty( $post_meta['position_x'] ) ? $post_meta['position_x'] : $this->allowed['position_x'];
+			$this->position_y = ! empty( $post_meta['position_y'] ) ? $post_meta['position_y'] : $this->allowed['position_y'];
+			$this->attachment = ! empty( $post_meta['background_attachment'] ) ? $post_meta['background_attachment'] : $this->allowed['background_attachment'];
 
 			add_filter( 'theme_mod_background_repeat', array( &$this, 'background_repeat' ), 25 );
-			add_filter( 'theme_mod_background_position_x', array( &$this, 'background_position_x' ), 25 );
-			add_filter( 'theme_mod_background_position_y', array( &$this, 'background_position_y' ), 25 );
+			add_filter( 'theme_mod_position_x', array( &$this, 'position_x' ), 25 );
+			add_filter( 'theme_mod_position_y', array( &$this, 'position_y' ), 25 );
 			add_filter( 'theme_mod_background_attachment', array( &$this, 'background_attachment' ), 25 );
 		}
 	}
 
 	/**
-	 * Sets the background color.
+	 * Sets the background color. Only exectued if using a background image.
 	 *
-	 * @since  0.1.0
+     * @since  0.1.0
 	 * @access public
 	 * @return string
-	 *
-	 * @param  string $color The background color property.
+
+	 * @param  string $color
 	 */
 	public function background_color( $color ) {
 
@@ -233,12 +331,12 @@ class cb_parallax_filters {
 	}
 
 	/**
-	 * Sets the background image.
+	 * Sets the background image. Only exectued if using a background image.
 	 *
-	 * @since  0.1.0
+     * @since  0.1.0
 	 * @access public
 	 * @return string
-	 *
+
 	 * @param  string $image The background image property.
 	 */
 	public function background_image( $image ) {
@@ -255,7 +353,7 @@ class cb_parallax_filters {
 	}
 
 	/**
-	 * Sets the background repeat property.  Only exectued if using a background image.
+	 * Sets the background repeat property. Only exectued if using a background image.
 	 *
 	 * @since  0.1.0
 	 * @access public
@@ -277,29 +375,27 @@ class cb_parallax_filters {
 	 *
 	 * @param  string $position_x The background horizontal position.
 	 */
-	public function background_position_x( $position_x ) {
+	public function position_x( $position_x ) {
 
 		return ! empty( $this->position_x ) ? $this->position_x : $position_x;
 	}
 
 	/**
-	 * Sets the background vertical position.  This isn't technically supported in WordPress (as
-	 * of 3.6).  This method is only executed if using a background image and the
-	 * custom_background_callback() method is executed.
+	 * Sets the background vertical position. Only exectued if using a background image.
 	 *
-	 * @since  0.1.0
+     * @since  0.1.0
 	 * @access public
 	 * @return string
-	 *
+
 	 * @param  string $position_y The background vertical position.
 	 */
-	public function background_position_y( $position_y ) {
+	public function position_y( $position_y ) {
 
 		return ! empty( $this->position_y ) ? $this->position_y : $position_y;
 	}
 
 	/**
-	 * Sets the background attachment property.  Only exectued if using a background image.
+	 * Sets the background attachment property. Only exectued if using a background image.
 	 *
 	 * @since  0.1.0
 	 * @access public
@@ -313,17 +409,25 @@ class cb_parallax_filters {
 	}
 
 	/**
-	 * Outputs the custom background style in the header.  This function is only executed if the value
-	 * of the 'wp-head-callback' for the 'custom-background' feature is set to '__return_false'.
+	 * Outputs the custom background style in the header, if an image is set.
 	 *
-	 * @since  0.1.0
+     * @since  0.1.0
 	 * @access public
 	 * @return void
 	 */
-	public function custom_background_callback() {
+	public function echo_custom_background() {
+
+		global $post;
+
+		$post_meta = get_post_meta( $post->ID, $this->meta_key, true);
 
 		// Get the background image.
 		$image = set_url_scheme( get_background_image() );
+
+		// We do only proceed if an image is set.
+		if ( $image === '' ) {
+			return;
+		}
 
 		// Get the background color.
 		$color = get_background_color();
@@ -336,35 +440,42 @@ class cb_parallax_filters {
 		// Set the background color.
 		$style = $color ? "background-color: #{$color};" : '';
 
-		// If there's a background image, add it.
+		// If there's a background image, add it and set these properties.
 		if ( $image ) {
 
 			// Background image.
 			$style .= " background-image: url('{$image}');";
 
 			// Background repeat.
-			$repeat = get_theme_mod( 'background_repeat', 'repeat' );
-			$repeat = in_array( $repeat, array( 'no-repeat', 'repeat-x', 'repeat-y', 'repeat' ) ) ? $repeat : 'repeat';
+			$mod_repeat = get_theme_mod( 'background_repeat', 'background_repeat' );
+			$repeat = in_array( $post_meta['background_repeat'], array( 'no-repeat', 'repeat-x', 'repeat-y', 'background_repeat' ) ) ? $post_meta['background_repeat'] : $mod_repeat;
 
 			$style .= " background-repeat: {$repeat};";
 
 			// Background position.
-			$position_y = get_theme_mod( 'background_position_y', 'top' );
-			$position_y = in_array( $position_y, array( 'top', 'center', 'bottom' ) ) ? $position_y : 'top';
+			$mod_position_y = get_theme_mod( 'position_y', 'top' );
+			$position_y = in_array( $post_meta['position_y'], array( 'top', 'center', 'bottom' ) ) ? $post_meta['position_y'] : $mod_position_y;
 
-			$position_x = get_theme_mod( 'background_position_x', 'left' );
-			$position_x = in_array( $position_x, array( 'center', 'right', 'left' ) ) ? $position_x : 'left';
+			$mod_position_x = get_theme_mod( 'position_x', 'left' );
+			$position_x = in_array( $post_meta['position_x'], array( 'center', 'right', 'left' ) ) ? $post_meta['position_x'] : $mod_position_x;
 
 			$style .= " background-position: {$position_y} {$position_x};";
 
 			// Background attachment.
-			$attachment = get_theme_mod( 'background_attachment', 'scroll' );
-			$attachment = in_array( $attachment, array( 'fixed', 'scroll' ) ) ? $attachment : 'scroll';
+			$mod_attachment = get_theme_mod( 'background_attachment', 'scroll' );
+			$attachment = in_array( $post_meta['background_attachment'], array( 'fixed', 'scroll' ) ) ? $post_meta['background_attachment'] : $mod_attachment;
 
 			$style .= " background-attachment: {$attachment};";
 		}
 
+		$parallax_enabled = true == $post_meta['parallax_enabled'] ? $post_meta['parallax_enabled'] : false;
+		// We bail, if the parallax option is enabled and the image is served trough the jQuery script. Else we echo the style for the custom background,
+		// while the script won't be executed.
+		if( $parallax_enabled ) {
+			return;
+		}
 		// Output the custom background style.
-		echo "\n" . '<style type="text/css" id="custom-background-css">body.custom-background{ ' . trim( $style ) . ' }</style>' . "\n";
+		echo "\n" . '<style type="text/css" id="custom-background-css">' . 'body.custom-background' . '{ ' . trim( $style ) . ' }' . '</style>' . "\n";
 	}
+
 }

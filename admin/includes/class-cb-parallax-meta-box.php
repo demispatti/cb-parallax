@@ -2,11 +2,6 @@
 
 /**
  * Defines and displays the meta box.
-
- * Since it is so perfect and we're talking GPL-2.0+ -Code,
- * this component is <strong>oh so</strong> based on Justin Tadlocks "Custom Backgrounds Extended" meta box script.
- * I [imagine-a-really-big-fa-heart-icon-here] it.
-
  *
  * @link              https://github.com/demispatti/cb-parallax/
  * @since             0.1.0
@@ -24,7 +19,7 @@ class cb_parallax_meta_box {
 	 *
 	 * @since    0.1.0
 	 * @access   private
-	 * @var      string $plugin_name The ID of this plugin.
+	 * @var      string $plugin_name
 	 */
 	private $plugin_name;
 
@@ -33,7 +28,7 @@ class cb_parallax_meta_box {
 	 *
 	 * @since    0.1.0
 	 * @access   private
-	 * @var      string $plugin_domain The domain of this plugin.
+	 * @var      string $plugin_domain
 	 */
 	private $plugin_domain;
 
@@ -42,7 +37,7 @@ class cb_parallax_meta_box {
 	 *
 	 * @since    0.1.0
 	 * @access   private
-	 * @var      string $plugin_version The current version of this plugin.
+	 * @var      string $plugin_version
 	 */
 	private $plugin_version;
 
@@ -56,28 +51,141 @@ class cb_parallax_meta_box {
 	public $theme_has_callback = false;
 
 	/**
+	 * The name of the meta key for accessing post meta data.
+	 *
+	 * @since    0.1.0
+	 * @access   private
+	 * @var      string $meta_key
+	 */
+	private $meta_key;
+
+	/**
+	 * Maintains the allowed option values.
+	 *
+	 * @since  0.1.0
+	 * @access public
+	 * @var    array $allowed
+	 */
+	public $allowed;
+
+	/**
+	 * A whitelist of allowed options.
+	 *
+	 * @since    0.1.0
+	 * @access   private
+	 * @return   void
+	 */
+	private function set_allowed_options() {
+
+		// Image options for a static background image.
+		$this->allowed['position_x'] = array(
+			'left'   => __( 'left', $this->plugin_domain ),
+			'center' => __( 'center', $this->plugin_domain ),
+			'right'  => __( 'right', $this->plugin_domain ),
+		);
+
+		$this->allowed['position_y'] = array(
+			'top'    => __( 'top', $this->plugin_domain ),
+			'center' => __( 'center', $this->plugin_domain ),
+			'bottom' => __( 'bottom', $this->plugin_domain ),
+		);
+
+		$this->allowed['attachment'] = array(
+			'fixed'  => __( 'fixed', $this->plugin_domain ),
+			'scroll' => __( 'scroll', $this->plugin_domain ),
+		);
+
+		$this->allowed['repeat'] = array(
+			'no-repeat'         => __( 'no-repeat', $this->plugin_domain ),
+			'repeat'            => __( 'repeat', $this->plugin_domain ),
+			'repeat-x'          => __( 'repeat horizontally', $this->plugin_domain ),
+			'repeat-y'          => __( 'repeat vertically', $this->plugin_domain ),
+		);
+
+		// Image options for a dynamic background image.
+		$this->allowed['parallax'] = array(
+			'off' => false,
+			'on'  => true
+		);
+
+		$this->allowed['direction'] = array(
+			'vertical'   => __( 'vertical', $this->plugin_domain ),
+			'horizontal' => __( 'horizontal', $this->plugin_domain )
+		);
+
+		$this->allowed['vertical_scroll_direction'] = array(
+			'top'    => __( 'to top', $this->plugin_domain ),
+			'bottom' => __( 'to bottom', $this->plugin_domain )
+		);
+
+		$this->allowed['horizontal_scroll_direction'] = array(
+			'left'  => __( 'to the left', $this->plugin_domain ),
+			'right' => __( 'to the right', $this->plugin_domain )
+		);
+
+		$this->allowed['horizontal_alignment'] = array(
+			'left'   => __( 'left', $this->plugin_domain ),
+			'center' => __( 'center', $this->plugin_domain ),
+			'right'  => __( 'right', $this->plugin_domain ),
+		);
+
+		$this->allowed['vertical_alignment'] = array(
+			'top'    => __( 'top', $this->plugin_domain ),
+			'center' => __( 'center', $this->plugin_domain ),
+			'bottom' => __( 'bottom', $this->plugin_domain ),
+		);
+
+		$this->allowed['overlay_image'] = array(
+			'none' => __( 'none', $this->plugin_domain ),
+			'01'   => '01.png',
+			'02'   => '02.png',
+			'03'   => '03.png',
+			'04'   => '04.png',
+			'05'   => '05.png',
+			'06'   => '06.png',
+			'07'   => '07.png',
+			'08'   => '08.png',
+			'09'   => '09.png'
+		);
+
+		$this->allowed['overlay_opacity'] = array(
+			'default' => __( 'default', $this->plugin_domain ),
+			'0.1'     => '0.1',
+			'0.2'     => '0.2',
+			'0.3'     => '0.3',
+			'0.4'     => '0.4',
+			'0.5'     => '0.5',
+			'0.6'     => '0.6',
+			'0.7'     => '0.7',
+			'0.8'     => '0.8',
+			'0.9'     => '0.9'
+		);
+	}
+
+	/**
 	 * Kicks off the meta box.
 	 *
-	 * 1. Adds the meta box if the user is on an edit screen and has cap.
-	 * 2. Displays it.
 	 * @since    0.1.0
 	 * @access   public
 	 *
 	 * @param    string $plugin_name
 	 * @param    string $plugin_domain
 	 * @param    string $plugin_version
+	 * @param    string $meta_key
 	 */
-	public function __construct( $plugin_name, $plugin_domain, $plugin_version ) {
+	public function __construct( $plugin_name, $plugin_domain, $plugin_version, $meta_key ) {
 
 		$this->plugin_name    = $plugin_name;
 		$this->plugin_domain  = $plugin_domain;
 		$this->plugin_version = $plugin_version;
+		$this->meta_key       = $meta_key;
 
 		/* If the current user can't edit custom backgrounds, bail early. */
 		if ( ! current_user_can( 'cb_parallax_edit' ) && ! current_user_can( 'edit_theme_options' ) ) {
 			return;
 		}
 
+		$this->set_allowed_options();
 		$this->init();
 	}
 
@@ -100,6 +208,7 @@ class cb_parallax_meta_box {
 	 *
 	 * @since  0.1.0
 	 * @access public
+	 * @return void
 	 */
 	public function load_post() {
 
@@ -117,24 +226,21 @@ class cb_parallax_meta_box {
 		$this->theme_has_callback = empty( $wp_head_callback ) || '_custom_background_cb' === $wp_head_callback ? false : true;
 
 		// Add the meta box
-		add_action( 'add_meta_boxes', array( &$this, 'add_meta_boxes' ), 5 );
+		add_action( 'add_meta_boxes', array( &$this, 'add_meta_box' ), 5 );
 
 		// Save meta data.
 		add_action( 'save_post', array( &$this, 'save_post' ), 10, 2 );
-
 	}
 
 	/**
-	 * Add custom meta boxes.
+	 * Adds the meta box.
 	 *
 	 * @since  0.1.0
 	 * @access public
-	 *
 	 * @param  string $post_type
-	 *
 	 * @return void
 	 */
-	public function add_meta_boxes( $post_type ) {
+	public function add_meta_box( $post_type ) {
 
 		add_meta_box( $this->plugin_name . '-meta-box', __( 'cb Parallax', $this->plugin_domain ), array(
 			&$this,
@@ -143,45 +249,37 @@ class cb_parallax_meta_box {
 	}
 
 	/**
-	 * Display the custom background meta box.
+	 * Displays the meta box.
 	 *
 	 * @since  0.1.0
 	 * @access public
-	 *
 	 * @param  object $post
-	 *
 	 * @return void
 	 */
 	public function display_meta_box( $post ) {
 
+		// Get theme mods.
+		$mod_repeat     = get_theme_mod( 'background_repeat', 'no-repeat' );
+		$mod_position_x = get_theme_mod( 'position_x', 'left' );
+		$mod_position_y = get_theme_mod( 'position_y', 'top' );
+		$mod_attachment = get_theme_mod( 'background_attachment', 'fixed' );
+
+		// Get the post meta.
+		$post_meta = get_post_meta( $post->ID, $this->meta_key, true );
+
 		// Get the background color.
-		$color = trim( get_post_meta( $post->ID, '_cb_parallax_color', true ), '#' );
+		$background_color = ! empty( $post_meta['background_color'] ) ? $post_meta['background_color'] : '';
 
 		// Get the background image attachment ID.
-		$attachment_id = get_post_meta( $post->ID, '_cb_parallax_image_id', true );
+		$attachment_id = isset($post_meta['attachment_id']) ? $post_meta['attachment_id'] : false;
 
 		// If an attachment ID was found, get the image source.
-		if ( ! empty( $attachment_id ) ) {
-			$image = wp_get_attachment_image_src( absint( $attachment_id ), 'post-thumbnail' );
+		if ( false !== $attachment_id ) {
+			$image = wp_get_attachment_image_src( absint( $attachment_id ), 'full' );
 		}
 
 		// Get the image URL.
 		$url = ! empty( $image ) && isset( $image[0] ) ? $image[0] : '';
-
-		// Get parallax option (bool)
-		$parallax = get_post_meta( $post->ID, '_cb_parallax_enabled', true );
-
-		// Get the background image settings.
-		$repeat     = get_post_meta( $post->ID, '_cb_parallax_repeat', true );
-		$position_x = get_post_meta( $post->ID, '_cb_parallax_position_x', true );
-		$position_y = get_post_meta( $post->ID, '_cb_parallax_position_y', true );
-		$attachment = get_post_meta( $post->ID, '_cb_parallax_attachment', true );
-
-		// Get theme mods.
-		$mod_repeat     = get_theme_mod( 'background_repeat', 'repeat' );
-		$mod_position_x = get_theme_mod( 'background_position_x', 'left' );
-		$mod_position_y = get_theme_mod( 'background_position_y', 'top' );
-		$mod_attachment = get_theme_mod( 'background_attachment', 'scroll' );
 
 		/**
 		 * Make sure values are set for the image options.  This should always be set so that we can
@@ -190,127 +288,187 @@ class cb_parallax_meta_box {
 		 * consistent between different themes and different WP custom background settings.  The data
 		 * will only be stored if the user selects a background image.
 		 */
-		$repeat     = ! empty( $repeat ) ? $repeat : $mod_repeat;
-		$position_x = ! empty( $position_x ) ? $position_x : $mod_position_x;
-		$position_y = ! empty( $position_y ) ? $position_y : $mod_position_y;
-		$attachment = ! empty( $attachment ) ? $attachment : $mod_attachment;
+		$background_repeat     = ! empty( $post_meta['background_repeat'] ) ? $post_meta['background_repeat'] : $mod_repeat;
+		$position_x            = ! empty( $post_meta['position_x'] ) ? $post_meta['position_x'] : $mod_position_x;
+		$position_y            = ! empty( $post_meta['position_y'] ) ? $post_meta['position_y'] : $mod_position_y;
+		$background_attachment = ! empty( $post_meta['background_attachment'] ) ? $post_meta['background_attachment'] : $mod_attachment;
 
-		// Set up an array of allowed values for the repeat option.
-		$repeat_options = array(
-			'no-repeat' => __( 'No Repeat', $this->plugin_domain ),
-			'repeat'    => __( 'Repeat', $this->plugin_domain ),
-			'repeat-x'  => __( 'Repeat Horizontally', $this->plugin_domain ),
-			'repeat-y'  => __( 'Repeat Vertically', $this->plugin_domain ),
-		);
+		// Get parallax-enabled option.
+		$parallax_enabled = ! empty( $post_meta['parallax_enabled'] ) ? $post_meta['parallax_enabled'] : array_values( $this->allowed['parallax'] )[0];
+		$direction        = ! empty( $post_meta['direction'] ) ? $post_meta['direction'] : array_values( $this->allowed['direction'] )[0];
 
-		// Set up an array of allowed values for the position-x option.
-		$position_x_options = array(
-			'left'   => __( 'Left', $this->plugin_domain ),
-			'right'  => __( 'Right', $this->plugin_domain ),
-			'center' => __( 'Center', $this->plugin_domain ),
-		);
 
-		// Set up an array of allowed values for the position-x option.
-		$position_y_options = array(
-			'top'    => __( 'Top', $this->plugin_domain ),
-			'bottom' => __( 'Bottom', $this->plugin_domain ),
-			'center' => __( 'Center', $this->plugin_domain ),
-		);
+		$vertical_scroll_direction   = ! empty( $post_meta['vertical_scroll_direction'] ) ? $post_meta['vertical_scroll_direction'] : array_values( $this->allowed['vertical_scroll_direction'] )[0];
+		$horizontal_scroll_direction = ! empty( $post_meta['horizontal_scroll_direction'] ) ? $post_meta['horizontal_scroll_direction'] : array_values( $this->allowed['horizontal_scroll_direction'] )[0];
+		$vertical_alignment   = ! empty( $post_meta['vertical_alignment'] ) ? $post_meta['vertical_alignment'] : array_values( $this->allowed['vertical_alignment'] )[1];
+		$horizontal_alignment = ! empty( $post_meta['horizontal_alignment'] ) ? $post_meta['horizontal_alignment'] : array_values( $this->allowed['horizontal_alignment'] )[1];
 
-		// Set up an array of allowed values for the attachment option.
-		$attachment_options = array(
-			'scroll' => __( 'Scroll', $this->plugin_domain ),
-			'fixed'  => __( 'Fixed', $this->plugin_domain ),
-		); ?>
+		$overlay_image   = ! empty( $post_meta['overlay_image'] ) ? $post_meta['overlay_image'] : array_values( $this->allowed['overlay_image'] )[0];
+		$overlay_opacity = ! empty( $post_meta['overlay_opacity'] ) ? $post_meta['overlay_opacity'] : array_values( $this->allowed['overlay_opacity'] )[3];
+		?>
 
-		<!-- Begin hidden fields. -->
+		<!-- hidden fields. -->
 		<?php wp_nonce_field( 'cb_parallax_nonce_field', 'cb_parallax_nonce' ); ?>
-		<input type="hidden" name="cb-parallax-background-image" id="cb-parallax-background-image" value="<?php echo esc_attr( $attachment_id ); ?>"/>
-		<!-- End hidden fields. -->
+		<input type="hidden" name="cbp_background_image" id="cbp_background_image" value="<?php echo ! empty( $attachment_id ) ? esc_attr( $attachment_id ) : '' ?>"/>
+		<input type="hidden" name="cbp_background_image_location" id="cbp_background_image_location" value="<?php echo ! empty( $attachment_id ) ? esc_url( $url ) : '' ?>"/>
+		<!-- # hidden fields. -->
 
-		<!-- Begin background color. -->
+		<!-- background color. -->
 		<p>
-			<label for="cb-parallax-background-color"><?php _e( 'Background Color', $this->plugin_domain ); ?></label>
-			<input type="text" name="cb-parallax-background-color" id="cb-parallax-backround-color" class="cb-parallax-wp-color-picker"
-			       value="#<?php echo esc_attr( $color ); ?>"/>
+			<label for="cbp_background_color"><?php _e( 'Background Color', $this->plugin_domain ); ?></label>
+			<input type="text" name="cbp_background_color" id="cbp_background_color" class="wp-color-picker cbp-color-picker" value="#<?php echo esc_attr( $background_color ); ?>"/>
 		</p>
-		<!-- End background color. -->
+		<!-- # background color. -->
 
-		<!-- Begin background image. -->
+		<!-- background image. -->
 		<p>
-			<a href="#" class="cb-parallax-add-media cb-parallax-add-media-img"><img class="cb-parallax-background-image-url"
+			<a href="#" class="cbp-media-url"><img id="cbp_background_image_url" class="cbp_background_image_url"
 			                                                                         src="<?php echo esc_url( $url ); ?>"
 			                                                                         style="max-width: 100%; max-height: 200px; display: block;"/></a>
-			<a href="#" class="cb-parallax-add-media cb-parallax-add-media-text"><?php _e( 'Set background image', $this->plugin_domain ); ?></a>
-			<a href="#" class="cb-parallax-remove-media"><?php _e( 'Remove background image', $this->plugin_domain ); ?></a>
 		</p>
-		<!-- End background image. -->
+		<!-- # background image. -->
 
-		<!-- Begin parallax checkbox -->
+		<!-- media buttons. -->
 		<p>
-			<input type="checkbox" id="cb-parallax-enabled-checkbox"
-			       name="cb-parallax-enabled-checkbox" <?php checked( $parallax, 'on', true ); ?> />
-			<label for="cb-parallax-enabled-checkbox"><?php _e( 'Enable parallax effect', $this->plugin_domain ); ?></label>
+			<a href="#" class="button button-secondary cbp-add-media-button"><?php _e( 'Set background image', $this->plugin_domain ); ?></a>
+			<a href="#" class="button button-secondary cbp-remove-media-button"><?php _e( 'Remove background image', $this->plugin_domain ); ?></a>
 		</p>
-		<!-- End parallax checkbox -->
+		<!-- # media buttons. -->
 
-		<!-- Begin scroll ratio range -->
+		<!-- parallax checkbox -->
+		<p class="cbp-single-option-container cbp-parallax-enabled-container">
+			<label for="cbp_parallax_enabled" class="label-for-cbp-switch"><?php echo __( 'Parallax', $this->plugin_domain );  ?></label>
 
-		<!-- End scroll ratio range -->
+			<label class="cbp-switch">
+				<input type="checkbox" id="cbp_parallax_enabled" class="cbp-switch-input cbp_parallax_enabled" name="cbp_parallax_enabled" value="1"
+					<?php checked( 1, isset( $parallax_enabled ) ? $parallax_enabled : 0, true ); ?>>
+				<span class="cbp-switch-label cbp_parallax_enabled" data-on="On" data-off="Off"></span>
+				<span class="cbp-switch-handle"></span>
+			</label>
+		</p>
+		<!-- # parallax checkbox -->
 
-		<!-- Begin background image options -->
-		<div class="cb-parallax-background-image-options">
-
-			<p>
-				<label for="cb-parallax-background-repeat"><?php _e( 'Repeat', $this->plugin_domain ); ?></label>
-				<select class="widefat" name="cb-parallax-background-repeat" id="cb-parallax-background-repeat">
-					<?php foreach ( $repeat_options as $option => $label ) { ?>
+        <!-- background image options -->
+		<div class="cbp-background-image-options-container">
+			<p class="cbp-single-option-container">
+				<label for="cbp_background_repeat"><?php _e( 'Repeat', $this->plugin_domain ); ?></label>
+				<select name="cbp_background_repeat" id="cbp_background_repeat" class="widefat cbp_background_repeat fancy-select cbp-fancy-select">
+					<?php foreach ( $this->allowed['repeat'] as $option => $label ) { ?>
 						<option
-							value="<?php echo esc_attr( $option ); ?>" <?php selected( $repeat, $option ); ?> ><?php echo esc_html( $label ); ?></option>
+							value="<?php echo esc_attr( $option ); ?>" <?php selected( $background_repeat, $option ); ?> ><?php echo esc_html( $label ); ?></option>
 					<?php } ?>
 				</select>
 			</p>
-
-			<p>
-				<label for="cb-parallax-background-position-x"><?php _e( 'Horizontal Position', $this->plugin_domain ); ?></label>
-				<select class="widefat" name="cb-parallax-background-position-x" id="cb-parallax-background-position-x">
-					<?php foreach ( $position_x_options as $option => $label ) { ?>
+			<p class="cbp-single-option-container">
+				<label for="cbp_position_y"><?php _e( 'Vertical Position', $this->plugin_domain ); ?></label>
+				<select name="cbp_position_y" id="cbp_position_y" class="widefat cbp_position_y fancy-select cbp-fancy-select">
+					<?php foreach ( $this->allowed['position_y'] as $option => $label ) { ?>
+						<option
+							value="<?php echo esc_attr( $option ); ?>" <?php selected( $position_y, $option ); ?> ><?php echo esc_html( $label ); ?></option>
+					<?php } ?>
+				</select>
+			</p>
+			<p class="cbp-single-option-container">
+				<label for="cbp_position_x"><?php _e( 'Horizontal Position', $this->plugin_domain ); ?></label>
+				<select name="cbp_position_x" id="cbp_position_x" class="widefat cbp_position_x fancy-select cbp-fancy-select">
+					<?php foreach ( $this->allowed['position_x'] as $option => $label ) { ?>
 						<option
 							value="<?php echo esc_attr( $option ); ?>" <?php selected( $position_x, $option ); ?> ><?php echo esc_html( $label ); ?></option>
 					<?php } ?>
 				</select>
 			</p>
-				<p>
-					<label for="cb-parallax-background-position-y"><?php _e( 'Vertical Position', $this->plugin_domain ); ?></label>
-					<select class="widefat" name="cb-parallax-background-position-y" id="cb-parallax-background-position-y">
-						<?php foreach ( $position_y_options as $option => $label ) { ?>
-							<option
-								value="<?php echo esc_attr( $option ); ?>" <?php selected( $position_y, $option ); ?> ><?php echo esc_html( $label ); ?></option>
-						<?php } ?>
-					</select>
-				</p>
-			<p>
-				<label for="cb-parallax-background-attachment"><?php _e( 'Attachment', $this->plugin_domain ); ?></label>
-				<select class="widefat" name="cb-parallax-background-attachment" id="cb-parallax-background-attachment">
-					<?php foreach ( $attachment_options as $option => $label ) { ?>
+			<p class="cbp-single-option-container">
+				<label for="cbp_background_attachment"><?php _e( 'Attachment', $this->plugin_domain ); ?></label>
+				<select name="cbp_background_attachment" id="cbp_background_attachment" class="widefat cbp_background_attachment fancy-select cbp-fancy-select">
+					<?php foreach ( $this->allowed['attachment'] as $option => $label ) { ?>
 						<option
-							value="<?php echo esc_attr( $option ); ?>" <?php selected( $attachment, $option ); ?> ><?php echo esc_html( $label ); ?></option>
+							value="<?php echo esc_attr( $option ); ?>" <?php selected( $background_attachment, $option ); ?> ><?php echo esc_html( $label ); ?></option>
 					<?php } ?>
 				</select>
 			</p>
-
 		</div>
-		<!-- End background image options. -->
+		<!-- # background image options. -->
 
-	<?php }
+		<!-- parallax options -->
+		<div class="cbp-parallax-options-container">
+			<p class="cbp-single-option-container">
+				<label for="cbp_direction"><?php _e( 'Mode', $this->plugin_domain ); ?></label>
+				<select name="cbp_direction" id="cbp_direction" class="widefat cbp_direction fancy-select cbp-fancy-select">
+					<?php foreach ( $this->allowed['direction'] as $key => $value ) { ?>
+						<option
+							value="<?php echo esc_attr( $value ); ?>" <?php selected( $value, $direction ); ?> ><?php echo esc_html( $value ); ?></option>
+					<?php } ?>
+				</select>
+			</p>
+			<p class="cbp-single-option-container" id="cpb_vertical_scroll_direction_container">
+				<label for="cbp_vertical_scroll_direction"><?php _e( 'Scroll Direction', $this->plugin_domain ); ?></label>
+				<select name="cbp_vertical_scroll_direction" id="cbp_vertical_scroll_direction" class="widefat cbp_vertical_scroll_direction fancy-select cbp-fancy-select">
+					<?php foreach ( $this->allowed['vertical_scroll_direction'] as $key => $value ) { ?>
+						<option
+							value="<?php echo esc_attr( $value ); ?>" <?php selected( $value, $vertical_scroll_direction ); ?> ><?php echo esc_html( $value ); ?></option>
+					<?php } ?>
+				</select>
+			</p>
+			<p class="cbp-single-option-container" id="cpb_horizontal_scroll_direction_container">
+				<label for="cbp_horizontal_scroll_direction"><?php _e( 'Scroll Direction', $this->plugin_domain ); ?></label>
+				<select name="cbp_horizontal_scroll_direction" id="cbp_horizontal_scroll_direction" class="widefat cbp_horizontal_scroll_direction fancy-select cbp-fancy-select">
+					<?php foreach ( $this->allowed['horizontal_scroll_direction'] as $key => $value ) { ?>
+						<option
+							value="<?php echo esc_attr( $value ); ?>" <?php selected( $value, $horizontal_scroll_direction ); ?> ><?php echo esc_html( $value ); ?></option>
+					<?php } ?>
+				</select>
+			</p>
+			<p class="cbp-single-option-container" id="cbp_horizontal_alignment_container">
+				<label for="cbp_horizontal_alignment"><?php _e( 'Alignment', $this->plugin_domain ); ?></label>
+				<select name="cbp_horizontal_alignment" id="cbp_horizontal_alignment"
+				        class="widefat cbp_horizontal_alignment fancy-select cbp-fancy-select">
+					<?php foreach ( $this->allowed['horizontal_alignment'] as $key => $value ) { ?>
+						<option
+							value="<?php echo esc_attr( $value ); ?>" <?php selected( $value, $horizontal_alignment ); ?> ><?php echo esc_html( $value ); ?></option>
+					<?php } ?>
+				</select>
+			</p>
+			<p class="cbp-single-option-container" id="cbp_vertical_alignment_container">
+				<label for="cbp_vertical_alignment"><?php _e( 'Alignment', $this->plugin_domain ); ?></label>
+				<select name="cbp_vertical_alignment" id="cbp_vertical_alignment"
+				        class="widefat cbp_vertical_alignment fancy-select cbp-fancy-select">
+					<?php foreach ( $this->allowed['vertical_alignment'] as $key => $value ) { ?>
+						<option
+							value="<?php echo esc_attr( $value ); ?>" <?php selected( $value, $vertical_alignment ); ?> ><?php echo esc_html( $value ); ?></option>
+					<?php } ?>
+				</select>
+			</p>
+			<p class="cbp-single-option-container">
+				<label for="cbp_overlay_image"><?php _e( 'Overlay', $this->plugin_domain ); ?></label>
+				<select name="cbp_overlay_image" id="cbp_overlay_image" class="widefat cbp_overlay_image fancy-select cbp-fancy-select">
+					<?php foreach ( $this->allowed['overlay_image'] as $key => $value ) { ?>
+						<option
+							value="<?php echo esc_attr( $value ); ?>" <?php selected( $value, $overlay_image ); ?> ><?php echo esc_html( $value ); ?></option>
+					<?php } ?>
+				</select>
+			</p>
+			<p class="cbp-single-option-container">
+				<label for="cbp_overlay_opacity"><?php _e( 'Overlay Opacity', $this->plugin_domain ); ?></label>
+				<select name="cbp_overlay_opacity" id="cbp_overlay_opacity" class="widefat cbp_overlay_opacity fancy-select cbp-fancy-select">
+					<?php foreach ( $this->allowed['overlay_opacity'] as $key => $value ) { ?>
+						<option
+							value="<?php echo esc_attr( $value ); ?>" <?php selected( $value, $overlay_opacity ); ?> ><?php echo esc_html( $value ); ?></option>
+					<?php } ?>
+				</select>
+			</p>
+		</div>
+		<!-- # parallax options. -->
+
+	<?php
+	}
 
 	/**
-	 * Saves the data from the custom backgrounds meta box.
+	 * Saves the data from the meta box.
 	 *
 	 * @since  0.1.0
 	 * @access public
-	 * @return void
-	 *
+	 * @return void / mixed
+     *
 	 * @param  int    $post_id
 	 * @param  object $post
 	 */
@@ -318,7 +476,6 @@ class cb_parallax_meta_box {
 
 		// Verify the nonce.
 		if ( ! isset( $_POST['cb_parallax_nonce'] ) || ! wp_verify_nonce( $_POST['cb_parallax_nonce'], 'cb_parallax_nonce_field' ) ) {
-
 			return;
 		}
 
@@ -327,83 +484,59 @@ class cb_parallax_meta_box {
 
 		// Check if the current user has permission to edit the post.
 		if ( ! current_user_can( $post_type->cap->edit_post, $post_id ) ) {
-
 			return $post_id;
 		}
 
 		// Don't save if the post is only a revision.
 		if ( 'revision' == $post->post_type ) {
-
 			return;
 		}
 
+		// Parallax
+		$meta['parallax_enabled'] = in_array( $_POST['cbp_parallax_enabled'], $this->allowed['parallax'] ) ? $_POST['cbp_parallax_enabled'] : false;
+
+		$meta['direction']        = in_array( $_POST['cbp_direction'], $this->allowed['direction'] ) ? $_POST['cbp_direction'] : array_values( $this->allowed['direction'] )[0];
 		// Sanitize the value for the color.
-		$color = preg_replace( '/[^0-9a-fA-F]/', '', $_POST['cb-parallax-background-color'] );
+		$meta['background_color'] = ! empty( $_POST['cbp_background_color'] ) ? preg_replace( '/[^0-9a-fA-F]/', '', $_POST['cbp_background_color'] ) : '';
+
+		// Get the background image.
+		$meta['background_image'] = isset( $_POST['cbp_background_image_location'] ) ? $_POST['cbp_background_image_location'] : '';
 
 		// Make sure the background image attachment ID is an absolute integer.
-		$image_id = absint( $_POST['cb-parallax-background-image'] );
+		$meta['attachment_id']    = absint( $_POST['cbp_background_image'] );
 
-		$parallax = $_POST['cb-parallax-enabled-checkbox'];
+		// Make sure the values have been white-listed. Otherwise, set the default value.
+		$meta['background_repeat']     = in_array( $_POST['cbp_background_repeat'], $this->allowed['repeat'] ) ? $_POST['cbp_background_repeat'] : array_values( $this->allowed['repeat'] )[0];
+		$meta['position_x']            = in_array( $_POST['cbp_position_x'], $this->allowed['position_x'] ) ? $_POST['cbp_position_x'] : array_values( $this->allowed['position_x'] )[0];
 
-		//$scroll_ratio = $_POST['cb-parallax-scroll-ratio'];
+		$meta['position_y']            = in_array( $_POST['cbp_position_y'], $this->allowed['position_y'] ) ? $_POST['cbp_position_y'] : array_values( $this->allowed['position_y'] )[0];
 
-		// If there's not an image ID, set background image options to an empty string.
-		if ( 0 >= $image_id ) {
+		$meta['background_attachment'] = in_array( $_POST['cbp_background_attachment'], $this->allowed['attachment'] ) ? $_POST['cbp_background_attachment'] : array_values( $this->allowed['attachment'] )[0];
 
-			$repeat = $position_x = $position_y = $attachment = '';
-			// If there is an image ID, validate the background image options.
-		} else {
+		$meta['vertical_scroll_direction'] = in_array( $_POST['cbp_vertical_scroll_direction'], $this->allowed['vertical_scroll_direction'] ) ? $_POST['cbp_vertical_scroll_direction'] : array_values( $this->allowed['vertical_scroll_direction'] )[0];
 
-			// Add the image to the pool of uploaded background images for this theme.
-			if ( ! empty( $image_id ) ) {
+		$meta['horizontal_scroll_direction'] = in_array( $_POST['cbp_horizontal_scroll_direction'], $this->allowed['horizontal_scroll_direction'] ) ? $_POST['cbp_horizontal_scroll_direction'] : array_values( $this->allowed['horizontal_scroll_direction'] )[0];
 
-				$is_custom_header = get_post_meta( $image_id, '_wp_attachment_is_custom_background', true );
+		$meta['horizontal_alignment'] = in_array( $_POST['cbp_horizontal_alignment'], $this->allowed['horizontal_alignment'] ) ? $_POST['cbp_horizontal_alignment'] : array_values( $this->allowed['horizontal_alignment'] )[0];
 
-				if ( $is_custom_header !== get_stylesheet() ) {
-					update_post_meta( $image_id, '_wp_attachment_is_custom_background', get_stylesheet() );
-				}
+		$meta['vertical_alignment'] = in_array( $_POST['cbp_vertical_alignment'], $this->allowed['vertical_alignment'] ) ? $_POST['cbp_vertical_alignment'] : array_values( $this->allowed['vertical_alignment'] )[0];
+
+		$meta['overlay_image'] = in_array( $_POST['cbp_overlay_image'], $this->allowed['overlay_image'] ) ? $_POST['cbp_overlay_image'] : array_values( $this->allowed['overlay_image'] )[0];
+
+		$meta['overlay_opacity'] = in_array( $_POST['cbp_overlay_opacity'], $this->allowed['overlay_opacity'] ) ? $_POST['cbp_overlay_opacity'] : array_values( $this->allowed['overlay_opacity'] )[3];
+
+		// If an attachment is set...
+		if ( $meta['attachment_id'] != 0 ) {
+
+			$is_custom_header = get_post_meta( $post->ID, '_wp_attachment_is_custom_background', true );
+
+			// ...add the image to the pool of uploaded background images for this theme.
+			if ( $is_custom_header !== get_stylesheet() ) {
+				update_post_meta( $post_id, '_wp_attachment_is_custom_background', get_stylesheet() );
 			}
 
-			// White-listed values.
-			$allowed_repeat     = array( 'no-repeat', 'repeat', 'repeat-x', 'repeat-y' );
-			$allowed_position_x = array( 'left', 'right', 'center' );
-			$allowed_position_y = array( 'top', 'bottom', 'center' );
-			$allowed_attachment = array( 'scroll', 'fixed' );
-
-			// Make sure the values have been white-listed. Otherwise, set an empty string.
-			$repeat     = in_array( $_POST['cb-parallax-background-repeat'], $allowed_repeat ) ? $_POST['cb-parallax-background-repeat'] : '';
-			$position_x = in_array( $_POST['cb-parallax-background-position-x'], $allowed_position_x ) ? $_POST['cb-parallax-background-position-x'] : '';
-			$position_y = in_array( $_POST['cb-parallax-background-position-y'], $allowed_position_y ) ? $_POST['cb-parallax-background-position-y'] : '';
-			$attachment = in_array( $_POST['cb-parallax-background-attachment'], $allowed_attachment ) ? $_POST['cb-parallax-background-attachment'] : '';
-		}
-
-		// Set up an array of meta keys and values.
-		$meta = array(
-			'_cb_parallax_color'            => $color,
-			'_cb_parallax_image_id'         => $image_id,
-			'_cb_parallax_repeat'           => $repeat,
-			'_cb_parallax_position_x'       => $position_x,
-			'_cb_parallax_position_y'       => $position_y,
-			'_cb_parallax_attachment'       => $attachment,
-			'_cb_parallax_enabled' => $parallax,
-		);
-
-		// Loop through the meta array and add, update, or delete the post metadata.
-		foreach ( $meta as $meta_key => $new_meta_value ) {
-
-			// Get the meta value of the custom field key
-			$meta_value = get_post_meta( $post_id, $meta_key, true );
-
-			// If a new meta value was added and there was no previous value, add it.
-			if ( $new_meta_value && '' == $meta_value ) {
-				add_post_meta( $post_id, $meta_key, $new_meta_value, true );
-			} // If the new meta value does not match the old value, update it.
-			elseif ( $new_meta_value && $new_meta_value != $meta_value ) {
-				update_post_meta( $post_id, $meta_key, $new_meta_value );
-			} // If there is no new meta value but an old value exists, delete it.
-			elseif ( '' == $new_meta_value && $meta_value ) {
-				delete_post_meta( $post_id, $meta_key, $meta_value );
-			}
+			// Save data.
+			update_post_meta( $post_id, $this->meta_key, $meta );
 		}
 	}
 

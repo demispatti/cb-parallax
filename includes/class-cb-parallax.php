@@ -19,7 +19,7 @@ class cb_parallax {
 	 *
 	 * @since    0.1.0
 	 * @access   private
-	 * @var      string $plugin_name The string used to uniquely identify this plugin.
+	 * @var      string $plugin_name
 	 */
 	private $plugin_name;
 
@@ -28,7 +28,7 @@ class cb_parallax {
 	 *
 	 * @since    0.1.0
 	 * @access   private
-	 * @var      string $plugin_domain The string used to uniquely identify this plugin.
+	 * @var      string $plugin_domain
 	 */
 	private $plugin_domain;
 
@@ -37,16 +37,26 @@ class cb_parallax {
 	 *
 	 * @since    0.1.0
 	 * @access   private
-	 * @var      string $plugin_version The current version of the plugin.
+	 * @var      string $plugin_version
 	 */
 	private $plugin_version;
 
 	/**
-	 * The loader that's responsible for maintaining and registering all hooks that power the plugin.
+	 * The name of the meta key for accessing post meta data.
 	 *
 	 * @since    0.1.0
 	 * @access   private
-	 * @var      cb_parallax_loader $loader Maintains and registers all hooks for the plugin.
+	 * @var      string $meta_key
+	 */
+	public $meta_key;
+
+	/**
+	 * The loader that's responsible for maintaining
+	 * and registering all hooks that power the plugin.
+	 *
+     * @since    0.1.0
+	 * @access   private
+	 * @var      cb_parallax_loader $loader
 	 */
 	private $loader;
 
@@ -65,6 +75,7 @@ class cb_parallax {
 		$this->plugin_name    = 'cb-parallax';
 		$this->plugin_domain  = $this->get_plugin_domain();
 		$this->plugin_version = '0.1.0';
+		$this->meta_key       = 'cb_parallax';
 
 		$this->load_dependencies();
 		$this->set_i18n();
@@ -122,23 +133,23 @@ class cb_parallax {
 	 */
 	private function define_admin_hooks() {
 
-		$admin = new cb_parallax_admin( $this->get_plugin_name(), $this->get_plugin_domain(), $this->get_plugin_version() );
+		$admin = new cb_parallax_admin( $this->get_plugin_name(), $this->get_plugin_domain(), $this->get_plugin_version(), $this->get_loader(), $this->get_meta_key() );
 
+		$this->loader->add_action( 'admin_enqueue_scripts', $admin, 'enqueue_styles' );
 		$this->loader->add_action( 'admin_enqueue_scripts', $admin, 'enqueue_scripts' );
-		$this->loader->add_action( 'admin_init', $admin, 'add_editing_functionality' );
-		// Prepared, Website follows soon
-		//$this->loader->add_action( 'plugin_row_meta', $admin, 'plugin_row_meta', 10, 2 );
+		$this->loader->add_action( 'admin_init', $admin, 'check_cap' );
+		$this->loader->add_action( 'plugin_row_meta', $admin, 'plugin_row_meta', 10, 2 );
 	}
 
 	/**
 	 * Register all of the hooks related to the public-facing functionality of the plugin.
 	 *
-	 * @since    0.2.0
+	 * @since    0.1.0
 	 * @access   private
 	 */
 	private function define_public_hooks() {
 
-		$public = new cb_parallax_public( $this->get_plugin_name(), $this->get_plugin_domain(), $this->get_plugin_version() );
+		$public = new cb_parallax_public( $this->get_plugin_name(), $this->get_plugin_domain(), $this->get_plugin_version(), $this->get_loader(), $this->get_meta_key() );
 
 		$this->loader->add_action( 'wp_enqueue_scripts', $public, 'enqueue_styles' );
 		$this->loader->add_action( 'wp_enqueue_scripts', $public, 'enqueue_scripts' );
@@ -187,10 +198,34 @@ class cb_parallax {
 	 *
 	 * @since     0.1.0
 	 * @access    public
-	 * @return    string    The version number of the plugin.
+	 * @return    string  $plugin_version
 	 */
 	public function get_plugin_version() {
 
 		return $this->plugin_version;
+	}
+
+	/**
+	 * Retrieves the loader.
+	 *
+	 * @since     0.1.0
+	 * @access    public
+	 * @return    string  $loader
+	 */
+	public function get_loader() {
+
+		return $this->loader;
+	}
+
+	/**
+	 * Retrieves the meta key for accessing the post meta data.
+	 *
+	 * @since     0.1.0
+	 * @access    public
+	 * @return    string  $meta_key
+	 */
+	public function get_meta_key() {
+
+		return $this->meta_key;
 	}
 }

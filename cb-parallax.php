@@ -7,8 +7,7 @@
  * effect for the custom background image (on boxed layouts) and the Nice Scroll library for smooth scrolling.
  * The parallax effect requires an image with a width of at least 1920px and a height of at least 1200px.
  * Have Fun!
- * https://github.com/justintadlock/custom-background-extended
- * So donations should rather take place at http://themehybrid.com/donate
+ *
  * in memoriam of Bender ( 1999 to 2013 )
  * Built with Tom McFarlin's WordPress Plugin Boilerplate in mind -
  * which now is maintained by Devin Vinson.
@@ -18,16 +17,18 @@
  * @since             0.1.0
  * @package           cb_parallax
  * @wordpress-plugin
- *                    Plugin Name:       cbParallax
- *                    Plugin URI:        https://github.com/demispatti/cb-parallax
- *                    Description:       Let's you add <a href="http://codex.wordpress.org/Custom_Backgrounds">custom backgrounds</a> - with or without vertical parallax effect - for single posts and pages. It requires your theme to support the WordPress <code>custom-background</code> feature.
- *                    target="_blank">custom-background</a> feature.
- *                    Author:            Demis Patti <demis@demispatti.ch>
- *                    Author URI:        http://demispatti.ch
- *                    License:           GPL-2.0+
- *                    License URI:       http://www.gnu.org/licenses/gpl-2.0.txt
- *                    Text Domain:       cb-parallax
- *                    Domain Path:       /languages
+ * Plugin Name:       cbParallax
+ * Contributors:      demispatti
+ * Plugin URI:        https://github.com/demispatti/cb-parallax
+ * Description:       Let's you add <a href="http://codex.wordpress.org/Custom_Backgrounds">custom backgrounds</a> - with or without vertical parallax effect - for single posts and pages. It requires your theme to support the WordPress <code>custom-background</code> feature.
+ * Author:            Demis Patti <demis@demispatti.ch>
+ * Author URI:        http://demispatti.ch
+ * License:           GPL-2.0+
+ * License URI:       http://www.gnu.org/licenses/gpl-2.0.txt
+ * Version:			  0.2.0
+ * Stable tag:        0.2.0
+ * Text Domain:       cb-parallax
+ * Domain Path:       /languages
  */
 
 /**

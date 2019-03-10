@@ -19,7 +19,7 @@ class cb_parallax_public {
 	 *
 	 * @since    0.1.0
 	 * @access   private
-	 * @var      string $plugin_name The string used to uniquely identify this plugin.
+	 * @var      string $plugin_name
 	 */
 	private $plugin_name;
 
@@ -28,7 +28,7 @@ class cb_parallax_public {
 	 *
 	 * @since    0.1.0
 	 * @access   private
-	 * @var      string $plugin_domain The string used to uniquely identify this plugin.
+	 * @var      string $plugin_domain
 	 */
 	private $plugin_domain;
 
@@ -37,47 +37,54 @@ class cb_parallax_public {
 	 *
 	 * @since    0.1.0
 	 * @access   private
-	 * @var      string $plugin_version The current version of the plugin.
+	 * @var      string $plugin_version
 	 */
 	private $plugin_version;
 
 	/**
-	 * The loader that's responsible for maintaining and registering all hooks that power the plugin.
+	 * The loader that's responsible for maintaining
+	 * and registering all hooks that power the plugin.
 	 *
-	 * @since    0.1.0
+     * @since    0.1.0
 	 * @access   private
-	 * @var      object $loader Maintains and registers all hooks for the plugin.
+	 * @var      object $loader
 	 */
 	private $loader;
 
 	/**
-	 * Initialize the class and set its properties.
+	 * The name of the meta key for accessing post meta data.
 	 *
-	 * 1. Gets the stylesheet enqueued
-	 * 2. Gets the scripts enqueued
-	 * 3. Loads its dependencies
-	 * 4. Defines the post meta manager file which retrieves the data related to the background image display
-	 *
-	 * @since      0.2.0
-	 *
-     * @param      string $plugin_name    The name of the plugin.
-	 * @param      string $plugin_domain  The name of the plugin.
-	 * @param      string $plugin_version The version of this plugin.
+	 * @since    0.1.0
+	 * @access   private
+	 * @var      string $meta_key
 	 */
-	public function __construct( $plugin_name, $plugin_domain, $plugin_version ) {
+	private $meta_key;
+
+	/**
+	 * Kicks off the public part of the plugin.
+	 *
+	 * @since 0.1.0
+	 *
+     * @param string $plugin_name
+	 * @param string $plugin_domain
+	 * @param string $plugin_version
+	 * @param object $loader
+	 * @param string $meta_key
+	 */
+	public function __construct( $plugin_name, $plugin_domain, $plugin_version, $loader, $meta_key ) {
 
 		$this->plugin_name    = $plugin_name;
 		$this->plugin_domain  = $plugin_domain;
 		$this->plugin_version = $plugin_version;
+		$this->loader         = $loader;
+		$this->meta_key       = $meta_key;
 
 		$this->load_dependencies();
-		$this->define_post_meta_manager();
+		$this->define_public_localisation();
 	}
 
 	/**
-	 * Loads the initial files needed by the admin part of the plugin and assigns the loader object.
-	 * The class responsible for orchestrating the actions and filters of the core plugin.
-	 * The class responsible for loading and handling post meta data.
+	 * Loads the class responsible for localizing the script that manages the parallax related stuff on the frontend.
 	 *
 	 * @since    0.1.0
 	 * @access   public
@@ -85,48 +92,95 @@ class cb_parallax_public {
 	 */
 	public function load_dependencies() {
 
-		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-cb-parallax-loader.php';
-
-		require_once plugin_dir_path( dirname( __FILE__ ) ) . "public/includes/class-cb-parallax-meta-manager-public.php";
-
-		$this->loader = new cb_parallax_loader();
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . "public/includes/class-cb-parallax-public-localisation.php";
 	}
 
 	/**
-	 * Register the stylesheet for the public-facing side of the site.
+	 * Registers the stylesheet for the public-facing side of the site.
+	 *
+	 * @hooked_action
 	 *
 	 * @since    0.1.0
+	 * @access   public
+	 * @return   void
 	 */
 	public function enqueue_styles() {
 
-		wp_enqueue_style( $this->plugin_name . '-public-css', plugin_dir_url( __FILE__ ) . 'css/cb-parallax-public.css', array(), $this->plugin_version, 'all' );
+		wp_enqueue_style(
+			$this->plugin_name . '-public-css',
+			plugin_dir_url( __FILE__ ) . 'css/public.css',
+			array(),
+			$this->plugin_version,
+			'all'
+		);
 	}
 
 	/**
-	 * Register the scripts for the public-facing side of the site.
+	 * Registers the scripts for the public-facing side of the site.
+	 *
+	 * @hooked_action
 	 *
 	 * @since    0.1.0
+	 * @access   public
+	 * @return   void
 	 */
 	public function enqueue_scripts() {
 
-		// Parallax Script
-		wp_enqueue_script( $this->plugin_name . '-main-js', plugin_dir_url( __FILE__ ) . 'js/cb-parallax-main.js', array( 'jquery' ), $this->plugin_version, false, 10 );
+		// Here we perform a check if any Nicescroll library has been registered.
+		$handle = 'jquery.nicescroll.js' || 'jquery.nicescroll.min.js';
+		$list   = 'registered';
+
+		// If so, we do only load the script for the public part.
+		if ( wp_script_is( $handle, $list ) ) {
+
+			// Public part.
+			wp_enqueue_script(
+				$this->plugin_name . '-public-js',
+				plugin_dir_url( __FILE__ ) . 'js/public.js',
+				array( 'jquery' ),
+				$this->plugin_version,
+				true
+			);
+		// Else we load Nicescroll and reference it to the array of dependencies belonging to the script for the public part.
+		} else {
+
+			// Nicescroll, modified version.
+			wp_enqueue_script(
+				$this->plugin_name . '-inc-nicescroll-min-js',
+				plugin_dir_url( __FILE__ ) . '../vendor/nicescroll/jquery.cbp.nicescroll.min.js',
+				array( 'jquery' ),
+				$this->plugin_version,
+				true
+			);
+
+			// Public part.
+			wp_enqueue_script(
+				$this->plugin_name . '-public-js',
+				plugin_dir_url( __FILE__ ) . 'js/public.js',
+				array(
+					'jquery',
+					$this->plugin_name . '-inc-nicescroll-min-js'
+				),
+				$this->plugin_version,
+				true
+			);
+		}
 	}
 
 	/**
-	 * Retrieves the data related to the background image to display.
+	 * Initiates the localisation for the public part of the plugin.
 	 *
 	 * @since    0.1.0
 	 * @access   private
 	 * @return   void
 	 */
-	private function define_post_meta_manager() {
+	private function define_public_localisation() {
 
-		$post_meta_manager_public = new cb_parallax_meta_manager_public( $this->get_plugin_name(), $this->get_plugin_domain(), $this->get_plugin_version() );
+		$public_localisation = new cb_parallax_public_localisation( $this->get_plugin_name(), $this->get_plugin_domain(), $this->get_plugin_version(), $this->get_meta_key() );
 
-		$this->loader->add_action( 'wp_enqueue_scripts', $post_meta_manager_public, 'get_image_meta_data', 1 );
-		$this->loader->add_action( 'template_redirect', $post_meta_manager_public, 'get_post_meta_data', 1 );
-		$this->loader->add_action( 'wp_enqueue_scripts', $post_meta_manager_public, 'localize_script', 100 );
+		$this->loader->add_action( 'wp_enqueue_scripts', $public_localisation, 'get_image_meta', 1 );
+		$this->loader->add_action( 'template_redirect', $public_localisation, 'get_post_meta', 100 );
+		$this->loader->add_action( 'wp_enqueue_scripts', $public_localisation, 'localize_public_area', 1000 );
 	}
 
 	/**
@@ -134,7 +188,7 @@ class cb_parallax_public {
 	 *
 	 * @since     0.1.0
 	 * @access    public
-	 * @return    string    The name of the plugin.
+	 * @return    string The name of the plugin.
 	 */
 	public function get_plugin_name() {
 
@@ -146,7 +200,7 @@ class cb_parallax_public {
 	 *
 	 * @since     0.1.0
 	 * @access    public
-	 * @return    string    The domain of the plugin.
+	 * @return    string The domain of the plugin.
 	 */
 	public function get_plugin_domain() {
 
@@ -158,10 +212,23 @@ class cb_parallax_public {
 	 *
 	 * @since     0.1.0
 	 * @access    public
-	 * @return    string    The version number of the plugin.
+	 * @return    string The version number of the plugin.
 	 */
 	public function get_plugin_version() {
 
 		return $this->plugin_version;
 	}
+
+	/**
+	 * Retrieves the meta key.
+	 *
+	 * @since    0.1.0
+	 * @access   public
+	 * @return   string $meta_key
+	 */
+	public function get_meta_key() {
+
+		return $this->meta_key;
+	}
+
 }

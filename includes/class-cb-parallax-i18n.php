@@ -23,12 +23,14 @@ class cb_parallax_i18n {
 	 *
 	 * @since    0.1.0
 	 * @access   private
-	 * @var      string $domain The domain identifier for this plugin.
+	 * @var      string $plugin_domain
 	 */
 	private $plugin_domain;
 
 	/**
 	 * Load the plugin text domain for translation.
+	 *
+	 * @hooked_action
 	 *
 	 * @since    0.1.0
 	 * @return   void
@@ -44,9 +46,7 @@ class cb_parallax_i18n {
 	 *
 	 * @since    0.1.0
 	 * @access   public
-	 *
-	 * @param    string $plugin_domain The domain that represents the locale of this plugin.
-	 *
+	 * @param    string $plugin_domain
 	 * @return   void
 	 */
 	public function set_domain( $plugin_domain ) {
