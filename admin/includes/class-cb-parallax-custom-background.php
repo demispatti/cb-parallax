@@ -516,51 +516,44 @@ class cb_parallax_custom_background {
 
 		global $post;
 
-		// Here we need to check if $post is an object. If not, we bail.
+		//* Here we need to check if $post is an object. If not, we bail.
 		if( !is_object( $post ) || NULL === $post ) {
 			return;
 		}
 
 		$post_meta = get_post_meta( $post->ID, $this->meta_key, true );
 
-		// If we have no related post meta data, we don't do anything here.
+		//* If we have no related post meta data, we don't do anything here.
 		if( false == $post_meta || '' == $post_meta ) {
 			return;
 		}
 
-		// We do only proceed if the parallax option is enabled or if there is meta data stored.
-		if( isset($post_meta['parallax_enabled']) && $post_meta['parallax_enabled'] == '1' || false === $post_meta ) {
-			return;
-		}
-
-		// Get the background image.
+		//* Get the background image.
 		$image = set_url_scheme( get_background_image() );
 
-		// We do only proceed if an image is set.
+		//* We do only proceed if an image is set.
 		if( $image === '' ) {
-
 			return;
 		}
 
-		// Get the background color.
+		//* Get the background color.
 		$color = get_background_color();
 
-		// If there is no image or color, bail.
+		//* If there is no image or color, bail.
 		if( empty($image) && empty($color) ) {
-
 			return;
 		}
 
-		// Set the background color.
+		//* Set the background color.
 		$style = $color ? "background-color: #{$color};" : '';
 
-		// If there's a background image, add it and set these properties.
+		//* If there's a background image, add it and set these properties.
 		if( $image ) {
 
-			// Background image.
+			//* Background image.
 			$style .= " background-image: url('{$image}');";
 
-			// Background repeat.
+			//* Background repeat.
 			$mod_repeat = get_theme_mod( 'background_repeat', 'no-repeat' );
 			$repeat = in_array( $post_meta['background_repeat'], array(
 				'no-repeat',
@@ -571,7 +564,7 @@ class cb_parallax_custom_background {
 
 			$style .= " background-repeat: {$repeat};";
 
-			// Background position.
+			//* Background position.
 			$mod_position_y = get_theme_mod( 'position_y', 'top' );
 			$position_y = in_array( $post_meta['position_y'], array( 'top', 'center', 'bottom' ) ) ? $post_meta['position_y'] : $mod_position_y;
 
@@ -580,22 +573,28 @@ class cb_parallax_custom_background {
 
 			$style .= " background-position: {$position_y} {$position_x};";
 
-			// Background attachment.
+			//* Background attachment.
 			$mod_attachment = get_theme_mod( 'background_attachment', 'scroll' );
 			$attachment = in_array( $post_meta['background_attachment'], array( 'fixed', 'scroll' ) ) ? $post_meta['background_attachment'] : $mod_attachment;
 
 			$style .= " background-attachment: {$attachment};";
 		}
 
-		$parallax_enabled = true == $post_meta['parallax_enabled'] ? $post_meta['parallax_enabled'] : false;
+		//* Retrieves the value for "parallax enabled".
+		$parallax_enabled = $post_meta['parallax_enabled'] ? $post_meta['parallax_enabled'] : false;
 
-		// We bail, if the parallax option is enabled and the image is served trough the jQuery script. Else we echo the style for the custom background,
-		// while the script won't be executed.
-		if( $parallax_enabled ) {
+		//* Retrieves the value for "disabled on mobile".
+		$options = get_option($this->meta_key);
+		$is_disabled_on_mobile = isset($options['disable_on_mobile']) ? $options['disable_on_mobile'] : false;
+
+		//* We bail, if the parallax option is enabled and the image is served trough the jQuery script. Else we echo the style for the custom background,
+		//* while the script won't be executed.
+		if( $parallax_enabled && ( wp_is_mobile() && !$is_disabled_on_mobile ) || $parallax_enabled && !wp_is_mobile() ) {
 			return;
+		} else {
+			//* Output the custom background.
+			//echo "\n" . '<style type="text/css" id="custom-background-css">' . 'body.custom-background' . '{ ' . trim( $style ) . ' }' . '</style>' . "\n";
 		}
-		// Output the custom background style.
-		echo "\n" . '<style type="text/css" id="custom-background-css">' . 'body.custom-background' . '{ ' . trim( $style ) . ' }' . '</style>' . "\n";
 	}
 
 }

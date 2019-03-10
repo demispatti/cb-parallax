@@ -90,7 +90,7 @@ class cb_parallax_admin {
 		$this->define_admin_localisation();
 		$this->define_custom_background();
 		$this->define_help_tab();
-		$this->define_general_setting();
+		$this->define_general_options();
 	}
 
 	/**
@@ -285,11 +285,11 @@ class cb_parallax_admin {
 	 * @access   private
 	 * @return   void
 	 */
-	private function define_general_setting() {
+	private function define_general_options() {
 
 		$general_settings = new cb_parallax_general_settings( $this->get_plugin_domain(), $this->get_meta_key() );
 
-		$this->loader->add_action( 'admin_init', $general_settings, 'add_general_option', 1 );
+		$this->loader->add_action( 'admin_init', $general_settings, 'add_general_options', 1 );
 	}
 
 	/**

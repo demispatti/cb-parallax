@@ -11,7 +11,7 @@
  * License URI:       http://www.gnu.org/licenses/gpl-2.0.txt
  */
 
-(function($){
+(function ($) {
 	"use strict";
 
 	/**
@@ -20,20 +20,20 @@
 	 http://my.opera.com/emoller/blog/2011/12/20/requestanimationframe-for-smart-er-animating
 	 MIT license
 	 */
-	(function(){
+	(function () {
 		var lastTime = 0;
 		var vendors = ['ms', 'moz', 'webkit', 'o'];
-		for(var x = 0; x < vendors.length && !window.requestAnimationFrame; ++x){
+		for (var x = 0; x < vendors.length && !window.requestAnimationFrame; ++x) {
 			window.requestAnimationFrame = window[vendors[x] + 'RequestAnimationFrame'];
 			window.cancelAnimationFrame = window[vendors[x] + 'CancelAnimationFrame']
 				|| window[vendors[x] + 'CancelRequestAnimationFrame'];
 		}
 
-		if(!window.requestAnimationFrame)
-			window.requestAnimationFrame = function(callback, element){
+		if (!window.requestAnimationFrame)
+			window.requestAnimationFrame = function (callback, element) {
 				var currTime = new Date().getTime();
 				var timeToCall = Math.max(0, 16 - (currTime - lastTime));
-				var id = window.setTimeout(function(){
+				var id = window.setTimeout(function () {
 						callback(currTime + timeToCall);
 					},
 					timeToCall);
@@ -41,419 +41,416 @@
 				return id;
 			};
 
-		if(!window.cancelAnimationFrame)
-			window.cancelAnimationFrame = function(id){
+		if (!window.cancelAnimationFrame)
+			window.cancelAnimationFrame = function (id) {
 				clearTimeout(id);
 			};
 	}());
 
-	var defaultOptions = {
-		imageSrc: '',
-		backgroundColor: '',
-		positionX: 'center',
-		positionY: 'center',
-		backgroundAttachment: 'fixed',
+	var requestAnimationFrame = window.mozRequestAnimationFrame || window.msRequestAnimationFrame || window.requestAnimationFrame;
+	var isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
 
-		parallaxPossible: false,
-		parallaxEnabled: false,
-		direction: 'vertical',
-		verticalScrollDirection: 'top',
-		horizontalScrollDirection: 'left',
-		horizontalAlignment: 'center',
-		verticalAlignment: 'center',
-		overlayImage: 'none',
-		imageWidth: $(window).width(),
-		imageHeight: $(window).height(),
-		overlayPath: '',
-		overlayOpacity: '0.3',
-		overlayColor: ''
-	};
+	function Plugin() {
 
-	var parallax = {
-		possible: cbParallax.parallaxPossible != 'undefined' ? cbParallax.parallaxPossible : defaultOptions.parallaxPossible,
-		enabled: cbParallax.parallaxEnabled != 'undefined' ? cbParallax.parallaxEnabled : defaultOptions.parallaxEnabled,
-		direction: cbParallax.direction != 'undefined' ? cbParallax.direction : defaultOptions.direction,
-		verticalScrollDirection: cbParallax.verticalScrollDirection != 'undefined' ? cbParallax.verticalScrollDirection : defaultOptions.verticalScrollDirection,
-		horizontalScrollDirection: cbParallax.horizontalScrollDirection != 'undefined' ? cbParallax.horizontalScrollDirection : defaultOptions.horizontalScrollDirection,
-		horizontalAlignment: cbParallax.horizontalAlignment != 'undefined' ? cbParallax.horizontalAlignment : defaultOptions.horizontalAlignment,
-		verticalAlignment: cbParallax.verticalAlignment != 'undefined' ? cbParallax.verticalAlignment : defaultOptions.verticalAlignment
-	};
+		this.defaultOptions = {
+			imageSrc            : '',
+			backgroundColor     : '',
+			positionX           : 'center',
+			positionY           : 'center',
+			backgroundAttachment: 'fixed',
 
-	var scrolling = {preserved: cbParallax.scrollingPreserved != 'undefined' ? cbParallax.scrollingPreserved : false};
+			parallaxPossible         : false,
+			parallaxEnabled          : false,
+			direction                : 'vertical',
+			verticalScrollDirection  : 'top',
+			horizontalScrollDirection: 'left',
+			horizontalAlignment      : 'center',
+			verticalAlignment        : 'center',
+			overlayImage             : 'none',
+			imageWidth               : $(window).width(),
+			imageHeight              : $(window).height(),
+			overlayPath              : '',
+			overlayOpacity           : '0.3',
+			overlayColor             : ''
+		},
+			this.parallax = {
+				possible                 : cbParallax.parallaxPossible != 'undefined' ? cbParallax.parallaxPossible : this.defaultOptions.parallaxPossible,
+				enabled                  : cbParallax.parallaxEnabled != 'undefined' ? cbParallax.parallaxEnabled : this.defaultOptions.parallaxEnabled,
+				direction                : cbParallax.direction != 'undefined' ? cbParallax.direction : this.defaultOptions.direction,
+				verticalScrollDirection  : cbParallax.verticalScrollDirection != 'undefined' ? cbParallax.verticalScrollDirection : this.defaultOptions.verticalScrollDirection,
+				horizontalScrollDirection: cbParallax.horizontalScrollDirection != 'undefined' ? cbParallax.horizontalScrollDirection : this.defaultOptions.horizontalScrollDirection,
+				horizontalAlignment      : cbParallax.horizontalAlignment != 'undefined' ? cbParallax.horizontalAlignment : this.defaultOptions.horizontalAlignment,
+				verticalAlignment        : cbParallax.verticalAlignment != 'undefined' ? cbParallax.verticalAlignment : this.defaultOptions.verticalAlignment
+			},
+			this.scrolling = {
+				preserved: cbParallax.scrollingPreserved != 'undefined' ? cbParallax.scrollingPreserved : false
+			},
+			this.image = {
+				src                 : cbParallax.imageSrc != 'undefined' ? cbParallax.imageSrc : this.defaultOptions.imageSrc,
+				backgroundColor     : cbParallax.backgroundColor != 'undefined' ? cbParallax.backgroundColor : this.defaultOptions.backgroundColor,
+				positionX           : cbParallax.positionX != 'undefined' ? cbParallax.positionX : this.defaultOptions.positionX,
+				positionY           : cbParallax.positionY != 'undefined' ? cbParallax.positionY : this.defaultOptions.positionX,
+				backgroundAttachment: cbParallax.backgroundAttachment != 'undefined' ? cbParallax.backgroundAttachment : this.defaultOptions.backgroundAttachment,
 
-	var image = {
-		src: cbParallax.imageSrc != 'undefined' ? cbParallax.imageSrc : defaultOptions.imageSrc,
-		backgroundColor: cbParallax.backgroundColor != 'undefined' ? cbParallax.backgroundColor : defaultOptions.backgroundColor,
-		positionX: cbParallax.positionX != 'undefined' ? cbParallax.positionX : defaultOptions.positionX,
-		positionY: cbParallax.positionY != 'undefined' ? cbParallax.positionY : defaultOptions.positionX,
-		backgroundAttachment: cbParallax.backgroundAttachment != 'undefined' ? cbParallax.backgroundAttachment : defaultOptions.backgroundAttachment,
-
-		width: cbParallax.imageWidth != 'undefined' ? cbParallax.imageWidth : defaultOptions.imageWidth,
-		height: cbParallax.imageHeight != 'undefined' ? cbParallax.imageHeight : defaultOptions.imageHeight
-	};
-
-	var overlay = {
-		path: cbParallax.overlayPath != 'undefined' ? cbParallax.overlayPath : defaultOptions.overlayPath,
-		image: cbParallax.overlayImage != 'undefined' ? cbParallax.overlayImage : defaultOptions.overlayImage,
-		opacity: cbParallax.overlayOpacity != 'undefined' ? cbParallax.overlayOpacity : defaultOptions.overlayOpacity,
-		color: cbParallax.overlayColor != 'undefined' ? cbParallax.overlayColor : defaultOptions.overlayColor
-	};
-
-	var imageContainer = null;
-
-	var overlayContainer = null;
-
-	var body = $('body');
-
-	var html = $('html');
-
-	var requestAnimationFrame = window.mozRequestAnimationFrame ||
-		window.msRequestAnimationFrame ||
-		window.requestAnimationFrame;
-
-	var isScrolling = false;
-
-	var isResizing = false;
-
-	var niceScrollConfig = {
-		zindex: -9999,
-		scrollspeed: 120,
-		mousescrollstep: 8 * 3,
-		preservenativescrolling: true,
-		horizrailenabled: false,
-		cursordragspeed: 1.2
-	};
-
-	// Converts alignments such as left, center and right into pixel values.
-	function getHorizontalAlignAsPosition(){
-
-		var posX = null;
-
-		switch(parallax.horizontalAlignment){
-
-			case 'left':
-				posX = '0';
-				break;
-
-			case 'center':
-				posX = ($(window).width() / 2) - (image.width / 2) + 'px';
-				break;
-
-			case 'right':
-				posX = $(window).width() - image.width + 'px';
-				break;
-		}
-
-		return posX;
-	}
-
-	// Converts alignments such as top, center and bottom into pixel values.
-	function getVerticalAlignAsPosition(){
-
-		var posY = null;
-
-		switch(parallax.verticalAlignment){
-
-			case 'top':
-				posY = '0';
-				break;
-
-			case 'center':
-				posY = ($(window).height() / 2) - (image.height / 2) + 'px';
-				break;
-
-			case 'bottom':
-				posY = $(window).height() - image.height + 'px';
-				break;
-		}
-
-		return posY;
-	}
-
-	// Calculates the scroll ratio depending on the viewport size, the image size, the shifting-direction and the scroll direction.
-	function getScrollRatio(){
-
-		var documentOffsetX = null;
-		var imageOffsetY = null;
-		var imageOffsetX = null;
-		var ratio = null;
-
-		if(parallax.direction == 'vertical'){
-			documentOffsetX = $(document).height() - $(window).height();
-			imageOffsetY = image.height - $(window).height();
-
-			ratio = (imageOffsetY / documentOffsetX);
-
-		} else if(parallax.direction == 'horizontal'){
-			documentOffsetX = $(document).height() - $(window).height();
-			imageOffsetX = image.width - $(window).width();
-
-			ratio = (imageOffsetX / documentOffsetX);
-		}
-
-		return ratio;
-	}
-
-	// Calculates and returns the x and y values for the transformation.
-	function getTransform(){
-
-		var transform = {
-			x: null,
-			y: null
-		};
-		var ratio = getScrollRatio();
-		var scrollingPosition = $(window).scrollTop();
-
-		// Determines the values for the transformation.
-		if(parallax.direction == 'vertical'){
-
-			if(parallax.verticalScrollDirection == 'to top'){
-				transform.x = 0;
-				transform.y = -scrollingPosition * ratio;
-
-			} else if(parallax.verticalScrollDirection == 'to bottom'){
-				transform.x = 0;
-				transform.y = scrollingPosition * ratio;
+				width : cbParallax.imageWidth != 'undefined' ? cbParallax.imageWidth : this.defaultOptions.imageWidth,
+				height: cbParallax.imageHeight != 'undefined' ? cbParallax.imageHeight : this.defaultOptions.imageHeight
+			},
+			this.overlay = {
+				path   : cbParallax.overlayPath != 'undefined' ? cbParallax.overlayPath : this.defaultOptions.overlayPath,
+				image  : cbParallax.overlayImage != 'undefined' ? cbParallax.overlayImage : this.defaultOptions.overlayImage,
+				opacity: cbParallax.overlayOpacity != 'undefined' ? cbParallax.overlayOpacity : this.defaultOptions.overlayOpacity,
+				color  : cbParallax.overlayColor != 'undefined' ? cbParallax.overlayColor : this.defaultOptions.overlayColor
+			},
+			this.overlayContainer = document.getElementById('cbp_overlay_container'),
+			this.body = document.getElementsByTagName('body'),
+			this.html = document.getElementsByTagName('html'),
+			this.requestAnimationFrame = window.mozRequestAnimationFrame || window.msRequestAnimationFrame || window.requestAnimationFrame,
+			this.isScrolling = false,
+			this.isResizing = false,
+			this.niceScrollConfig = {
+				zindex                 : '-9999',
+				scrollspeed            : '120',
+				mousescrollstep        : '24',
+				preservenativescrolling: true,
+				horizrailenabled       : false,
+				cursordragspeed        : '1.2'
 			}
-		} else if(parallax.direction == 'horizontal'){
-
-			if(parallax.horizontalScrollDirection == 'to the left'){
-				transform.x = -scrollingPosition * ratio;
-				transform.y = 0;
-
-			} else if(parallax.horizontalScrollDirection == 'to the right'){
-				transform.x = scrollingPosition * ratio;
-				transform.y = 0;
-			}
-		}
-
-		return transform;
 	}
 
-	// Creates a container and assigns the overlay image and its opacity, if an overlay pattern is set.
-	function setOverlay(){
+	Plugin.prototype = {
 
-		if(overlay.image != "none"){
+		constructor                    : Plugin,
+		setOverlay                     : function () {
 
-			body.prepend('<div id="cbp_overlay"></div>');
+			if (cbParallax.overlayImage != "none") {
+				$('body').prepend('<div id="cbp_overlay"></div>');
+				this.overlayContainer = $('#cbp_overlay');
+				this.overlayContainer.css({
+					'background'      : 'url(' + cbParallax.overlayPath + cbParallax.overlayImage + ')',
+					'background-color': '#' + cbParallax.overlayColor,
+					'opacity'         : cbParallax.overlayOpacity
+				});
+			}
+		},
+		setupImageContainer            : function () {
 
-			overlayContainer = $('#cbp_overlay');
-
-			overlayContainer.css({
-				'background': 'url(' + overlay.path + overlay.image + ')',
-				'background-color': '#' + overlay.color,
-				'opacity': overlay.opacity
+			$('#cbp_image_container').css({
+				'background-size' : cbParallax.imageWidth + 'px' + ' ' + cbParallax.imageHeight + 'px',
+				'background-color': '#' + cbParallax.backgroundColor
 			});
-		}
-	}
+		},
+		revertBodyStyling              : function () {
 
-	// Set style.
-	function setStyle(){
+			var body = $('body');
+			body.removeClass('custom-background');
+			body.removeProp('background-image');
+		},
+		getHorizontalAlignInPx         : function () {
 
-		// Removes the custom background class and the background image.
-		body.removeClass('custom-background');
-		body.removeProp('background-image');
+			var posX = null;
+			switch (cbParallax.positionX) {
 
-		// Sets the image dimensions.
-		imageContainer.css({
-			'background-size': image.width + 'px' + ' ' + image.height + 'px',
-			'background-color': '#' + image.backgroundColor
-		});
-	}
+				case 'left':
+					posX = '0';
+					break;
 
-	// Sets the initial background position.
-	function setInitialPosition(){
+				case 'center':
+					posX = ($(window).width() / 2) - (cbParallax.imageWidth / 2) + 'px';
+					break;
 
-		if(parallax.direction == 'vertical'){
-			imageContainer.css({
-				'left': getHorizontalAlignAsPosition()
-			});
-
-			if(parallax.verticalScrollDirection == 'to top'){
-
-				imageContainer.css({
-					'top': 0
-				});
-
-			} else if(parallax.verticalScrollDirection == 'to bottom'){
-
-				imageContainer.css({
-					'bottom': 0
-				});
+				case 'right':
+					posX = $(window).width() - cbParallax.imageWidth + 'px';
+					break;
 			}
+			return posX;
+		},
+		getVerticalAlignInPx           : function () {
 
-		} else if(parallax.direction == 'horizontal'){
+			var posY = null;
+			switch (cbParallax.positionY) {
 
-			imageContainer.css({
-				'top': getVerticalAlignAsPosition()
-			});
+				case 'top':
+					posY = '0';
+					break;
 
-			if(parallax.horizontalScrollDirection == 'to the left'){
+				case 'center':
+					posY = ($(window).height() / 2) - (cbParallax.imageHeight / 2) + 'px';
+					break;
 
-				imageContainer.css({
-					'left': 0
-				});
-
-			} else if(parallax.horizontalScrollDirection == 'to the right'){
-
-				imageContainer.css({
-					'right': 0
-				});
+				case 'bottom':
+					posY = $(window).height() - cbParallax.imageHeight + 'px';
+					break;
 			}
-		}
-	}
+			return posY;
+		},
+		parallaxGetScrollRatio         : function () {
 
-	// While scrolling.
-	function animationLoop(){
+			var documentOffsetX = null;
+			var imageOffsetY = null;
+			var imageOffsetX = null;
+			var ratio = null;
+			if (cbParallax.direction == 'vertical') {
+				documentOffsetX = $(document).height() - $(window).height();
+				imageOffsetY = cbParallax.imageHeight - $(window).height();
 
-		if(isScrolling){
+				ratio = (imageOffsetY / documentOffsetX);
 
-			var transform = getTransform();
-			setTranslate3DTransform(transform);
-		}
+			} else if (cbParallax.direction == 'horizontal') {
+				documentOffsetX = $(document).height() - $(window).height();
+				imageOffsetX = cbParallax.imageWidth - $(window).width();
 
-		isScrolling = false;
-		requestAnimationFrame(animationLoop);
-	}
-
-	// Keeps the image centered and positioned on window resize.
-	function keepImageCentered(){
-
-		if(isResizing){
-
-			var posX = getHorizontalAlignAsPosition();
-			var posY = getVerticalAlignAsPosition();
-
-			if(parallax.direction == 'vertical' && parallax.horizontalAlignment == 'center' || parallax.horizontalAlignment == 'right'){
-
-				imageContainer.css({
-					'left': posX
-				});
-			} else if(parallax.direction == 'horizontal' && parallax.verticalAlignment == 'center' || parallax.verticalAlignment == 'bottom'){
-
-				imageContainer.css({
-					'top': posY
-				});
+				ratio = (imageOffsetX / documentOffsetX);
 			}
-		}
-	}
+			return ratio;
+		},
+		parallaxGetTransform           : function () {
 
-	// Animation loop on window resize.
-	function animationLoopOnResize(){
-
-		if(isResizing){
-
-			keepImageCentered();
-			var transform = getTransform();
-			setTranslate3DTransform(transform);
-		}
-
-		isResizing = false;
-		requestAnimationFrame(animationLoopOnResize);
-	}
-
-	// Transformation function for repositioning the canvas.
-	function setTranslate3DTransform(transform){
-
-		imageContainer.css({
-			'-webkit-transform': 'translate3d(' + transform.x + 'px, ' + transform.y + 'px, 0px)',
-			'-moz-transform': 'translate3d(' + transform.x + 'px, ' + transform.y + 'px, 0px)',
-			'-ms-transform': 'translate3d(' + transform.x + 'px, ' + transform.y + 'px, 0px)',
-			'-o-transform': 'translate3d(' + transform.x + 'px, ' + transform.y + 'px, 0px)',
-			'transform': 'translate3d(' + transform.x + 'px, ' + transform.y + 'px, 0px)'
-		});
-	}
-
-	function preserveScrolling(){
-
-		// Instanciates Nicescroll.
-		var nice = html.niceScroll(niceScrollConfig);
-
-		// Hides the rail and the scrollbar.
-		nice.hide();
-
-		// Forces display of the default scrollbar in IE.
-		body.css('-ms-overflow-style', 'scrollbar');
-	}
-
-	// Creates the image container.
-	function prependCanvas(){
-
-		body.prepend('<canvas id="cbp_image_container" class="custom-background" width="' + image.width + '" height="' + image.height + '"></canvas>');
-
-		imageContainer = $('#cbp_image_container');
-	}
-
-	// If parallax is possible and enabled, this function fires after the background image has been drawn onto the canvas.
-	function bootstrap(){
-
-		// Since we use a modified version of Nicescroll, we perform this check here: If there is no "default" Nicescroll library detected, we load the modified version.
-		if($('#ascrail2000').length == 0){
-
-			preserveScrolling();
-		}
-
-		setOverlay();
-		setStyle();
-		setInitialPosition();
-
-		// We call this one once from here so everything is Radiohead, Everything in its right place.
-		var transform = getTransform();
-		setTranslate3DTransform(transform);
-	}
-
-	// Let's roll.
-	function init(){
-
-		// Kicks off the script if...
-		if(parallax.possible && parallax.enabled){
-
-			// This is the routine that sets the context, creates the new image and then draws the assigned background image onto the canvas.
-			window.onload = function(){
-
-				var canvas = document.getElementById('cbp_image_container');
-				var context = canvas.getContext('2d');
-				var img = new Image();
-
-				img.onload = function(){
-
-					context.drawImage(img, 0, 0, image.width, image.height);
-
-					bootstrap();
-				};
-
-				img.src = image.src;
+			var transform = {
+				x: null,
+				y: null
 			};
-			// ...else if scrolling is preserved, we load the modified Nicescroll library.
-		} else if(scrolling.preserved){
+			var ratio = this.parallaxGetScrollRatio();
+			var scrollingPosition = $(window).scrollTop();
+			// Determines the values for the transformation.
+			if (cbParallax.direction == 'vertical') {
 
-			preserveScrolling();
+				if (cbParallax.verticalScrollDirection == 'to top') {
+					transform.x = 0;
+					transform.y = -scrollingPosition * ratio;
+
+				} else if (cbParallax.verticalScrollDirection == 'to bottom') {
+					transform.x = 0;
+					transform.y = scrollingPosition * ratio;
+				}
+			} else if (cbParallax.direction == 'horizontal') {
+
+				if (cbParallax.horizontalScrollDirection == 'to the left') {
+					transform.x = -scrollingPosition * ratio;
+					transform.y = 0;
+
+				} else if (cbParallax.horizontalScrollDirection == 'to the right') {
+					transform.x = scrollingPosition * ratio;
+					transform.y = 0;
+				}
+			}
+			return transform;
+		},
+		parallaxSetInitialPosition     : function () {
+
+			var imageContainer = $('#cbp_image_container');
+
+			if (cbParallax.direction == 'vertical') {
+				imageContainer.css({
+					'left': this.getHorizontalAlignInPx()
+				});
+
+				if (cbParallax.verticalScrollDirection == 'to top') {
+
+					imageContainer.css({
+						'top': 0
+					});
+
+				} else if (cbParallax.verticalScrollDirection == 'to bottom') {
+
+					imageContainer.css({
+						'bottom': 0
+					});
+				}
+
+			} else if (cbParallax.direction == 'horizontal') {
+
+				imageContainer.css({
+					'top': this.getVerticalAlignInPx()
+				});
+
+				if (cbParallax.horizontalScrollDirection == 'to the left') {
+
+					imageContainer.css({
+						'left': 0
+					});
+
+				} else if (cbParallax.horizontalScrollDirection == 'to the right') {
+
+					imageContainer.css({
+						'right': 0
+					});
+				}
+			}
+		},
+		parallaxAnimationLoop          : function () {
+
+			if (Plugin.prototype.isScrolling) {
+
+				var transform = Plugin.prototype.parallaxGetTransform();
+				Plugin.prototype.parallaxSetTranslate3DTransform(transform);
+			}
+			Plugin.prototype.isScrolling = false;
+			requestAnimationFrame(Plugin.prototype.parallaxAnimationLoop);
+		},
+		parallaxKeepImageCentered      : function () {
+
+			if (this.isResizing) {
+
+				var posX = this.getHorizontalAlignInPx();
+				var posY = this.getVerticalAlignInPx();
+
+				if (cbParallax.direction == 'vertical' && cbParallax.horizontalAlignment == 'center' || cbParallax.horizontalAlignment == 'right') {
+
+					$('#cbp_image_container').css({
+						'left': posX
+					});
+				} else if (cbParallax.direction == 'horizontal' && cbParallax.verticalAlignment == 'center' || cbParallax.verticalAlignment == 'bottom') {
+
+					$('#cbp_image_container').css({
+						'top': posY
+					});
+				}
+			}
+		},
+		parallaxAnimationLoopOnResize  : function () {
+
+			if (Plugin.prototype.isResizing) {
+				Plugin.prototype.parallaxKeepImageCentered();
+				var transform = Plugin.prototype.parallaxGetTransform();
+				Plugin.prototype.parallaxSetTranslate3DTransform(transform);
+			}
+			Plugin.prototype.isResizing = false;
+			requestAnimationFrame(Plugin.prototype.parallaxAnimationLoopOnResize);
+		},
+		parallaxSetTranslate3DTransform: function (transform) {
+
+			$('#cbp_image_container').css({
+				'-webkit-transform': 'translate3d(' + transform.x + 'px, ' + transform.y + 'px, 0px)',
+				'-moz-transform'   : 'translate3d(' + transform.x + 'px, ' + transform.y + 'px, 0px)',
+				'-ms-transform'    : 'translate3d(' + transform.x + 'px, ' + transform.y + 'px, 0px)',
+				'-o-transform'     : 'translate3d(' + transform.x + 'px, ' + transform.y + 'px, 0px)',
+				'transform'        : 'translate3d(' + transform.x + 'px, ' + transform.y + 'px, 0px)'
+			});
+		},
+		parallaxPreserveScrolling      : function () {
+
+			var nice = $('html').niceScroll(this.niceScrollConfig);
+			nice.hide();
+			$('body').css('-ms-overflow-style', 'scrollbar');
+		},
+		parallaxBootstrap              : function () {
+
+			if ($('#ascrail2000').length == 0) {
+				this.parallaxPreserveScrolling();
+			}
+
+			this.setOverlay();
+			this.revertBodyStyling();
+			this.parallaxSetInitialPosition();
+
+			// We call this one once from here so everything is Radiohead, Everything in its right place.
+			var transform = this.parallaxGetTransform();
+			this.parallaxSetTranslate3DTransform(transform);
+		},
+		staticSetImagePosition         : function () {
+
+			$('#cbp_image_container').css({
+				'left': Plugin.prototype.getHorizontalAlignInPx(),
+				'top' : Plugin.prototype.getVerticalAlignInPx()
+			});
+		},
+		staticKeepImageAligned         : function () {
+
+			if (Plugin.prototype.isResizing) {
+				Plugin.prototype.staticSetImagePosition();
+			}
+			Plugin.prototype.isResizing = false;
+			requestAnimationFrame(Plugin.prototype.staticKeepImageAligned);
+		},
+		staticBootstrap                : function () {
+
+			if ($('#ascrail2000').length == 0) {
+				this.parallaxPreserveScrolling();
+			}
+			this.setOverlay();
+			this.revertBodyStyling();
+			this.setupImageContainer();
+			this.staticSetImagePosition();
+		},
+		prependCanvas                  : function () {
+
+			var element = '<canvas id="cbp_image_container" class="custom-background" width="' + cbParallax.imageWidth + '" height="' + cbParallax.imageHeight + '"></canvas>';
+			$('body').prepend(element);
+		},
+		init                           : function () {
+
+			if (cbParallax.parallaxPossible && cbParallax.parallaxEnabled) {
+
+				window.onload = function () {
+
+					var canvas = document.getElementById('cbp_image_container');
+					var context = canvas.getContext('2d');
+					var img = new Image();
+
+					img.onload = function () {
+						context.drawImage(img, 0, 0, cbParallax.imageWidth, cbParallax.imageHeight);
+						Plugin.prototype.parallaxBootstrap();
+					};
+
+					img.src = cbParallax.imageSrc;
+				};
+			} else if (cbParallax.parallaxPossible && cbParallax.parallaxEnabled == false || isMobile && cbParallax.isDisabledOnMobile) {
+
+				window.onload = function () {
+
+					var canvas = document.getElementById('cbp_image_container');
+					var context = canvas.getContext('2d');
+					var img = new Image();
+
+					img.onload = function () {
+						context.drawImage(img, 0, 0, cbParallax.imageWidth, cbParallax.imageHeight);
+						Plugin.prototype.staticBootstrap();
+					};
+
+					img.src = cbParallax.imageSrc;
+				};
+			} else if (this.scrolling.preserved) {
+				this.parallaxPreserveScrolling();
+			}
+		},
+		observeScrollEvent             : function () {
+
+			$(document).bind('scroll', function () {
+
+				if (cbParallax.parallaxPossible && cbParallax.parallaxEnabled) {
+
+					if(false == isMobile || false == isMobile && '1' != cbParallax.isDisabledOnMobile){
+						Plugin.prototype.isScrolling = true;
+						requestAnimationFrame(Plugin.prototype.parallaxAnimationLoop);
+					}
+				}
+			});
+		},
+		observeResizeEvent             : function () {
+
+			$(window).bind('resize', function () {
+
+				if (cbParallax.parallaxPossible && cbParallax.parallaxEnabled) {
+
+					if (!isMobile && !cbParallax.isDisabledOnMobile){
+						Plugin.prototype.isResizing = true;
+						requestAnimationFrame(Plugin.prototype.parallaxAnimationLoopOnResize);
+					}
+				} else if (cbParallax.parallaxPossible && cbParallax.parallaxEnabled == false || isMobile && cbParallax.isDisabledOnMobile) {
+					Plugin.prototype.isResizing = true;
+					requestAnimationFrame(Plugin.prototype.staticKeepImageAligned);
+				}
+			});
 		}
-	}
+	};
 
-	$(document).ready(function(){
+	$(document).ready(function () {
 
-		prependCanvas();
-
-		init();
-	});
-
-	$(window).on('scroll', function(){
-
-		if(parallax.possible && parallax.enabled){
-
-			isScrolling = true;
-			requestAnimationFrame(animationLoop);
-		}
-	});
-
-	$(window).on('resize', function(){
-
-		if(parallax.possible && parallax.enabled){
-
-			isResizing = true;
-			requestAnimationFrame(animationLoopOnResize);
-		}
+		var plugin = new Plugin();
+		plugin.prependCanvas();
+		plugin.init();
+		plugin.observeScrollEvent();
+		plugin.observeResizeEvent();
 	});
 
 })(jQuery);

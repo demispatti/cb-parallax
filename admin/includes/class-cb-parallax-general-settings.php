@@ -41,7 +41,7 @@ class cb_parallax_general_settings {
 	 * @param    string $plugin_domain
 	 * @param    string $meta_key
 	 */
-	public function __construct( $plugin_domain, $meta_key ) {
+	public function __construct($plugin_domain, $meta_key) {
 
 		$this->plugin_domain = $plugin_domain;
 		$this->meta_key = $meta_key;
@@ -56,13 +56,13 @@ class cb_parallax_general_settings {
 	 * @access public
 	 * @return void
 	 */
-	public function add_general_option() {
+	public function add_general_options() {
 
-		add_filter( 'admin_init', array( &$this, 'register_field' ) );
+		add_filter('admin_init', array(&$this, 'register_fields'));
 	}
 
 	/**
-	 *  Registers the option with WordPress.
+	 *  Registers the options with WordPress.
 	 *
 	 * @callback
 	 *
@@ -70,17 +70,36 @@ class cb_parallax_general_settings {
 	 * @access public
 	 * @return void
 	 */
-	public function register_field() {
+	public function register_fields() {
 
-		register_setting( 'general', $this->meta_key );
-		add_settings_field( $this->meta_key, '<label class="cbp_general_setting_label" for="' . $this->meta_key . '">' . __( 'cbParallax', $this->plugin_domain ) . '</label>', array(
-			&$this,
-			'display_input_field',
-		), 'general' );
+		register_setting('general', $this->meta_key);
+
+		add_settings_section(
+			'cbp_settings_section',
+			__('cbParallax Settings', $this->plugin_domain),
+			null,
+			'general'
+		);
+
+		add_settings_field(
+			'preserve_scrolling',
+			__('Preserve scrolling behaviour', $this->plugin_domain),
+			array(&$this, 'preserve_scrolling_render'),
+			'general',
+			'cbp_settings_section'
+		);
+
+		add_settings_field(
+			'disable_on_mobile',
+			__('Disable on mobile', $this->plugin_domain),
+			array(&$this, 'disable_on_mobile_render'),
+			'general',
+			'cbp_settings_section'
+		);
 	}
 
 	/**
-	 *  Displays the input field.
+	 *  Renders the checkbox.
 	 *
 	 * @callback
 	 *
@@ -88,24 +107,42 @@ class cb_parallax_general_settings {
 	 * @access public
 	 * @return void
 	 */
-	public function display_input_field() {
+	public function preserve_scrolling_render() {
 
-		$value = get_option( $this->meta_key );
+		$value = get_option($this->meta_key);
 
-		?>
-		<!-- checkbox to preserve the scrolling behaviour -->
-		<p class="cbp_general_setting_container cbp-parallax-enabled-container">
-		<p class="label_for_<?php echo $this->meta_key ?>"><?php echo __( 'Preserve scrolling behaviour', $this->plugin_domain ); ?></p>
+		$html = '<p class="cbp_general_setting_container cbp-parallax-enabled-container">';
+		$html .= '<p class="label_for_' . $this->meta_key . '[preserve_scrolling]"></p>';
+		$html .= '<label class="cbp-switch"><input type="checkbox" id="' . $this->meta_key . '[preserve_scrolling]" class="cbp-switch-input" name="' . $this->meta_key . '[preserve_scrolling]" value="1" ' . checked(1, isset($value["preserve_scrolling"]) ? $value["preserve_scrolling"] : false, false) . '/>';
+		$html .= '<span class="cbp-switch-label" data-on="On" data-off="Off"></span>';
+		$html .= '<span class="cbp-switch-handle"></span>';
+		$html .= '</label>';
+		$html .= '</p>';
 
-		<label class="cbp-switch">
-			<input type="checkbox" id="<?php echo $this->meta_key ?>" class="cbp-switch-input" name="<?php echo $this->meta_key ?>"
-			       value="1" <?php checked( 1, isset($value) ? $value : false, true ); ?>>
-			<span class="cbp-switch-label" data-on="On" data-off="Off"></span>
-			<span class="cbp-switch-handle"></span>
-		</label>
-		<!--</p>-->
-		<!-- # checkbox to preserve the scrolling behaviour -->
-		<?php
+		echo $html;
 	}
 
+	/**
+	 *  Renders the checkbox.
+	 *
+	 * @callback
+	 *
+	 * @since  0.2.1
+	 * @access public
+	 * @return void
+	 */
+	public function disable_on_mobile_render() {
+
+			$value = get_option($this->meta_key);
+
+		$html = '<p class="cbp_general_setting_container cbp-parallax-enabled-container">';
+		$html .= '<p class="label_for_' . $this->meta_key . '[disable_on_mobile]"></p>';
+		$html .= '<label class="cbp-switch"><input type="checkbox" id="' . $this->meta_key . '[disable_on_mobile]" class="cbp-switch-input" name="' . $this->meta_key . '[disable_on_mobile]" value="1" ' . checked(1, isset($value["disable_on_mobile"]) ? $value["disable_on_mobile"] : false, false) . '/>';
+		$html .= '<span class="cbp-switch-label" data-on="On" data-off="Off"></span>';
+		$html .= '<span class="cbp-switch-handle"></span>';
+		$html .= '</label>';
+		$html .= '</p>';
+
+		echo $html;
+	}
 }

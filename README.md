@@ -1,14 +1,14 @@
 === cbParallax ===
 
-Tags: image, background, fullscreen, parallax, Hintergrund, Bild, Hintergrundbild
+Tags: image, background, fullscreen, parallax, Hintergrund, Bild, Hintergrundbild  
 
 Requires at least: 3.9  
-Tested up to: 4.4.1  
-Stable tag: 0.3.0  
-Version: 0.3.0  
+Tested up to: 4.4.2  
+Stable tag: 0.4.0  
+Version: 0.4.0  
 Contributors: demispatti  
 License: GPLv2 or later  
-License URI: http://www.gnu.org/licenses/gpl-2.0.html
+License URI: http://www.gnu.org/licenses/gpl-2.0.html  
 
 This plugin allows you to customize single pages, posts and products with an individual, optionally parallaxing fullscreen background image.
 
@@ -24,8 +24,6 @@ This plugin enables you to set a custom background image.  It supports vertical 
 - Works vertically and, for fun, horizontally
 - Supports and is supported by Nicescroll
 - Various overlays to choose from
-
-This plugin works with recent versions of Chrome, Firefox, Internet Explorer, Opera and Safari.
 
 == Requirements ==
 
@@ -107,6 +105,12 @@ Yes. If you're using the "Vantage" theme from SiteOrigin, the background image w
 3. Custom background meta box.
 
 == Changelog ==
+
+= Version 0.4.0 =
+
+1. Completely rewritten the script for the public part.
+2. Static image is now also being handled by the public script, it's mobile ready now
+3. Added an option to disable parallax on mobile ( View the "Settings / General" page). Will show the image as a static background.
 
 = Version 0.3.0 =
 

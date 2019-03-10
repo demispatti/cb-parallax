@@ -402,7 +402,7 @@ class cb_parallax_public_localisation {
 				$this->image_meta,
 				$this->post_meta,
 				$this->get_path_to_overlay_images(),
-				$this->get_preserve_scrolling_behaviour_option()
+				$this->get_general_options()
 			)
 		);
 	}
@@ -583,10 +583,12 @@ class cb_parallax_public_localisation {
 	 * @access   private
 	 * @return   array
 	 */
-	private function get_preserve_scrolling_behaviour_option() {
+	private function get_general_options() {
 
-		$value = get_option( $this->meta_key );
+		$options = get_option( $this->meta_key );
+		$is_scrolling_preserved = isset($options['preserve_scrolling']) ? $options['preserve_scrolling'] : false;
+		$is_disabled_on_mobile = isset($options['disable_on_mobile']) ? $options['disable_on_mobile'] : false;
 
-		return array( 'scrollingPreserved' => $value );
+		return array( 'isScrollingPreserved' => $is_scrolling_preserved, 'isDisabledOnMobile' => $is_disabled_on_mobile );
 	}
 }

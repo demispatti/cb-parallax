@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Custom Backgrounds\n"
-"POT-Creation-Date: 2015-09-09 12:05+0100\n"
-"PO-Revision-Date: 2015-09-09 12:08+0100\n"
+"POT-Creation-Date: 2016-02-20 00:02+0100\n"
+"PO-Revision-Date: 2016-02-20 00:03+0100\n"
 "Last-Translator: Demis Patti <dpatti@gmx.ch>\n"
 "Language-Team:  <demis@demispatti.ch>\n"
 "Language: de_DE\n"
@@ -28,45 +28,49 @@ msgstr "Plugin bewerten"
 msgid "Donate"
 msgstr "Spenden"
 
-#: admin/includes/class-cb-parallax-admin-localisation.php:137
-#: admin/includes/class-cb-parallax-admin-localisation.php:139
-#: admin/includes/class-cb-parallax-admin-localisation.php:145
+#: admin/includes/class-cb-parallax-admin-localisation.php:138
+#: admin/includes/class-cb-parallax-admin-localisation.php:140
+#: admin/includes/class-cb-parallax-admin-localisation.php:146
 #: admin/includes/class-cb-parallax-custom-background.php:175
 #: admin/includes/class-cb-parallax-custom-background.php:431
 #: admin/includes/class-cb-parallax-meta-box.php:112
-#: public/includes/class-cb-parallax-public-localisation.php:149
-#: public/includes/class-cb-parallax-public-localisation.php:372
-#: public/includes/class-cb-parallax-public-localisation.php:430
+#: public/includes/class-cb-parallax-public-localisation.php:439
+#: public/includes/class-cb-parallax-public-localisation.php:497
 msgid "vertical"
 msgstr "vertikal"
 
-#: admin/includes/class-cb-parallax-admin-localisation.php:142
-#: admin/includes/class-cb-parallax-admin-localisation.php:146
+#: admin/includes/class-cb-parallax-admin-localisation.php:143
+#: admin/includes/class-cb-parallax-admin-localisation.php:147
 #: admin/includes/class-cb-parallax-custom-background.php:176
 #: admin/includes/class-cb-parallax-custom-background.php:428
 #: admin/includes/class-cb-parallax-meta-box.php:113
-#: public/includes/class-cb-parallax-public-localisation.php:150
-#: public/includes/class-cb-parallax-public-localisation.php:369
-#: public/includes/class-cb-parallax-public-localisation.php:433
+#: public/includes/class-cb-parallax-public-localisation.php:436
+#: public/includes/class-cb-parallax-public-localisation.php:500
 msgid "horizontal"
 msgstr "horizontal"
 
-#: admin/includes/class-cb-parallax-admin-localisation.php:188
-#: admin/includes/class-cb-parallax-meta-box.php:325
+#: admin/includes/class-cb-parallax-admin-localisation.php:197
+#: admin/includes/class-cb-parallax-meta-box.php:324
 msgid "Background Color"
 msgstr "Hintergrundfarbe"
 
-#: admin/includes/class-cb-parallax-admin-localisation.php:188
-#: admin/includes/class-cb-parallax-meta-box.php:483
+#: admin/includes/class-cb-parallax-admin-localisation.php:198
+#: admin/includes/class-cb-parallax-meta-box.php:482
 msgid "Overlay Color"
 msgstr "Overlay-Farbe"
 
-#: admin/includes/class-cb-parallax-admin-localisation.php:240
+#: admin/includes/class-cb-parallax-admin-localisation.php:199
+#: admin/includes/class-cb-parallax-meta-box.php:139
+#: public/includes/class-cb-parallax-public-localisation.php:539
+msgid "none"
+msgstr "kein"
+
+#: admin/includes/class-cb-parallax-admin-localisation.php:252
 msgid "Set Background Image"
 msgstr "Eigenes Hintergrundbild"
 
-#: admin/includes/class-cb-parallax-admin-localisation.php:241
-#: admin/includes/class-cb-parallax-meta-box.php:342
+#: admin/includes/class-cb-parallax-admin-localisation.php:253
+#: admin/includes/class-cb-parallax-meta-box.php:341
 msgid "Set background image"
 msgstr "Hintergrundbild wählen"
 
@@ -77,20 +81,17 @@ msgstr "no repeat"
 #: admin/includes/class-cb-parallax-custom-background.php:137
 #: admin/includes/class-cb-parallax-custom-background.php:425
 #: admin/includes/class-cb-parallax-meta-box.php:100
-#: public/includes/class-cb-parallax-public-localisation.php:137
-#: public/includes/class-cb-parallax-public-localisation.php:366
+#: public/includes/class-cb-parallax-public-localisation.php:433
 msgid "repeat"
 msgstr "repeat"
 
 #: admin/includes/class-cb-parallax-custom-background.php:138
 #: admin/includes/class-cb-parallax-meta-box.php:101
-#: public/includes/class-cb-parallax-public-localisation.php:138
 msgid "repeat horizontally"
 msgstr "repeat horizontal"
 
 #: admin/includes/class-cb-parallax-custom-background.php:139
 #: admin/includes/class-cb-parallax-meta-box.php:102
-#: public/includes/class-cb-parallax-public-localisation.php:139
 msgid "repeat vertically"
 msgstr "repeat vertikal"
 
@@ -99,9 +100,7 @@ msgstr "repeat vertikal"
 #: admin/includes/class-cb-parallax-custom-background.php:458
 #: admin/includes/class-cb-parallax-meta-box.php:82
 #: admin/includes/class-cb-parallax-meta-box.php:127
-#: public/includes/class-cb-parallax-public-localisation.php:119
-#: public/includes/class-cb-parallax-public-localisation.php:164
-#: public/includes/class-cb-parallax-public-localisation.php:399
+#: public/includes/class-cb-parallax-public-localisation.php:466
 msgid "left"
 msgstr "links"
 
@@ -110,9 +109,7 @@ msgstr "links"
 #: admin/includes/class-cb-parallax-custom-background.php:464
 #: admin/includes/class-cb-parallax-meta-box.php:84
 #: admin/includes/class-cb-parallax-meta-box.php:129
-#: public/includes/class-cb-parallax-public-localisation.php:121
-#: public/includes/class-cb-parallax-public-localisation.php:166
-#: public/includes/class-cb-parallax-public-localisation.php:405
+#: public/includes/class-cb-parallax-public-localisation.php:472
 msgid "right"
 msgstr "rechts"
 
@@ -124,12 +121,8 @@ msgstr "rechts"
 #: admin/includes/class-cb-parallax-meta-box.php:89
 #: admin/includes/class-cb-parallax-meta-box.php:128
 #: admin/includes/class-cb-parallax-meta-box.php:134
-#: public/includes/class-cb-parallax-public-localisation.php:120
-#: public/includes/class-cb-parallax-public-localisation.php:126
-#: public/includes/class-cb-parallax-public-localisation.php:165
-#: public/includes/class-cb-parallax-public-localisation.php:171
-#: public/includes/class-cb-parallax-public-localisation.php:386
-#: public/includes/class-cb-parallax-public-localisation.php:402
+#: public/includes/class-cb-parallax-public-localisation.php:453
+#: public/includes/class-cb-parallax-public-localisation.php:469
 msgid "center"
 msgstr "mittig"
 
@@ -138,9 +131,7 @@ msgstr "mittig"
 #: admin/includes/class-cb-parallax-custom-background.php:442
 #: admin/includes/class-cb-parallax-meta-box.php:88
 #: admin/includes/class-cb-parallax-meta-box.php:133
-#: public/includes/class-cb-parallax-public-localisation.php:125
-#: public/includes/class-cb-parallax-public-localisation.php:170
-#: public/includes/class-cb-parallax-public-localisation.php:383
+#: public/includes/class-cb-parallax-public-localisation.php:450
 msgid "top"
 msgstr "oben"
 
@@ -149,25 +140,21 @@ msgstr "oben"
 #: admin/includes/class-cb-parallax-custom-background.php:448
 #: admin/includes/class-cb-parallax-meta-box.php:90
 #: admin/includes/class-cb-parallax-meta-box.php:135
-#: public/includes/class-cb-parallax-public-localisation.php:127
-#: public/includes/class-cb-parallax-public-localisation.php:172
-#: public/includes/class-cb-parallax-public-localisation.php:389
+#: public/includes/class-cb-parallax-public-localisation.php:456
 msgid "bottom"
 msgstr "unten"
 
 #: admin/includes/class-cb-parallax-custom-background.php:158
 #: admin/includes/class-cb-parallax-custom-background.php:477
 #: admin/includes/class-cb-parallax-meta-box.php:95
-#: public/includes/class-cb-parallax-public-localisation.php:132
-#: public/includes/class-cb-parallax-public-localisation.php:418
+#: public/includes/class-cb-parallax-public-localisation.php:485
 msgid "scroll"
 msgstr "scroll"
 
 #: admin/includes/class-cb-parallax-custom-background.php:159
 #: admin/includes/class-cb-parallax-custom-background.php:474
 #: admin/includes/class-cb-parallax-meta-box.php:94
-#: public/includes/class-cb-parallax-public-localisation.php:131
-#: public/includes/class-cb-parallax-public-localisation.php:415
+#: public/includes/class-cb-parallax-public-localisation.php:482
 msgid "fixed"
 msgstr "fixed"
 
@@ -185,18 +172,21 @@ msgstr "Vordergrund"
 
 #: admin/includes/class-cb-parallax-custom-background.php:422
 #: admin/includes/class-cb-parallax-meta-box.php:99
-#: public/includes/class-cb-parallax-public-localisation.php:136
-#: public/includes/class-cb-parallax-public-localisation.php:363
+#: public/includes/class-cb-parallax-public-localisation.php:430
 msgid "no-repeat"
 msgstr "no-repeat"
 
-#: admin/includes/class-cb-parallax-general-settings.php:76
-msgid "cbParallax"
-msgstr "cbParallax"
+#: admin/includes/class-cb-parallax-general-settings.php:79
+msgid "cbParallax Settings"
+msgstr "cbParallax Einstellungen"
 
-#: admin/includes/class-cb-parallax-general-settings.php:94
+#: admin/includes/class-cb-parallax-general-settings.php:86
 msgid "Preserve scrolling behaviour"
 msgstr "Das Scroll-Verhalten bewahren."
+
+#: admin/includes/class-cb-parallax-general-settings.php:94
+msgid "Disable on mobile"
+msgstr "Auf Mobilgeräten deaktiviert"
 
 #: admin/includes/class-cb-parallax-help-tab.php:44
 msgid "HELP"
@@ -248,38 +238,27 @@ msgid "Enjoy!"
 msgstr "Enjoy!"
 
 #: admin/includes/class-cb-parallax-meta-box.php:117
-#: public/includes/class-cb-parallax-public-localisation.php:154
-#: public/includes/class-cb-parallax-public-localisation.php:444
+#: public/includes/class-cb-parallax-public-localisation.php:511
 msgid "to top"
 msgstr "hoch"
 
 #: admin/includes/class-cb-parallax-meta-box.php:118
-#: public/includes/class-cb-parallax-public-localisation.php:155
-#: public/includes/class-cb-parallax-public-localisation.php:447
+#: public/includes/class-cb-parallax-public-localisation.php:514
 msgid "to bottom"
 msgstr "runter"
 
 #: admin/includes/class-cb-parallax-meta-box.php:122
-#: public/includes/class-cb-parallax-public-localisation.php:159
-#: public/includes/class-cb-parallax-public-localisation.php:458
+#: public/includes/class-cb-parallax-public-localisation.php:525
 msgid "to the left"
 msgstr "nach links"
 
 #: admin/includes/class-cb-parallax-meta-box.php:123
-#: public/includes/class-cb-parallax-public-localisation.php:160
-#: public/includes/class-cb-parallax-public-localisation.php:461
+#: public/includes/class-cb-parallax-public-localisation.php:528
 msgid "to the right"
 msgstr "nach rechts"
 
-#: admin/includes/class-cb-parallax-meta-box.php:139
-#: public/includes/class-cb-parallax-public-localisation.php:176
-#: public/includes/class-cb-parallax-public-localisation.php:472
-msgid "none"
-msgstr "kein"
-
 #: admin/includes/class-cb-parallax-meta-box.php:152
-#: public/includes/class-cb-parallax-public-localisation.php:189
-#: public/includes/class-cb-parallax-public-localisation.php:482
+#: public/includes/class-cb-parallax-public-localisation.php:549
 msgid "default"
 msgstr "Standard"
 
@@ -287,51 +266,54 @@ msgstr "Standard"
 msgid "cb Parallax"
 msgstr "cb Parallax"
 
-#: admin/includes/class-cb-parallax-meta-box.php:344
+#: admin/includes/class-cb-parallax-meta-box.php:343
 msgid "Remove background image"
 msgstr "Hintergrundbild entfernen"
 
-#: admin/includes/class-cb-parallax-meta-box.php:351
+#: admin/includes/class-cb-parallax-meta-box.php:350
 msgid "Parallax"
 msgstr "Parallax"
 
-#: admin/includes/class-cb-parallax-meta-box.php:366
+#: admin/includes/class-cb-parallax-meta-box.php:365
 msgid "Repeat"
 msgstr "Repeat"
 
-#: admin/includes/class-cb-parallax-meta-box.php:376
+#: admin/includes/class-cb-parallax-meta-box.php:375
 msgid "Vertical Position"
 msgstr "Vertikale Position"
 
-#: admin/includes/class-cb-parallax-meta-box.php:386
+#: admin/includes/class-cb-parallax-meta-box.php:385
 msgid "Horizontal Position"
 msgstr "Horizontale Position"
 
-#: admin/includes/class-cb-parallax-meta-box.php:396
+#: admin/includes/class-cb-parallax-meta-box.php:395
 msgid "Attachment"
 msgstr "Background-Attachment"
 
-#: admin/includes/class-cb-parallax-meta-box.php:411
+#: admin/includes/class-cb-parallax-meta-box.php:410
 msgid "Mode"
 msgstr "Modus"
 
-#: admin/includes/class-cb-parallax-meta-box.php:422
-#: admin/includes/class-cb-parallax-meta-box.php:433
+#: admin/includes/class-cb-parallax-meta-box.php:421
+#: admin/includes/class-cb-parallax-meta-box.php:432
 msgid "Scroll Direction"
 msgstr "Scrollrichtung"
 
-#: admin/includes/class-cb-parallax-meta-box.php:443
-#: admin/includes/class-cb-parallax-meta-box.php:453
+#: admin/includes/class-cb-parallax-meta-box.php:442
+#: admin/includes/class-cb-parallax-meta-box.php:452
 msgid "Alignment"
 msgstr "Ausrichtung"
 
-#: admin/includes/class-cb-parallax-meta-box.php:463
+#: admin/includes/class-cb-parallax-meta-box.php:462
 msgid "Overlay"
 msgstr "Overlay"
 
-#: admin/includes/class-cb-parallax-meta-box.php:473
+#: admin/includes/class-cb-parallax-meta-box.php:472
 msgid "Overlay Opacity"
 msgstr "Opazität des Overlays"
+
+#~ msgid "cbParallax"
+#~ msgstr "cbParallax"
 
 #~ msgid ""
 #~ "On parallaxed images, there's an option to set an overlay pattern as well "
