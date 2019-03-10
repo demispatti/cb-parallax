@@ -1,15 +1,15 @@
 === cbParallax ===
 
-Tags: parallax, responsive, fullscreen, image, background, Hintergrund, Bild, Hintergrundbild
-Requires at least: 4.9
-Tested up to: 5.1
-Requires PHP: 5.6
-Stable tag: 0.9.1
-Version: 0.9.1
-License: GPLv2 or later
-License URI: https://www.gnu.org/licenses/gpl-2.0.html
-Author: Demis Patti
-Author URI: https://demispatti.ch
+Tags: parallax, responsive, fullscreen, image, background, Hintergrund, Bild, Hintergrundbild  
+Requires at least: 4.9  
+Tested up to: 5.1  
+Requires PHP: 5.6  
+Stable tag: 0.9.1  
+Version: 0.9.1  
+License: GPLv2 or later  
+License URI: https://www.gnu.org/licenses/gpl-2.0.html  
+Author: Demis Patti  
+Author URI: https://demispatti.ch  
 
 == Description ==
 
