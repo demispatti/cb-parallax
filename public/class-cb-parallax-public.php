@@ -42,16 +42,6 @@ class cb_parallax_public {
 	private $plugin_version;
 
 	/**
-	 * The loader that's responsible for maintaining
-	 * and registering all hooks that power the plugin.
-	 *
-	 * @since    0.1.0
-	 * @access   private
-	 * @var      object $loader
-	 */
-	private $loader;
-
-	/**
 	 * Kicks off the public part of the plugin.
 	 *
 	 * @since 0.1.0
@@ -62,12 +52,11 @@ class cb_parallax_public {
 	 * @param object $loader
 	 * @param string $meta_key
 	 */
-	public function __construct( $plugin_name, $plugin_domain, $plugin_version, $loader ) {
+	public function __construct( $plugin_name, $plugin_domain, $plugin_version ) {
 
 		$this->plugin_name    = $plugin_name;
 		$this->plugin_domain  = $plugin_domain;
 		$this->plugin_version = $plugin_version;
-		$this->loader         = $loader;
 
 		$this->load_dependencies();
 	}
@@ -143,28 +132,38 @@ class cb_parallax_public {
 	 */
 	public function enqueue_scripts() {
 
-		// Nicescroll, modified version.
+		// jQuery easing
 		wp_enqueue_script(
-			$this->plugin_name . '-cb-parallax-nicescroll-min-js',
-			plugin_dir_url( __FILE__ ) . '../vendor/nicescroll/jquery.cbp.nicescroll.min.js',
+			$this->plugin_name . '-cb-parallax-easing-min-js',
+			plugin_dir_url( __FILE__ ) . '../vendor/jquery-easing/jquery.easing.min.js',
 			array( 'jquery' ),
 			$this->plugin_version,
 			true
 		);
 
-		if( $this->has_background_image() ) {
-			// Parallax script.
-			wp_enqueue_script(
-				$this->plugin_name . '-public-js',
-				plugin_dir_url( __FILE__ ) . 'js/public.js',
-				array(
-					'jquery',
-					$this->plugin_name . '-cb-parallax-nicescroll-min-js',
-				),
-				$this->plugin_version,
-				true
-			);
-		}
+		// Nicescroll
+		wp_enqueue_script(
+			$this->plugin_name . '-cb-parallax-nicescroll-min-js',
+			plugin_dir_url( __FILE__ ) . '../vendor/nicescroll/jquery.nicescroll.min.js',
+			array(
+				'jquery',
+				$this->plugin_name . '-cb-parallax-easing-min-js'
+			),
+			$this->plugin_version,
+			true
+		);
+
+		// Parallax script.
+		wp_enqueue_script(
+			$this->plugin_name . '-public-js',
+			plugin_dir_url( __FILE__ ) . 'js/public.js',
+			array(
+				'jquery',
+				$this->plugin_name . '-cb-parallax-nicescroll-min-js',
+			),
+			$this->plugin_version,
+			false
+		);
 
 	}
 
@@ -180,82 +179,10 @@ class cb_parallax_public {
 	public function define_public_localisation() {
 
 		$public_localisation = new cb_parallax_public_localisation( $this->get_plugin_name(), $this->get_plugin_domain(), $this->get_plugin_version() );
-		$this->loader->add_action( 'wp_enqueue_scripts', $public_localisation, 'retrieve_image_data', 12 );
-		$this->loader->add_action( 'template_redirect', $public_localisation, 'retrieve_image_options' );
-		$this->loader->add_action( 'wp_enqueue_scripts', $public_localisation, 'localize_frontend', 1000 );
-	}
 
-	/**
-	 * Determines if there is a background image related to the requested post (type).
-	 *
-	 * @since    0.6.0
-	 * @access   private
-	 * @return   bool
-	 */
-	private function has_background_image() {
-
-		global $post;
-
-		$image_options              = get_option( 'cb_parallax_options' );
-		$post_meta                  = isset( $post ) ? get_post_meta( $post->ID, 'cb_parallax', true ) : false;
-		$menu_options_attachment_id = isset( $image_options['cb_parallax_attachment_id'] ) ? $image_options['cb_parallax_attachment_id'] : false;
-		$post_meta_attachment_id    = isset( $post_meta['cb_parallax_attachment_id'] ) ? $post_meta['cb_parallax_attachment_id'] : false;
-
-		$image_source = $this->determine_image_source();
-
-		if ( 'global' == $image_source ) {
-
-			if( false !== $menu_options_attachment_id ) {
-
-				return true;
-			} else {
-
-				return false;
-			}
-		} else {
-
-			if ( false !== $post_meta_attachment_id ) {
-
-				return true;
-			} else {
-
-				return false;
-			}
-		}
-	}
-
-	/**
-	 * Determines the image source.
-	 *
-	 * @since    0.6.0
-	 * @access   private
-	 * @return   string $source_type
-	 */
-	private function determine_image_source() {
-
-		global $post;
-
-		$post_meta      = isset( $post ) ? get_post_meta( $post->ID, 'cb_parallax', true ) : false;
-		$post_has_image = isset( $post_meta['cb_parallax_attachment_id'] ) ? $post_meta['cb_parallax_attachment_id'] : false;
-
-		$options        = get_option( 'cb_parallax_options' );
-		$is_global      = isset( $options['cb_parallax_global'] ) ? $options['cb_parallax_global'] : false;
-		$allow_override = isset( $options['cb_parallax_allow_override'] ) ? $options['cb_parallax_allow_override'] : false;
-		$attachment_id  = isset( $options['cb_parallax_attachment_id'] ) ? $options['cb_parallax_attachment_id'] : '';
-
-		$source_type = null;
-
-		if ( ! $is_global || $is_global && $attachment_id == '' ) {
-			$source_type = 'per_post';
-
-		} else if ( $is_global && $allow_override && $post_has_image ) {
-			$source_type = 'per_post';
-		} else {
-			$source_type = 'global';
-		}
-
-		return $source_type;
-
+		add_action( 'wp_enqueue_scripts', array( $public_localisation, 'retrieve_image_data' ), 12 );
+		add_action( 'template_redirect', array( $public_localisation, 'retrieve_image_options' ) );
+		add_action( 'wp_enqueue_scripts', array( $public_localisation, 'localize_frontend' ), 1000 );
 	}
 
 	/**

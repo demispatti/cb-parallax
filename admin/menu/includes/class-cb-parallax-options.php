@@ -65,7 +65,7 @@ class cb_parallax_options {
 				'name'           => __( 'Background Image', $this->plugin_domain ),
 				'callback'       => 'render_settings_field_callback',
 				'settings_group' => 'background-image',
-				'description'    => __( 'Choose a background image.', $this->plugin_domain ),
+				'description'    => ''/*__( 'Choose a background image.', $this->plugin_domain )*/,
 				'default_value'  => '',
 				'input_type'     => 'media',
 				'notice_level'   => 'none',
@@ -235,7 +235,7 @@ class cb_parallax_options {
 				'name'           => __( 'Parallax Enabled', $this->plugin_domain ),
 				'callback'       => 'render_settings_field_callback',
 				'settings_group' => 'background-image',
-				'description'    => __( 'Enable this feature to have your background image parallaxing.', $this->plugin_domain ),
+				'description'    => __( 'Enable parallax', $this->plugin_domain ),
 				'default_value'  => false,
 				'input_type'     => 'checkbox',
 				'notice_level'   => 'none',
@@ -246,7 +246,7 @@ class cb_parallax_options {
 				'name'           => __( 'Global', $this->plugin_domain ),
 				'callback'       => 'render_settings_field_callback',
 				'settings_group' => 'background-image',
-				'description'    => __( 'Use this image and these settings for all supported posts, products and pages.', $this->plugin_domain ),
+				'description'    => __( 'Enable this feature to apply this image and it\'s settings to all supported post types.', $this->plugin_domain ),
 				'default_value'  => false,
 				'input_type'     => 'checkbox',
 				'notice_level'   => 'none',
@@ -257,7 +257,7 @@ class cb_parallax_options {
 				'name'           => __( 'Allow Override', $this->plugin_domain ),
 				'callback'       => 'render_settings_field_callback',
 				'settings_group' => 'background-image',
-				'description'    => __( 'This setting is the same as "global", except that backgrounds you defined on a per-post-basis, will be displayed instead of the one you defined on this screen. On pages where you did not explicitly define a paralax background, this one here will be shown if set.', $this->plugin_domain ),
+				'description'    => __( 'Individual settings on a per post -/ per page basis will be used instead of this image and it\'s settings. On pages where no background image is defined, the above image will be displayed, if one is defined.', $this->plugin_domain ),
 				'default_value'  => true,
 				'input_type'     => 'checkbox',
 				'notice_level'   => 'none',
@@ -279,7 +279,7 @@ class cb_parallax_options {
 				'name'           => __( 'Disable On Mobile Devices', $this->plugin_domain ),
 				'callback'       => 'render_settings_field_callback',
 				'settings_group' => 'background-image',
-				'description'    => __( 'Disable parallax-effect on mobile devices. This may be useful if you encounter performance issues.', $this->plugin_domain ),
+				'description'    => __( 'Disable parallax-effect on mobile devices. This may be useful <i>if</i> you encounter performance issues.', $this->plugin_domain ),
 				'default_value'  => false,
 				'input_type'     => 'checkbox',
 				'notice_level'   => 'none',
@@ -561,9 +561,9 @@ class cb_parallax_options {
 
 		$plugin_heading = array(
 			'option_key'     => 'cb_parallax_parallax_options',
-			'name'           => __( 'Plugin Settings', $this->plugin_domain ),
+			'name'           => __( 'General Settings', $this->plugin_domain ),
 			'settings_group' => 'plugin',
-			'description'    => __( 'Customize the plugin settings.', $this->plugin_domain ),
+			'description'    => __( 'General settings.', $this->plugin_domain ),
 			'callback'       => 'plugin_settings_section_callback',
 			'class'          => 'icon icon-equalizer',
 		);
@@ -592,7 +592,7 @@ class cb_parallax_options {
 	 *
 	 * @param object $post
 	 *
-	 * @return array
+	 * @return mixed
 	 */
 	public function fetch_options() {
 

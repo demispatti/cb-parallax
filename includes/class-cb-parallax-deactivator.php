@@ -22,26 +22,29 @@ class cb_parallax_deactivator {
 	 * @access   public
 	 * @var      string $capability
 	 */
-	public static $capability = 'cb_parallax_edit';
+	public $capability;
+
+	public function __construct() {
+
+		$this->capability = 'cb_parallax_edit';
+	}
 
 	/**
 	 * Fired during deactivation of the plugin.
 	 * Removes the capability to edit custom backgrounds from the administrator role.
 	 *
-	 * @hooked_action
-	 *
 	 * @since    0.1.0
 	 * @access   static
 	 * @return   void
 	 */
-	public static function deactivate() {
+	public function deactivate() {
 
 		// Gets the administrator role.
 		$role = get_role( 'administrator' );
 
 		// If the acting user has admin rights, the capability gets removed.
 		if ( ! empty( $role ) ) {
-			$role->remove_cap( self::$capability );
+			$role->remove_cap( $this->capability );
 		}
 	}
 }

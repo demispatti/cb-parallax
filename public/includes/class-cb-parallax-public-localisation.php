@@ -159,7 +159,7 @@ class cb_parallax_public_localisation {
 	 *
 	 * @since    0.1.0
 	 * @access   public
-	 * @return   mixed / void
+	 * @return   mixed
 	 */
 	public function retrieve_image_data() {
 
@@ -336,24 +336,32 @@ class cb_parallax_public_localisation {
 	 */
 	public function localize_frontend() {
 
-		// If there is no image, we bail here too...
-		if ( $this->image_data == null ) {
-			return;
-		}
+		if( $this->has_background_image() ) {
 
-		// Passes the parameters to the script.
-		wp_localize_script(
-			$this->plugin_name . '-public-js',
-			'cbParallax',
-			array_merge(
-				$this->image_data,
-				$this->image_options,
-				$this->get_none_string(),
-				$this->get_overlay_image_path(),
-				array('pluginOptions' => $this->get_plugin_options() ),
-				$this->retrieve_plugin_options()
-			)
-		);
+			wp_localize_script(
+				$this->plugin_name . '-public-js',
+				'cbParallax',
+				array_merge(
+					$this->image_data,
+					$this->image_options,
+					$this->get_none_string(),
+					$this->get_overlay_image_path(),
+					array( 'pluginOptions' => $this->get_plugin_options() ),
+					$this->retrieve_plugin_options()
+				)
+			);
+		} else {
+
+			wp_localize_script(
+				$this->plugin_name . '-public-js',
+				'cbParallax',
+				array_merge(
+					$this->get_none_string(),
+					array( 'pluginOptions' => $this->get_plugin_options() ),
+					$this->retrieve_plugin_options()
+				)
+			);
+		}
 	}
 
 	/**
@@ -631,6 +639,79 @@ class cb_parallax_public_localisation {
 	public function get_plugin_domain() {
 
 		return $this->plugin_domain;
+	}
+
+	/**
+	 * Determines if there is a background image related to the requested post (type).
+	 *
+	 * @since    0.6.0
+	 * @access   private
+	 * @return   bool
+	 */
+	private function has_background_image() {
+
+		global $post;
+
+		$image_options              = get_option( 'cb_parallax_options' );
+		$post_meta                  = isset( $post ) ? get_post_meta( $post->ID, 'cb_parallax', true ) : false;
+		$menu_options_attachment_id = isset( $image_options['cb_parallax_attachment_id'] ) ? $image_options['cb_parallax_attachment_id'] : false;
+		$post_meta_attachment_id    = isset( $post_meta['cb_parallax_attachment_id'] ) ? $post_meta['cb_parallax_attachment_id'] : false;
+
+		$image_source = $this->determine_image_source();
+
+		if ( 'global' == $image_source ) {
+
+			if ( false !== $menu_options_attachment_id ) {
+
+				return true;
+			} else {
+
+				return false;
+			}
+		} else {
+
+			if ( false !== $post_meta_attachment_id ) {
+
+				return true;
+			} else {
+
+				return false;
+			}
+		}
+	}
+
+	/**
+	 * Determines the image source.
+	 *
+	 * @since    0.6.0
+	 * @access   private
+	 * @return   string $source_type
+	 */
+	private function determine_image_source() {
+
+		global $post;
+
+		$post_meta      = isset( $post ) ? get_post_meta( $post->ID, 'cb_parallax', true ) : false;
+		$post_has_image = isset( $post_meta['cb_parallax_attachment_id'] ) ? $post_meta['cb_parallax_attachment_id'] : false;
+
+		$options        = get_option( 'cb_parallax_options' );
+		$is_global      = isset( $options['cb_parallax_global'] ) ? $options['cb_parallax_global'] : false;
+		$allow_override = isset( $options['cb_parallax_allow_override'] ) ? $options['cb_parallax_allow_override'] : false;
+		$attachment_id  = isset( $options['cb_parallax_attachment_id'] ) ? $options['cb_parallax_attachment_id'] : '';
+
+		$source_type = null;
+
+		if ( ! $is_global || $is_global && $attachment_id == '' ) {
+			$source_type = 'per_post';
+
+		} else if ( $is_global && $allow_override && $post_has_image ) {
+			$source_type = 'per_post';
+		} else {
+			$source_type = 'global';
+		}
+
+		return $source_type;
+
 	}
 
 }

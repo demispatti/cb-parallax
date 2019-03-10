@@ -1,20 +1,20 @@
 === cbParallax ===
 
-Tags: image, background, fullscreen, parallax, Hintergrund, Bild, Hintergrundbild, Fullscreen
+Tags: parallax, responsive, fullscreen, image, background, Hintergrund, Bild, Hintergrundbild
 
-Requires at least: 4.2
-Tested up to: 4.6.1
-Stable tag: 0.6.0
-Version: 0.6.0
-Contributors: demispatti
+Requires at least: 4.5
+Tested up to: 4.7.3
+Stable tag: 0.8.1
+Version: 0.8.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
+Contributors: demispatti
 
-This plugin allows you to customize single pages, posts and products with an individual, optionally parallaxing fullscreen background image.
+Responsive, parallaxing fullscreen background image.
 
 == Description ==
 
-This plugin enables you to set a custom background image.  It supports vertical and horizontal parallax scrolling effect, as long as the image dimensions exceed the viewport dimensions.  Be aware that the image is never being resized, just moved around, so keep that in mind.  You can align the image on either side parallel to the parallax direction or centered. The offset defines the area for the parallax effect.  You can also choose from a couple of overlays if you like to.
+Responsive, parallaxing fullscreen background image.
 
 == Features ==
 
@@ -30,9 +30,9 @@ This plugin enables you to set a custom background image.  It supports vertical 
 
 Your theme must support the core WordPress implementation of the [Custom Backgrounds](http://codex.wordpress.org/Custom_Backgrounds) theme feature.
 
-In order to use the parallax feature, I decided to set the minimum required image dimensions to 1920px * 1200px, so that covers a fullHD screen with a slight vertical parallax movement ( Image height - viewport height, so 1200px - 1080px gives 120px offset to move the image. I hope you get the point here.)
+In order to use the parallax feature, I decided to set the minimum required image dimensions to 1920px * 1200px, so that covers a fullHD screen with a slight vertical parallax movement ( Image height - viewport height, so 1200px - 1080px gives 120px offset to move the image. I hope you get the point here.).
 
-Your theme's layout must be "boxed" somehow or an opacity should be added to the page content container for the background image to be seen.
+Your theme's layout must be "boxed" somehow or an opacity should be added to the page content container for the background image to be seen. This is up to you.
 
 PHP version 5.3 or above.
 
@@ -110,8 +110,6 @@ Yes. I have a look at the plugin's support page two or three times a week and I 
 
 = Are there any known issues? =
 
-Yes. If you're using the "Vantage" theme from SiteOrigin, the background image won't be displayed on Firefox. On every other browser it will. I'm on it.
-
 == Screenshots ==
 
 1. Multiple background views of a single post.
@@ -120,8 +118,33 @@ Yes. If you're using the "Vantage" theme from SiteOrigin, the background image w
 
 == Changelog ==
 
-= Version 0.6.0 =
+= Version 0.8.1 =
+1. Made compatible with some premium themes.
+2. Changed the display of the thumb on the settings page.
 
+= Version 0.8.0 =
+1. I'm responsive, baby! Please note that ( for now ), when an image aspect ratio matches the viewport aspect ratio, there is no room for parallax. Choose your image higher / wider than the expected viewport size according to the parallax direction ( vertical / horizontal)
+2. Minor UI changes
+
+= Version 0.7.5 =
+1. Updated Nicescroll to version 3.6.8. Scrolling behaviour might be different now. Options to control scrolling behaviour will be available soon.
+2. Removed custom Nicescroll version
+3. Added easing
+4. Resolved an issue with preserved scrolling
+
+= Version 0.7.4 =
+1. Optimized performance
+2. Removed obsolete "add media" button on both the meta box and the settings page
+3. Modified the "add media" button
+
+= Version 0.7.3 =
+1. Included missing file...
+
+= Version 0.7.2 =
+1. Optimized code, removed the loader-class
+2. Optimized js
+
+= Version 0.6.0 =
 1. Fixed some bugs that occurred on Installations using the non-default locale.
 2. Fixed issue with overlay color.
 3. Fixed issue with static background image.

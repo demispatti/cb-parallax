@@ -42,16 +42,6 @@ class cb_parallax {
 	private $plugin_version;
 
 	/**
-	 * The loader that's responsible for maintaining
-	 * and registering all hooks that power the plugin.
-	 *
-	 * @since    0.1.0
-	 * @access   private
-	 * @var      cb_parallax_loader $loader
-	 */
-	private $loader;
-
-	/**
 	 * 1. Defines the plugin's name, domain and version, and loads its basic dependencies.
 	 * 2. Instanciates and assigns the loader.
 	 * 3. Loads the language files.
@@ -65,26 +55,23 @@ class cb_parallax {
 
 		$this->plugin_name    = 'cb-parallax';
 		$this->plugin_domain  = $this->get_plugin_domain();
-		$this->plugin_version = '0.6.0';
+		$this->plugin_version = '0.8.1';
 
-		$this->add_hooks();
 		$this->load_dependencies();
 		$this->set_i18n();
-		$this->define_admin_hooks();
-		$this->define_public_hooks();
-
 	}
 
 	/**
 	 * Register the hook with WordPress.
 	 *
 	 * @since    0.6.0
-	 * @access   private
+	 * @access   public
 	 * @return   void
 	 */
-	private function add_hooks() {
+	public function run() {
 
-		add_action( 'upgrader_process_complete', array( $this, 'upgrade' ), 20 );
+		$this->define_admin_hooks();
+		$this->define_public_hooks();
 	}
 
 	/**
@@ -101,15 +88,11 @@ class cb_parallax {
 	 */
 	private function load_dependencies() {
 
-		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-cb-parallax-loader.php';
-
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-cb-parallax-i18n.php';
 
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . "admin/class-cb-parallax-admin.php";
 
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . "public/class-cb-parallax-public.php";
-
-		$this->loader = new cb_parallax_loader();
 	}
 
 	/**
@@ -123,7 +106,7 @@ class cb_parallax {
 
 		$i18n = new cb_parallax_i18n( $this->get_plugin_domain() );
 
-		$this->loader->add_action( 'init', $i18n, 'load_plugin_textdomain' );
+		add_action( 'init', array( $i18n, 'load_plugin_textdomain') );
 	}
 
 	/**
@@ -135,12 +118,12 @@ class cb_parallax {
 	 */
 	private function define_admin_hooks() {
 
-		$admin = new cb_parallax_admin( $this->get_plugin_name(), $this->get_plugin_domain(), $this->get_plugin_version(), $this->get_loader() );
+		$admin = new cb_parallax_admin( $this->get_plugin_name(), $this->get_plugin_domain(), $this->get_plugin_version() );
 
-		$this->loader->add_action( 'admin_enqueue_scripts', $admin, 'enqueue_styles' );
-		$this->loader->add_action( 'admin_enqueue_scripts', $admin, 'enqueue_scripts' );
-		$this->loader->add_action( 'admin_init', $admin, 'check_cap' );
-		$this->loader->add_action( 'plugin_row_meta', $admin, 'plugin_row_meta', 10, 2 );
+		add_action( 'admin_enqueue_scripts', array( $admin, 'enqueue_styles' ) );
+		add_action( 'admin_enqueue_scripts', array( $admin, 'enqueue_scripts' ) );
+		add_action( 'admin_init', array( $admin, 'check_cap' ) );
+		add_action( 'plugin_row_meta', array( $admin, 'plugin_row_meta' ), 10, 2 );
 	}
 
 	/**
@@ -151,40 +134,13 @@ class cb_parallax {
 	 */
 	private function define_public_hooks() {
 
-		$public = new cb_parallax_public( $this->get_plugin_name(), $this->get_plugin_domain(), $this->get_plugin_version(), $this->get_loader() );
+		$public = new cb_parallax_public( $this->get_plugin_name(), $this->get_plugin_domain(), $this->get_plugin_version() );
 
-		$this->loader->add_action( 'wp_enqueue_scripts', $public, 'check_for_nicescrollr_plugin', 10 );
-		$this->loader->add_action( 'admin_enqueue_scripts', $public, 'check_for_nicescrollr_plugin', 10 );
-		$this->loader->add_action( 'wp', $public, 'define_public_localisation' );
-		$this->loader->add_action( 'wp_enqueue_scripts', $public, 'enqueue_styles', 11 );
-		$this->loader->add_action( 'wp_enqueue_scripts', $public, 'enqueue_scripts', 12 );
-	}
-
-	/**
-	 * Calls the class responsible for any eventual upgrade-related functions.
-	 *
-	 * @since    0.6.0
-	 * @access   public
-	 */
-	public function upgrade() {
-
-		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-cb-parallax-upgrade.php';
-
-		$upgrader = new cb_parallax_upgrade( $this->get_plugin_name(), $this->get_plugin_domain(), $this->get_plugin_version() );
-
-		$upgrader->run();
-	}
-
-	/**
-	 * Runs the loader to execute all of the hooks with WordPress.
-	 *
-	 * @since    0.1.0
-	 * @access   public
-	 * @return   void
-	 */
-	public function run() {
-
-		$this->loader->run();
+		add_action( 'wp_enqueue_scripts', array( $public, 'check_for_nicescrollr_plugin' ), 10 );
+		add_action( 'admin_enqueue_scripts', array( $public, 'check_for_nicescrollr_plugin' ), 10 );
+		add_action( 'wp', array( $public, 'define_public_localisation' ) );
+		add_action( 'wp_enqueue_scripts', array( $public, 'enqueue_styles' ), 11 );
+		add_action( 'wp_enqueue_scripts', array( $public, 'enqueue_scripts' ), 12 );
 	}
 
 	/**
@@ -223,18 +179,6 @@ class cb_parallax {
 	public function get_plugin_version() {
 
 		return $this->plugin_version;
-	}
-
-	/**
-	 * Retrieves the loader.
-	 *
-	 * @since     0.1.0
-	 * @access    public
-	 * @return    object  $loader
-	 */
-	public function get_loader() {
-
-		return $this->loader;
 	}
 
 }

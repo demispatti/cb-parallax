@@ -10,405 +10,395 @@
  * License:           GPL-2.0+
  * License URI:       http://www.gnu.org/licenses/gpl-2.0.txt
  */
-(function ( $ )
-{
+(function ( $ ) {
 	"use strict";
 
-	var backgroundImage = null;
-	var attachmentId = null;
-	var parallaxOnOffCheckBox = null;
-	var parallaxDirectionSelectBox = null;
-	var overlayOptionsContainer = null;
-	var overlayImageSelectBox = null;
-	var overlayImageContainer = null;
+	function Plugin () {
 
-	var attachmentWidth = cbParallax.attachmentWidth != 'undefined' ? cbParallax.attachmentWidth : 0;
-	var attachmentHeight = cbParallax.attachmentHeight != 'undefined' ? cbParallax.attachmentHeight : 0;
-
-	var parallaxGlobalContainer = null;
-
-	var addMediaButton = null;
-	var removeMediaButton = null;
-
-	var backgroundImageContainer = null;
-	var parallaxEnabledContainer = null;
-	var imageOptionsContainer = null;
-	var parallaxOptionsContainer = null;
-	//var backgroundColorContainer = null;
-	var backgroundAttachmentContainer = null;
-
-	var verticalScrollDirectionContainer = null;
-	var horizontalScrollDirectionContainer = null;
-	var verticalAlignmentContainer = null;
-	var horizontalAlignmentContainer = null;
-	var overlayColorContainer = null;
-	var overlayOpacityContainer = null;
-	var directionContainer = null;
-
-	var cb_parallax_frame;
-
-
-	function setImageUrl ()
-	{
-		backgroundImage.attr( "src", (cbParallax.backgroundImageUrl) != 'undefined' ? cbParallax.backgroundImageUrl : '' );
-	}
-	function wrapOptionFields ()
-	{
-		var ids = cbParallax.defaults;
-
-		$( ids ).each( function ( i )
-		{
-			var tr = $( '.form-table tr' ).eq( i );
-			var id = $( this ).selector;
-
-			tr.wrap( '<div class="cb-parallax-table-row" id="' + id + '_container"></div>' );
-		} );
-
-		$( '.wp-picker-container:nth-of-type(1)' ).wrap( '<div class="cb-parallax-table-row" id="cb_parallax_background_color_container"></div>' );
-		$( '.wp-picker-container:nth-of-type(2)' ).wrap( '<div class="cb-parallax-table-row" id="cb_parallax_overlay_color_container"></div>' );
-
-	}
-	function wrapImage ()
-	{
-		backgroundImage.wrap( '<a class="cb-parallax-image-container" href="#"></a>' );
-	}
-	function wrapImageOptionsHeading ()
-	{
-		$( 'h2:nth-of-type(3)' ).wrap( '<a class="cb-parallax-image-options-heading-container"></a>' );
-	}
-	function setObjects ()
-	{
-		// Background image
-		backgroundImage = $( '#cb_parallax_background_image_url' );
-		// Attachment id
-		attachmentId = $( "#cb_parallax_attachment_id" );
-		// On/Off switch
-		parallaxOnOffCheckBox = $( '#cb_parallax_parallax_enabled' );
-		// Direction switch
-		parallaxDirectionSelectBox = $( '#cb_parallax_direction' );
-		// Overlay options select
-		overlayImageSelectBox = $( '#cb_parallax_overlay_image' );
-		// Add media button
-		addMediaButton = $( ".cb-parallax-add-media-button" );
-		// Remove media button
-		removeMediaButton = $( ".cb-parallax-remove-media-button" );
-		// Set this height to keep things in place
-	}
-	function assembleContainers ()
-	{
-		backgroundAttachmentContainer = $( '#cb_parallax_background_attachment_container' );
-		//backgroundColorContainer = $( '#cb_parallax_background_color_container' );
-		backgroundImageContainer = $( '#cb_parallax_background_image_container' );
-
-		parallaxEnabledContainer = $( '#cb_parallax_parallax_enabled_container' );
-		directionContainer = $( '#cb_parallax_direction_container' );
-
-		verticalScrollDirectionContainer = $( '#cb_parallax_vertical_scroll_direction_container' );
-		horizontalScrollDirectionContainer = $( '#cb_parallax_horizontal_scroll_direction_container' );
-		verticalAlignmentContainer = $( '#cb_parallax_vertical_alignment_container' );
-		horizontalAlignmentContainer = $( '#cb_parallax_horizontal_alignment_container' );
-
-		overlayImageContainer = $( '#cb_parallax_overlay_image_container' );
-		overlayOpacityContainer = $( '#cb_parallax_overlay_opacity_container' );
-		overlayColorContainer = $( '#cb_parallax_overlay_color_container' );
-
-		parallaxGlobalContainer = $( '#cb_parallax_global_container' );
-
-		imageOptionsContainer = $( '#cb_parallax_background_repeat_container, #cb_parallax_position_x_container, #cb_parallax_position_y_container, #cb_parallax_background_attachment_container' ).wrapAll( '<div class="cb-parallax-image-options-container"></div>' );
-		parallaxOptionsContainer = $( '#cb_parallax_vertical_scroll_direction_container, #cb_parallax_horizontal_scroll_direction_container, #cb_parallax_horizontal_alignment_container, #cb_parallax_vertical_alignment_container, #cb_parallax_overlay_image_container, #cb_parallax_overlay_opacity_container, #cb_parallax_overlay_color_container' ).wrapAll( '<div class="cb-parallax-parallax-options-container"></div>' );
-		overlayOptionsContainer = $( '#cb_parallax_overlay_image_container, #cb_parallax_overlay_opacity_container, #cb_parallax_overlay_color_container' ).wrapAll( '<div class="cb-parallax-overlay-options-container"></div>' );
-
-	}
-	function insertPluginSectionHeading ()
-	{
-		parallaxGlobalContainer.before( '<div id="cb_parallax_plugin_options_heading_container"><h2>' + cbParallax.pluginSectionTitleText + '</h2></div>' );
-	}
-	function insertImageSectionHeading ()
-	{
-		$( '.cb-parallax-image-options-container' ).before( '<div id="cb_parallax_image_options_heading_container"><h2>' + cbParallax.imageSectionTitleText + '</h2></div>' );
-	}
-	function initColorpicker ()
-	{
-		$( '#cb_parallax_background_color, #cb_parallax_overlay_color' ).wpColorPicker();
-	}
-	function initFancySelect ()
-	{
-		$( '.cb-parallax-fancy-select' ).fancySelect();
-	}
-	function localizeScript ()
-	{
-		if ( cbParallax.locale == 'de_DE' )
-		{
-			$( '<style>.cb-parallax-switch-input ~ .cb-parallax-switch-label:before{content:"' + cbParallax.switchesText.Off + '";}</style>' ).appendTo( 'head' );
-			$( '<style>.cb-parallax-switch-input:checked ~ .cb-parallax-switch-label:after{content:"' + cbParallax.switchesText.On + '";}</style>' ).appendTo( 'head' );
-		}
-	}
-	function fixView()
-	{
-		if(backgroundAttachmentContainer.css('display') == 'none')
-		{
-			verticalAlignmentContainer.css('height', directionContainer.height() * 2);
-			horizontalAlignmentContainer.css( 'height', directionContainer.height() * 2 );
-		} else
-		{
-			verticalAlignmentContainer.css( 'height', 'auto' );
-			horizontalAlignmentContainer.css( 'height', 'auto' );
-		}
+		this.attachmentWidth  = cbParallax.attachmentWidth != 'undefined' ? cbParallax.attachmentWidth : 0;
+		this.attachmentHeight = cbParallax.attachmentHeight != 'undefined' ? cbParallax.attachmentHeight : 0;
 	}
 
+	Plugin.prototype = {
 
-	function toggleParallaxOnOffSwitch ()
-	{
-		setView();
-	}
-	function toggleParallaxDirection ()
-	{
-		if ( parallaxOnOffCheckBox.prop( 'checked' ) )
-		{
-			if ( backgroundImage.attr( 'src' ) != '' )
-			{
-				if ( parallaxDirectionSelectBox.val() === cbParallax.verticalString )
-				{
-					horizontalScrollDirectionContainer.hide();
-					verticalAlignmentContainer.hide();
+		constructor : Plugin,
 
-					verticalScrollDirectionContainer.show();
-					horizontalAlignmentContainer.show();
+		init : function () {
+
+			this.localizeScript();
+			this.wrapOptionFields();
+			this.setObjects();
+			this.setImageUrl();
+			this.assembleContainers();
+			this.insertImageSectionHeading();
+			this.wrapImageOptionsHeading();
+			this.insertPluginSectionHeading();
+			this.initColorpicker();
+			this.initFancySelect();
+			this.setView();
+			this.bind();
+		},
+
+		setImageUrl             : function () {
+
+			this.backgroundImage.attr( "src", (cbParallax.backgroundImageUrl) != 'undefined' ? cbParallax.backgroundImageUrl : '' );
+		},
+		wrapOptionFields        : function () {
+			var ids = cbParallax.defaults;
+
+			$( ids ).each( function ( i ) {
+				var tr = $( '.form-table tr' ).eq( i );
+				var id = $( this ).selector;
+
+				tr.wrap( '<div class="cb-parallax-table-row" id="' + id + '_container"></div>' );
+			} );
+
+			$( '.wp-picker-container:nth-of-type(1)' ).wrap( '<div class="cb-parallax-table-row" id="cb_parallax_background_color_container"></div>' );
+			$( '.wp-picker-container:nth-of-type(2)' ).wrap( '<div class="cb-parallax-table-row" id="cb_parallax_overlay_color_container"></div>' );
+
+		},
+		wrapImageOptionsHeading : function () {
+
+			$( 'h2:nth-of-type(3)' ).wrap( '<a class="cb-parallax-image-options-heading-container"></a>' );
+		},
+
+		setObjects         : function () {
+
+			this.backgroundImage            = $( '#cb_parallax_background_image_url' );
+			this.attachmentId               = $( "#cb_parallax_attachment_id" );
+			this.parallaxOnOffCheckBox      = $( '#cb_parallax_parallax_enabled' );
+			this.parallaxDirectionSelectBox = $( '#cb_parallax_direction' );
+			this.overlayImageSelectBox      = $( '#cb_parallax_overlay_image' );
+			this.addMediaButton             = $( '.cb-parallax-media-url' );
+			this.removeMediaButton          = $( ".cb-parallax-remove-media" );
+		},
+		assembleContainers : function () {
+			//
+			this.removeMediaButtonContainer    = $( '.cb-parallax-remove-media-button-container' );
+			//
+			this.backgroundAttachmentContainer = $( '#cb_parallax_background_attachment_container' );
+			//
+			//backgroundColorContainer = $( '#cb_parallax_background_color_container' );
+			//
+			//this.backgroundImageContainer = $( '.cb-parallax-image-container' );
+
+			this.parallaxEnabledContainer = $( '#cb_parallax_parallax_enabled_container' );
+			this.directionContainer       = $( '#cb_parallax_direction_container' );
+
+			this.verticalScrollDirectionContainer   = $( '#cb_parallax_vertical_scroll_direction_container' );
+			this.horizontalScrollDirectionContainer = $( '#cb_parallax_horizontal_scroll_direction_container' );
+			this.verticalAlignmentContainer         = $( '#cb_parallax_vertical_alignment_container' );
+			this.horizontalAlignmentContainer       = $( '#cb_parallax_horizontal_alignment_container' );
+
+			//this.overlayImageContainer   = $( '#cb_parallax_overlay_image_container' );
+			this.overlayOpacityContainer = $( '#cb_parallax_overlay_opacity_container' );
+			this.overlayColorContainer   = $( '#cb_parallax_overlay_color_container' );
+
+			this.parallaxGlobalContainer = $( '#cb_parallax_global_container' );
+
+			this.imageOptionsContainer    = $( '#cb_parallax_background_repeat_container, #cb_parallax_position_x_container, #cb_parallax_position_y_container, #cb_parallax_background_attachment_container' ).wrapAll( '<div class="cb-parallax-image-options-container"></div>' );
+			this.parallaxOptionsContainer = $( '#cb_parallax_vertical_scroll_direction_container, #cb_parallax_horizontal_scroll_direction_container, #cb_parallax_horizontal_alignment_container, #cb_parallax_vertical_alignment_container, #cb_parallax_overlay_image_container, #cb_parallax_overlay_opacity_container, #cb_parallax_overlay_color_container' ).wrapAll( '<div class="cb-parallax-parallax-options-container"></div>' );
+			this.overlayOptionsContainer  = $( '#cb_parallax_overlay_image_container, #cb_parallax_overlay_opacity_container, #cb_parallax_overlay_color_container' ).wrapAll( '<div class="cb-parallax-overlay-options-container"></div>' );
+
+		},
+
+		insertPluginSectionHeading : function () {
+
+			this.parallaxGlobalContainer.before( '<div id="cb_parallax_plugin_options_heading_container"><h2>' + cbParallax.pluginSectionTitleText + '</h2></div>' );
+		},
+		insertImageSectionHeading  : function () {
+
+			$( '.cb-parallax-image-options-container' ).before( '<div id="cb_parallax_image_options_heading_container"><h2>' + cbParallax.imageSectionTitleText + '</h2></div>' );
+		},
+
+		initColorpicker : function () {
+
+			$( '#cb_parallax_background_color, #cb_parallax_overlay_color' ).wpColorPicker();
+		},
+		initFancySelect : function () {
+
+			$( '.cb-parallax-fancy-select' ).fancySelect();
+		},
+
+		localizeScript : function () {
+			if ( cbParallax.locale == 'de_DE' ) {
+
+				$( '<style>.cb-parallax-switch-input ~ .cb-parallax-switch-label:before{content:"' + cbParallax.switchesText.Off + '";}</style>' ).appendTo( 'head' );
+				$( '<style>.cb-parallax-switch-input:checked ~ .cb-parallax-switch-label:after{content:"' + cbParallax.switchesText.On + '";}</style>' ).appendTo( 'head' );
+			}
+		},
+
+		setView : function () {
+			// If there is an attachment...
+			if ( this.backgroundImage.attr( 'src' ) != '' ) {
+				// If parallax is not possible with this attachment...
+				if ( this.attachmentWidth < 1920 || this.attachmentHeight < 1200 ) {
+
+					this.parallaxOptionsContainer.hide();
+					this.parallaxEnabledContainer.hide();
+					this.directionContainer.hide();
+					this.imageOptionsContainer.show();
 				}
-				else
-				{
-					verticalScrollDirectionContainer.hide();
-					horizontalAlignmentContainer.hide();
+				// else if parallax is possible AND "off"
+				else if ( ( this.attachmentWidth >= 1920 && this.attachmentHeight >= 1200 ) && false == this.parallaxOnOffCheckBox.prop( 'checked' ) ) {
 
-					horizontalScrollDirectionContainer.show();
-					verticalAlignmentContainer.show();
+					this.directionContainer.hide();
+					this.parallaxOptionsContainer.hide();
+					this.overlayOptionsContainer.hide();
+					this.imageOptionsContainer.show();
+					this.parallaxEnabledContainer.show();
+				}
+				// else if parallax is possible AND "on"
+				else if ( true == this.attachmentWidth >= 1920 && this.attachmentHeight >= 1200 && this.parallaxOnOffCheckBox.prop( 'checked' ) ) {
+
+					this.parallaxOptionsContainer.show();
+					this.parallaxEnabledContainer.show();
+					this.directionContainer.show();
+					this.imageOptionsContainer.hide();
+				}
+				// Else parallax is possible AND "on"
+				else {
+
+					this.directionContainer.hide();
+					this.parallaxOptionsContainer.hide();
+					this.overlayOptionsContainer.hide();
+					this.imageOptionsContainer.show();
+					this.parallaxEnabledContainer.show();
 				}
 			}
-			else
-			{
-				verticalScrollDirectionContainer.hide();
-				horizontalAlignmentContainer.hide();
+			// ...else there is no attachment...
+			else {
 
-				horizontalScrollDirectionContainer.hide();
-				verticalAlignmentContainer.hide();
+				this.parallaxEnabledContainer.hide();
+				this.imageOptionsContainer.hide();
+				this.parallaxOptionsContainer.hide();
+				this.directionContainer.hide();
+				$( '#cb_parallax_image_options_heading_container' ).hide();
 			}
 
-		}
-		else
-		{
-			verticalScrollDirectionContainer.hide();
-			horizontalAlignmentContainer.hide();
+			this.toggleOverlayOpacityAndColorOptions();
+			this.toggleParallaxDirection();
 
-			horizontalScrollDirectionContainer.hide();
-			verticalAlignmentContainer.hide();
-		}
+			this.fixView();
+			this.toggleCursor();
+			this.toggleRemoveMediaButton();
+		},
+		fixView : function () {
 
-	}
-	function toggleOverlayOpacityAndColorOptions ()
-	{
-		if ( backgroundImage.attr( 'src' ) != '' )
-		{
-			overlayOptionsContainer.show();
+			if ( this.backgroundAttachmentContainer.css( 'display' ) == 'none' ) {
 
-			if ( $( "#cb_parallax_overlay_image" ).val() != cbParallax.noneString )
-			{
-				overlayOpacityContainer.show();
-				overlayColorContainer.show();
+				this.verticalAlignmentContainer.css( 'height', this.directionContainer.height() * 2 );
+				this.horizontalAlignmentContainer.css( 'height', this.directionContainer.height() * 2 );
 			}
-			else
-			{
-				overlayOpacityContainer.hide();
-				overlayColorContainer.hide();
+			else {
+
+				this.verticalAlignmentContainer.css( 'height', 'auto' );
+				this.horizontalAlignmentContainer.css( 'height', 'auto' );
+			}
+		},
+
+		toggleParallaxOnOffSwitch           : function ( event ) {
+
+			var self = event.data.context;
+
+			self.setView();
+		},
+		toggleParallaxDirection             : function ( event ) {
+
+			if ( event ) {
+				var self = event.data.context;
+			}
+			else {
+				self = this;
 			}
 
-		}
-		else
-		{
-			overlayOpacityContainer.hide();
-			overlayColorContainer.hide();
-		}
+			self.parallaxDirectionSelectBox.trigger( 'change.$' );
 
-	}
+			if ( self.parallaxOnOffCheckBox.prop( 'checked' ) ) {
+				if ( self.backgroundImage.attr( 'src' ) != '' ) {
+					if ( self.parallaxDirectionSelectBox.val() == cbParallax.verticalString ) {
+						self.horizontalScrollDirectionContainer.hide();
+						self.verticalAlignmentContainer.hide();
 
+						self.verticalScrollDirectionContainer.show();
+						self.horizontalAlignmentContainer.show();
+					}
+					else {
+						self.verticalScrollDirectionContainer.hide();
+						self.horizontalAlignmentContainer.hide();
 
-	function setView ()
-	{
-		// If there is an attachment...
-		if ( backgroundImage.attr( 'src' ) != '' )
-		{
-			// If parallax is not possible with this attachment...
-			if ( attachmentWidth < 1920 || attachmentHeight < 1200 )
-			{
-				parallaxOptionsContainer.hide();
-				parallaxEnabledContainer.hide();
-				directionContainer.hide();
-				imageOptionsContainer.show();
+						self.horizontalScrollDirectionContainer.show();
+						self.verticalAlignmentContainer.show();
+					}
+				}
+				else {
+					self.verticalScrollDirectionContainer.hide();
+					self.horizontalAlignmentContainer.hide();
 
-				addMediaButton.hide();
-				backgroundImage.show();
-				removeMediaButton.show();
+					self.horizontalScrollDirectionContainer.hide();
+					self.verticalAlignmentContainer.hide();
+				}
+
 			}
-			// else if parallax is possible AND "off"
-			else if ( ( attachmentWidth >= 1920 && attachmentHeight >= 1200 ) && false == parallaxOnOffCheckBox.prop( 'checked' ) )
-			{
-				directionContainer.hide();
-				parallaxOptionsContainer.hide();
-				overlayOptionsContainer.hide();
-				imageOptionsContainer.show();
-				parallaxEnabledContainer.show();
+			else {
+				self.verticalScrollDirectionContainer.hide();
+				self.horizontalAlignmentContainer.hide();
 
-				addMediaButton.hide();
-				backgroundImage.show();
-				removeMediaButton.show();
+				self.horizontalScrollDirectionContainer.hide();
+				self.verticalAlignmentContainer.hide();
 			}
-			// else if parallax is possible AND "on"
-			else if ( true == attachmentWidth >= 1920 && attachmentHeight >= 1200 && parallaxOnOffCheckBox.prop( 'checked' ) )
-			{
-				parallaxOptionsContainer.show();
-				parallaxEnabledContainer.show();
-				directionContainer.show();
-				imageOptionsContainer.hide();
 
-				addMediaButton.hide();
-				backgroundImage.show();
-				removeMediaButton.show();
+		},
+		toggleOverlayOpacityAndColorOptions : function ( event ) {
+
+			if ( event ) {
+				var self = event.data.context;
 			}
-			// Else parallax is possible AND "on"
-			else
-			{
-				directionContainer.hide();
-				parallaxOptionsContainer.hide();
-				overlayOptionsContainer.hide();
-				imageOptionsContainer.show();
-				parallaxEnabledContainer.show();
-
-				addMediaButton.hide();
-				backgroundImage.show();
-				removeMediaButton.show();
+			else {
+				self = this;
 			}
-		}
-		// ...else there is no attachment...
-		else
-		{
-			parallaxEnabledContainer.hide();
-			imageOptionsContainer.hide();
-			parallaxOptionsContainer.hide();
-			directionContainer.hide();
-			$( '#cb_parallax_image_options_heading_container' ).hide();
 
-			removeMediaButton.hide();
-			backgroundImage.hide();
-			addMediaButton.show();
-		}
+			self.overlayOptionsContainer.trigger( 'change.$' );
 
-		toggleOverlayOpacityAndColorOptions();
-		toggleParallaxDirection();
-		fixView();
-	}
+			if ( self.backgroundImage.attr( 'src' ) != '' ) {
+				self.overlayOptionsContainer.show();
 
+				if ( self.overlayImageSelectBox.val() != cbParallax.noneString ) {
 
-	function listen ()
-	{
-		parallaxOnOffCheckBox.bind( 'click', function ()
-		{
-			toggleParallaxOnOffSwitch();
-		} );
+					self.overlayOpacityContainer.show();
+					self.overlayColorContainer.show();
+				}
+				else {
+					self.overlayOpacityContainer.hide();
+					self.overlayColorContainer.hide();
+				}
+			}
+			else {
+				self.overlayOptionsContainer.hide();
+				self.overlayOpacityContainer.hide();
+				self.overlayColorContainer.hide();
+			}
 
-		parallaxDirectionSelectBox.bind( 'change.fs', function ()
-		{
-			$( this ).trigger( 'change.$' );
-			toggleParallaxDirection();
-		} );
+		},
+		toggleRemoveMediaButton             : function () {
 
-		overlayOptionsContainer.bind( 'change.fs', function ()
-		{
-			$( this ).trigger( 'change.$' );
-			toggleOverlayOpacityAndColorOptions();
-		} );
+			if ( this.backgroundImage.attr( 'src' ) != '' || this.addMediaButton.hasClass( 'cb-parallax-image-container-empty' ) ) {
 
-		removeMediaButton.bind( 'click', function ()
-		{
-			backgroundImage.attr( 'src', '' );
-			attachmentId.val( '' );
+				this.removeMediaButtonContainer.css( 'visibility', 'hidden' );
+			}
+			else {
 
-			attachmentHeight = 0;
-			attachmentWidth = 0;
+				this.removeMediaButtonContainer.css( 'visibility', 'visible' );
+			}
+		},
 
-			setView();
+		bind : function () {
 
-		} );
+			this.parallaxOnOffCheckBox.bind( 'click', { context : this }, this.toggleParallaxOnOffSwitch );
 
-		$( '.cb-parallax-add-media-button, .cb-parallax-media-url, .cb-parallax-image-container' ).bind( 'click', function ()
-		{
+			this.parallaxDirectionSelectBox.bind( 'change.fs', { context : this }, this.toggleParallaxDirection );
 
-			if ( cb_parallax_frame )
-			{
+			this.overlayOptionsContainer.bind( 'change.fs', { context : this }, this.toggleOverlayOpacityAndColorOptions );
+
+			this.removeMediaButton.bind( 'click', { context : this }, this.removeMedia );
+
+			this.addMediaButton.bind( 'click', { context : this }, this.addMedia );
+
+			this.addMediaButton.bind( 'mouseenter', { context : this }, this.removeMediaButtonOnMouseEnter );
+			this.addMediaButton.bind( 'mouseleave', { context : this }, this.removeMediaButtonOnMouseLeave );
+		},
+
+		addMedia    : function ( event ) {
+			event.preventDefault();
+			var self = event.data.context;
+
+			if ( self.backgroundImage.attr( 'src' ) != '' ) {
+				return false;
+			}
+
+			if ( cb_parallax_frame ) {
 				cb_parallax_frame.open();
 				return;
 			}
-			cb_parallax_frame = wp.media.frames.cb_parallax_frame = wp.media( {
+			var cb_parallax_frame = wp.media.frames.cb_parallax_frame = wp.media( {
 
-				className: "media-frame cb-parallax-frame",
-				frame    : "select",
-				multiple : false,
-				title    : cbParallaxMediaFrame.title,
-				library  : { type: "image" },
-				button   : { text: cbParallaxMediaFrame.button }
+				className : "media-frame cb-parallax-frame",
+				frame     : "select",
+				multiple  : false,
+				title     : cbParallaxMediaFrame.title,
+				library   : { type : "image" },
+				button    : { text : cbParallaxMediaFrame.button }
 			} );
 
-			cb_parallax_frame.on( "select", function ()
-			{
+			cb_parallax_frame.on( "select", function () {
 				var media_attachment = cb_parallax_frame.state().get( "selection" ).first().toJSON();
 
-				attachmentId.val( media_attachment.id );
-				backgroundImage.attr( 'src', media_attachment.url );
+				self.attachmentId.val( media_attachment.id );
+				self.backgroundImage.attr( 'src', media_attachment.url );
 
-				attachmentHeight = media_attachment.height;
-				attachmentWidth = media_attachment.width;
+				self.attachmentHeight = media_attachment.height;
+				self.attachmentWidth  = media_attachment.width;
 
-				setView();
+				self.setView();
 			} );
 
 			// Opens the media frame.
 			cb_parallax_frame.open();
-		} );
-	}
+		},
+		removeMedia : function ( event ) {
+			var self = event.data.context;
 
+			self.backgroundImage.attr( 'src', '' );
+			self.attachmentId.val( '' );
+			self.attachmentHeight = 0;
+			self.attachmentWidth  = 0;
 
-	function dismissNotice ()
-	{
-		var notice = $( '.cb-parallax-admin-menu .notice' );
+			self.setView();
+			return false;
+		},
 
-		if ( notice.length )
-		{
-			notice.slideUp( 400 );
+		dismissNotice : function () {
+			var notice = $( '.cb-parallax-admin-menu .notice' );
+
+			if ( notice.length ) {
+				notice.slideUp( 400 );
+			}
+		},
+
+		toggleCursor : function () {
+
+			if ( this.backgroundImage.attr( 'src' ) != '' ) {
+
+				this.addMediaButton.removeClass( 'cb-parallax-image-container-empty' );
+				this.addMediaButton.addClass( 'cb-parallax-image-container-in-use' );
+			}
+			else {
+
+				this.addMediaButton.removeClass( 'cb-parallax-image-container-in-use' );
+				this.addMediaButton.addClass( 'cb-parallax-image-container-empty' );
+			}
+		},
+
+		removeMediaButtonOnMouseEnter : function ( event ) {
+			var self = event.data.context;
+
+			if( ! self.addMediaButton.hasClass( 'cb-parallax-image-container-empty' ) ) {
+
+				self.removeMediaButtonContainer.css( 'visibility', 'visible' );
+			}
+		},
+		removeMediaButtonOnMouseLeave : function ( event ) {
+			var self = event.data.context;
+
+			self.removeMediaButtonContainer.css( 'visibility', 'hidden' );
 		}
-	}
+	};
 
+	$( document ).one( 'ready', function () {
 
-	$( document ).one( 'ready', function ()
-	{
-		setTimeout( dismissNotice, 3600 );
+		var plugin = new Plugin();
+		plugin.init();
+		setTimeout( plugin.dismissNotice, 3600 );
 	} );
-
-
-	$( document ).ready( function ()
-	{
-		localizeScript();
-		wrapOptionFields();
-		setObjects();
-		wrapImage();
-		setImageUrl();
-		assembleContainers();
-		insertImageSectionHeading();
-		wrapImageOptionsHeading();
-		insertPluginSectionHeading();
-		initColorpicker();
-		initFancySelect();
-		setView();
-
-		listen();
-	} );
-
 
 })( jQuery );

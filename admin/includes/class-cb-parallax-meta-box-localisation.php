@@ -90,7 +90,7 @@ class cb_parallax_meta_box_localisation {
 
 		if ( is_admin() ) {
 
-			add_action( 'admin_enqueue_scripts', array( &$this, 'retrieve_image_options' ), 1 );
+			add_action( 'admin_enqueue_scripts', array( &$this, 'retrieve_image_options' ), 11 );
 			add_action( 'admin_enqueue_scripts', array( &$this, 'localize_meta_box' ), 1000 );
 			add_action( 'admin_enqueue_scripts', array( &$this, 'localize_media_frame' ), 1000 );
 		}

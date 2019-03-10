@@ -309,7 +309,7 @@ class cb_parallax_settings {
 	 *
 	 * @param $args
 	 *
-	 * @return echo
+	 * @return void echo
 	 */
 	public function echo_checkbox_field( $args ) {
 
@@ -335,7 +335,7 @@ class cb_parallax_settings {
 	 *
 	 * @param $args
 	 *
-	 * @return echo
+	 * @return void echo
 	 */
 	public function echo_text_field( $args ) {
 
@@ -357,7 +357,7 @@ class cb_parallax_settings {
 	 *
 	 * @since 0.6.0
 	 * @param $args
-	 * @return echo
+	 * @return void echo
 	 */
 	public function echo_media_field( $args ) {
 
@@ -376,25 +376,16 @@ class cb_parallax_settings {
 		// Get the image URL.
 		$url = isset( $image[0] ) ? $image[0] : '';
 
-		?>
-		<!-- hidden fields. -->
-		<?php wp_nonce_field( 'cb_parallax_nonce_field', 'cb_parallax_nonce' ); ?>
-		<input type="hidden" name="cb_parallax_attachment_id" id="cb_parallax_attachment_id" value="<?php echo ! empty( $attachment_id ) ? esc_attr( $attachment_id ) : '' ?>" />
-		<input type="hidden" name="cb_parallax_background_image_url_hidden" id="cb_parallax_background_image_url_hidden" value="<?php echo ! empty( $attachment_id ) ? esc_attr( $url ) : '' ?>" />
-		<!-- # hidden fields. -->
+		// hidden fields.
+		wp_nonce_field( 'cb_parallax_nonce_field', 'cb_parallax_nonce' );
+		$html = '<input type="hidden" name="cb_parallax_attachment_id" id="cb_parallax_attachment_id" value="' . ( ! empty( $attachment_id ) ? esc_attr( $attachment_id ) : "" ) . '" />';
+		$html .= '<input type="hidden" name="cb_parallax_background_image_url_hidden" id="cb_parallax_background_image_url_hidden" value="' . ( ! empty( $attachment_id ) ? esc_attr( $url ) : "" ) . '" />';
 
-		<?php
+		// "Remove image" button.
+		$html .= '<div class="cb-parallax-remove-media-button-container"><a class="cb-parallax-remove-media" href="#"><i class="fa fa-times" aria-hidden="true"></i></a></div>';
 
-		/*<!-- background image. -->*/
-		//$html = '<div>';
-		$html = '<img class="cb-parallax-media-url" id="cb_parallax_background_image_url" title="' . $description . '" class="cb_parallax_background_image" src="' . esc_url( $value ) . '" style="max-width: 100%; max-height: 200px; display: block;" />';
-		//$html .= '</div>';
-
-		$html .= '<div>
-			<a href="#" class="button button-primary cb-parallax-add-media-button">' . __( 'Set background image', $this->plugin_domain ) . '</a>
-			<a href="#" class="button button-secondary cb-parallax-remove-media-button">' . __( 'Remove background image', $this->plugin_domain ) . '</a>
-		</div>';
-		/*<!-- # background image. -->*/
+		// background image.
+		$html .= '<div class="cb-parallax-image-container"><a href="#" class="cb-parallax-media-url"><img id="cb_parallax_background_image_url" title="' . $description . '" class="cb_parallax_background_image" src="' . esc_url( $value ) . '" style="max-width: 100%; max-height: 200px; display: block;" /></a></div>';
 
 		echo $html;
 	}
@@ -406,7 +397,7 @@ class cb_parallax_settings {
 	 *
 	 * @param $args
 	 *
-	 * @return echo
+	 * @return void echo
 	 */
 	public function echo_color_picker_field( $args ) {
 
@@ -431,7 +422,7 @@ class cb_parallax_settings {
 	 *
 	 * @param  $args
 	 *
-	 * @return echo
+	 * @return void echo
 	 */
 	public function echo_select_field( $args ) {
 

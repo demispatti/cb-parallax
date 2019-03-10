@@ -78,6 +78,15 @@ class cb_parallax_meta_box {
 	public $default_image_options;
 
 	/**
+	 * The array holding the names of the supported post types.
+	 *
+	 * @since    0.7.4
+	 * @access   private
+	 * @var      array $supported_post_types
+	 */
+	private $supported_post_types;
+
+	/**
 	 * Kicks off the meta box.
 	 *
 	 * @since    0.1.0
@@ -86,13 +95,14 @@ class cb_parallax_meta_box {
 	 * @param    string $plugin_name
 	 * @param    string $plugin_domain
 	 * @param    string $plugin_version
-	 * @param    string $meta_key
+	 * @param    array $upported_post_types
 	 */
-	public function __construct( $plugin_name, $plugin_domain, $plugin_version ) {
+	public function __construct( $plugin_name, $plugin_domain, $plugin_version, $upported_post_types ) {
 
-		$this->plugin_name    = $plugin_name;
-		$this->plugin_domain  = $plugin_domain;
-		$this->plugin_version = $plugin_version;
+		$this->plugin_name          = $plugin_name;
+		$this->plugin_domain        = $plugin_domain;
+		$this->plugin_version       = $plugin_version;
+		$this->supported_post_types = $upported_post_types;
 
 		/* If the current user can't edit custom backgrounds, bail early. */
 		if ( ! current_user_can( 'cb_parallax_edit' ) && ! current_user_can( 'edit_theme_options' ) ) {
@@ -145,6 +155,9 @@ class cb_parallax_meta_box {
 		/* Only load on the edit post screen. */
 		add_action( 'load-post.php', array( $this, 'load_post' ) );
 		add_action( 'load-post-new.php', array( $this, 'load_post' ) );
+
+		// Save meta data.
+		add_action( 'save_post', array( $this, 'save_post' ), 10, 2 );
 	}
 
 	/**
@@ -172,10 +185,10 @@ class cb_parallax_meta_box {
 		$this->theme_has_callback = empty( $wp_head_callback ) || '_custom_background_cb' === $wp_head_callback ? false : true;
 
 		// Add the meta box
-		add_action( 'add_meta_boxes', array( &$this, 'add_meta_box' ), 5 );
+		add_action( 'add_meta_boxes', array( $this, 'add_meta_box' ), 5 );
 
 		// Save meta data.
-		add_action( 'save_post', array( &$this, 'save_post' ), 10, 2 );
+		add_action( 'save_post', array( $this, 'save_post' ), 10, 2 );
 	}
 
 	/**
@@ -190,10 +203,15 @@ class cb_parallax_meta_box {
 	 */
 	public function add_meta_box( $post_type ) {
 
-		add_meta_box( $this->plugin_name . '-meta-box', __( 'cb Parallax', $this->plugin_domain ), array(
-			&$this,
-			'display_meta_box',
-		), $post_type, 'side', 'core' );
+		$screen = get_current_screen();
+
+		if ( in_array( $screen->id, $this->supported_post_types ) ) {
+
+			add_meta_box( $this->plugin_name . '-meta-box', __( 'cb Parallax', $this->plugin_domain ), array(
+				&$this,
+				'display_meta_box',
+			), $post_type, 'side', 'core' );
+		}
 	}
 
 	/**
@@ -243,6 +261,12 @@ class cb_parallax_meta_box {
 
 		<div class="image-bg">
 
+		<!-- media button. -->
+		<div class="cb-parallax-remove-media-button-container">
+			<a class="cb-parallax-remove-media" href="#"><i class="fa fa-times" aria-hidden="true"></i></a>
+		</div>
+		<!-- # media button. -->
+
 		<!-- background image. -->
 		<!--<div>-->
 		<a class="cb-parallax-image-container" href="#">
@@ -250,15 +274,6 @@ class cb_parallax_meta_box {
 		</a>
 		<!--</div>-->
 		<!-- # background image. -->
-
-		<!-- media buttons. -->
-		<div class="cb-parallax-media-buttons-container">
-			<a href="#"
-			   class="button button-primary cb-parallax-add-media-button"><?php _e( 'Set background image', $this->plugin_domain ); ?></a>
-			<a href="#"
-			   class="button button-secondary cb-parallax-remove-media-button"><?php _e( 'Remove background image', $this->plugin_domain ); ?></a>
-		</div>
-		<!-- # media buttons. -->
 
 		<!-- parallax checkbox -->
 		<div class="cb-parallax-single-option-container cb-parallax-parallax-enabled-container" id="cb_parallax_parallax_enabled_container">

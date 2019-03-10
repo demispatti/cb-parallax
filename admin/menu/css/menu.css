@@ -103,9 +103,6 @@ div.fancy-select .cb-parallax-fancy-select .cb-parallax-fancy-select ul.options.
 	visibility: visible;
 	top: 50px;
 	opacity: 1;
-
-	/* have to use a non-visibility transition to prevent this iOS issue (bug?): */
-	/*http://stackoverflow.com/questions/10736478/css-animation-visibility-visible-works-on-chrome-and-safari-but-not-on-ios*/
 	transition: opacity 300ms ease-out, top 300ms ease-out;
 	-webkit-transition: opacity 300ms ease-out, top 300ms ease-out;
 	-moz-transition: opacity 300ms ease-out, top 300ms ease-out;
@@ -302,8 +299,6 @@ div.fancy-select ul.options.open
 	visibility: visible;
 	top: 30px;
 	opacity: 1;
-	/* have to use a non-visibility transition to prevent this iOS issue (bug?): */
-	/*http://stackoverflow.com/questions/10736478/css-animation-visibility-visible-works-on-chrome-and-safari-but-not-on-ios*/
 	transition: opacity 300ms ease-out, top 300ms ease-out;
 	-webkit-transition: opacity 300ms ease-out, top 300ms ease-out;
 	-moz-transition: opacity 300ms ease-out, top 300ms ease-out;
@@ -483,7 +478,7 @@ div.fancy-select ul.options li.hover
 
 .cb-parallax-switch-input:checked ~ .cb-parallax-switch-label
 {
-	background: #47a8d8;
+	background: #87d37c;
 	box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.15), inset 0 0 3px rgba(0, 0, 0, 0.2);
 }
 
@@ -605,10 +600,14 @@ div.fancy-select ul.options li.hover
 
 #cb_parallax_form h2
 {
-	background-color: #fff;
-	padding: 40px 20px 20px 0;
-	border-bottom: 1px solid #f2f2f2;
-	margin: 0;
+	font-size: 16px;
+	font-weight: 600;
+	padding: 10px 0 10px 16px;
+	box-sizing: border-box;
+	max-width: 480px;
+	font-family: 'Open Sans', sans-serif;
+	margin-top: 0;
+	margin-bottom: 0;
 }
 
 #cb_parallax_form h2:not(first-of-type)
@@ -638,8 +637,8 @@ div.fancy-select ul.options li.hover
 	border-bottom: 2px solid #fff;
 }
 
-.cb-parallax-table-row:last-of-type/*:not(#cb_parallax_overlay_color_container)*/ {
-	border-bottom: none !important;/*1px solid #f2f2f2*/;
+.cb-parallax-table-row:last-of-type {
+	border-bottom: none !important;
 }
 
 #cb_parallax_form .form-table th
@@ -675,23 +674,77 @@ div.fancy-select ul.options li.hover
 {
 	display: block;
 	background: url('/wp-content/plugins/cb-parallax/admin/menu/images/placeholder.jpg');
-	width: 320px;
-	height: auto;
 	margin-bottom: 17px;
 	z-index: 10;
 }
 
 #cb_parallax_background_image_url {
 	width: inherit;
-	background-size: contain;
-}
-
-.cb-parallax-image-container:hover
-{
-	cursor: hand;
+	object-fit: cover;
 }
 
 .cb-parallax-settings-page .cb-parallax-admin-menu {
 	width: 100%;
 	max-width: 723px;
+}
+
+.cb-parallax-media-url {
+	display: block;
+	width: 100%;
+	height: 100%;
+	z-index: 10;
+	margin-bottom: 0;
+}
+
+.cb-parallax-image-container-empty {
+	width: 100%;
+	max-width: 320px;
+	min-height: 200px;
+	height: 100%;
+}
+
+.cb-parallax-image-container-empty:hover {
+	cursor: hand !important;
+}
+
+.cb-parallax-image-container-in-use {
+	cursor: default !important;
+}
+
+.cb-parallax-remove-media-button-container {
+	display: block;
+	height: 0;
+	text-align: right;
+	width: 100%;
+}
+
+.cb-parallax-remove-media {
+	position: relative;
+	right: 6px;
+	top: 8px;
+	color: rgb(170, 0, 0);
+	font-size: 16px;
+	width: 20px;
+	height: 20px;
+	border-radius: 50%;
+	background-color: rgba(255, 255, 255, 0.82);
+}
+
+.cb-parallax-remove-media:hover {
+	visibility: visible !important;
+	color: rgb(220, 0, 0);
+}
+
+.cb-parallax-remove-media i {
+	width: 20px;
+	height: 20px;
+}
+
+.cb-parallax-remove-media i:before {
+	position: relative;
+	right: 4px;
+	top: -2px;
+
+	width: 20px;
+	height: 20px;
 }

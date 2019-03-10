@@ -41,14 +41,16 @@ class cb_parallax_admin {
 	 */
 	private $plugin_version;
 
-	/**
-	 * The loader that's responsible for maintaining and registering all hooks that power the plugin.
-	 *
-	 * @since    0.1.0
-	 * @access   private
-	 * @var      object $loader
-	 */
-	private $loader;
+	private $supported_post_types = array(
+		'post',
+		'page',
+		'product',
+		'portfolio',
+		'books',
+		'movies',
+		'projects',
+		'work'
+	);
 
 	/**
 	 * Kicks off the admin part of the plugin.
@@ -68,18 +70,18 @@ class cb_parallax_admin {
 	 * @param    object $loader
 	 * @param    string $meta_key
 	 */
-	public function __construct( $plugin_name, $plugin_domain, $plugin_version, $loader ) {
+	public function __construct( $plugin_name, $plugin_domain, $plugin_version ) {
 
 		$this->plugin_name    = $plugin_name;
 		$this->plugin_domain  = $plugin_domain;
 		$this->plugin_version = $plugin_version;
-		$this->loader         = $loader;
 
 		$this->load_dependencies();
 		$this->define_post_type_support();
-		$this->define_meta_box_localisation();
 		$this->define_help_tab();
 		$this->define_menu();
+
+		$this->add_hooks();
 	}
 
 	/**
@@ -121,14 +123,24 @@ class cb_parallax_admin {
 	 *
 	 * @return   void
 	 */
-	public function enqueue_styles( $hook_suffix ) {
+	public function enqueue_styles() {
 
-		// These styles are also loaded on the options page (admin menu)
-		if ( in_array( $hook_suffix, array( 'post-new.php', 'post.php', 'options-general.php'  ) ) ) {
+		$screen = get_current_screen();
+
+		if ( in_array( $screen->id, $this->supported_post_types ) ) {
+
+			// Font Awesome.
+			$fa_url = 'https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css';
+			$fa_cdn = wp_remote_get( $fa_url );
+			if ( (int) wp_remote_retrieve_response_code( $fa_cdn ) !== 200 ) {
+				$fa_url = plugin_dir_url( __FILE__ ) . '../../vendor/font-awesome/font-awesome.min.css';
+			}
+			wp_enqueue_style( 'inc-font-awesome', $fa_url, false );
 
 			// Color picker.
 			wp_enqueue_style( 'wp-color-picker' );
 
+			// Admin part
 			wp_enqueue_style(
 				$this->plugin_name . '-admin-css',
 				plugin_dir_url( __FILE__ ) . 'css/admin.css',
@@ -155,16 +167,20 @@ class cb_parallax_admin {
 	 *
 	 * @param    $hook_suffix
 	 */
-	public function enqueue_scripts( $hook_suffix ) {
+	public function enqueue_scripts() {
 
-		// These scripts are also loaded on the options page (admin menu)
-		if ( in_array( $hook_suffix, array( 'post-new.php', 'post.php', 'options-general.php' ) ) ) {
+		$screen = get_current_screen();
+
+		if ( in_array( $screen->id, $this->supported_post_types ) ) {
 
 			// Color picker.
 			wp_enqueue_script( 'wp-color-picker' );
 
 			// Media Frame.
 			wp_enqueue_script( 'media-views' );
+
+			// Media upload engine.
+			wp_enqueue_media();
 
 			// Fancy Select.
 			wp_enqueue_script(
@@ -188,9 +204,33 @@ class cb_parallax_admin {
 				$this->plugin_version,
 				true
 			);
-
 		}
 
+	}
+
+	private function add_hooks() {
+
+		add_action( 'admin_enqueue_scripts', array( $this, 'define_meta_box_localisation' ) );
+		add_action( 'current_screen', array( $this, 'define_meta_box' ), 20 );
+
+		add_action( 'upgrader_process_complete', array( $this, 'upgrade' ), 20 );
+	}
+
+	/**
+	 * Calls the class responsible for any eventual upgrade-related functions.
+	 *
+	 * @hooked_action
+	 *
+	 * @since    0.6.0
+	 * @access   public
+	 */
+	public function upgrade() {
+
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-cb-parallax-upgrade.php';
+
+		$upgrader = new cb_parallax_upgrade( $this->get_plugin_name(), $this->get_plugin_domain(), $this->get_plugin_version() );
+
+		$upgrader->run();
 	}
 
 	/**
@@ -223,37 +263,44 @@ class cb_parallax_admin {
 
 		$wp_support = new cb_parallax_post_type_support();
 
-		$this->loader->add_action( 'init', $wp_support, 'add_post_type_support' );
+		add_action( 'init', array( $wp_support, 'add_post_type_support' ) );
 	}
 
 	/**
 	 * Instanciates the class responsible for displaying the meta box.
 	 *
 	 * @since    0.1.0
-	 * @access   private
+	 * @access   public
 	 * @return   void
 	 */
-	private function define_meta_box() {
+	public function define_meta_box() {
 
-		$meta_box = new cb_parallax_meta_box( $this->get_plugin_name(), $this->get_plugin_domain(), $this->get_plugin_version() );
+		$meta_box = new cb_parallax_meta_box( $this->get_plugin_name(), $this->get_plugin_domain(), $this->get_plugin_version(), $this->supported_post_types );
 
-		$this->loader->add_action( 'add_meta_boxes', $meta_box, 'add_meta_box' );
+		add_action( 'add_meta_boxes', array( $meta_box, 'add_meta_box' ) );
 	}
 
 	/**
 	 * Instanciates the class responsible localizing the admin part of the plugin.
 	 *
+	 * @hooked_action
+	 *
 	 * @since    0.1.0
-	 * @access   private
+	 * @access   public
 	 * @return   void
 	 */
-	private function define_meta_box_localisation() {
+	public function define_meta_box_localisation() {
 
-		$admin_localisation = new cb_parallax_meta_box_localisation( $this->get_plugin_name(), $this->get_plugin_domain(), $this->get_plugin_version() );
+		$screen = get_current_screen();
 
-		$this->loader->add_action( 'admin_enqueue_scripts', $admin_localisation, 'retrieve_image_options', 1 );
-		$this->loader->add_action( 'admin_enqueue_scripts', $admin_localisation, 'localize_meta_box', 1000 );
-		$this->loader->add_action( 'admin_enqueue_scripts', $admin_localisation, 'localize_media_frame', 1000 );
+		if ( in_array( $screen->id, $this->supported_post_types ) ) {
+
+			$admin_localisation = new cb_parallax_meta_box_localisation( $this->get_plugin_name(), $this->get_plugin_domain(), $this->get_plugin_version() );
+
+			add_action( 'admin_enqueue_scripts', array( $admin_localisation, 'retrieve_image_options' ), 1 );
+			add_action( 'admin_enqueue_scripts', array( $admin_localisation, 'localize_meta_box' ), 1000 );
+			add_action( 'admin_enqueue_scripts', array( $admin_localisation, 'localize_media_frame' ), 1000 );
+		}
 	}
 
 	/**
@@ -271,11 +318,11 @@ class cb_parallax_admin {
 
 			$Help_Tab = new cb_parallax_help_tab( $this->get_plugin_domain() );
 
-			$this->loader->add_action( 'in_admin_header', $Help_Tab, 'add_cb_parallax_help_tab', 20 );
+			add_action( 'in_admin_header', array( $Help_Tab, 'add_cb_parallax_help_tab' ), 20 );
 
-			$this->loader->add_action( 'load-post.php', $Help_Tab, 'add_cb_parallax_help_tab', 10 );
-			$this->loader->add_action( 'load-post-new.php', $Help_Tab, 'add_cb_parallax_help_tab', 11 );
-			$this->loader->add_action( "load-{$GLOBALS['pagenow']}", $Help_Tab, 'add_cb_parallax_help_tab', 12 );
+			add_action( 'load-post.php', array( $Help_Tab, 'add_cb_parallax_help_tab' ), 10 );
+			add_action( 'load-post-new.php', array( $Help_Tab, 'add_cb_parallax_help_tab' ), 11 );
+			add_action( "load-{$GLOBALS['pagenow']}", array( $Help_Tab, 'add_cb_parallax_help_tab' ), 12 );
 		}
 	}
 
@@ -289,13 +336,13 @@ class cb_parallax_admin {
 	 */
 	private function define_menu() {
 
-		$menu = new cb_parallax_menu( $this->get_plugin_name(), $this->get_plugin_domain(), $this->get_plugin_version(), $this->get_loader() );
+		$menu = new cb_parallax_menu( $this->get_plugin_name(), $this->get_plugin_domain(), $this->get_plugin_version() );
 
-		$this->loader->add_action( 'admin_enqueue_scripts', $menu, 'enqueue_styles' );
-		$this->loader->add_action( 'admin_enqueue_scripts', $menu, 'enqueue_scripts' );
-		$this->loader->add_action( 'admin_menu', $menu, 'add_options_page', 20 );
-		$this->loader->add_action( 'admin_menu', $menu, 'define_settings', 40 );
-		$this->loader->add_filter( 'admin_body_class', $menu, 'add_body_class', 10, 1 );
+		add_action( 'admin_enqueue_scripts', array( $menu, 'enqueue_styles' ) );
+		add_action( 'admin_enqueue_scripts', array( $menu, 'enqueue_scripts' ) );
+		add_action( 'admin_menu', array( $menu, 'add_options_page' ), 20 );
+		add_action( 'admin_menu', array( $menu, 'define_settings' ), 40 );
+		add_filter( 'admin_body_class', array( $menu, 'add_body_class' ), 10, 1 );
 	}
 
 	/**
@@ -315,24 +362,12 @@ class cb_parallax_admin {
 		$plugin = plugin_basename( 'cb-parallax/cb-parallax.php' );
 
 		if ( $file == $plugin ) {
-			$meta[] = '<a href="https://github.com/demispatti/cb-parallax" target="_blank">' . __( 'Plugin support', $this->plugin_domain ) . '</a>';
-			$meta[] = '<a href="http://wordpress.org/plugins/cb-parallax" target="_blank">' . __( 'Rate plugin', $this->plugin_domain ) . '</a>';
-			$meta[] = '<a href="http://demispatti.ch/plugins" target="_blank">' . __( 'Donate', $this->plugin_domain ) . '</a>';
+			$meta[] = '<a href="https://wordpress.org/support/plugin/cb-parallax" target="_blank">' . __( 'Plugin support', $this->plugin_domain ) . '</a>';
+			$meta[] = '<a href="https://wordpress.org/plugins/cb-parallax" target="_blank">' . __( 'Rate plugin', $this->plugin_domain ) . '</a>';
+			$meta[] = '<a href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=XLMMS7C62S76Q" target="_blank">' . __( 'Donate', $this->plugin_domain ) . '</a>';
 		}
 
 		return $meta;
-	}
-
-	/**
-	 * Run the loader to execute all of the hooks with WordPress.
-	 *
-	 * @since    0.1.0
-	 * @access   public
-	 * @return   void
-	 */
-	public function run() {
-
-		$this->loader->run();
 	}
 
 	/**
@@ -371,18 +406,6 @@ class cb_parallax_admin {
 	public function get_plugin_version() {
 
 		return $this->plugin_version;
-	}
-
-	/**
-	 * Retrieves the loader.
-	 *
-	 * @since     0.1.0
-	 * @access    public
-	 * @return    object  $loader
-	 */
-	public function get_loader() {
-
-		return $this->loader;
 	}
 
 }

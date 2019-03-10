@@ -93,9 +93,9 @@ class cb_parallax_menu_localisation {
 
 		if ( is_admin() ) {
 
-			add_action( 'admin_enqueue_scripts', array( &$this, 'retrieve_image_options' ), 8 );
-			add_action( 'admin_enqueue_scripts', array( &$this, 'localize_menu' ), 1000 );
-			add_action( 'admin_enqueue_scripts', array( &$this, 'localize_media_frame' ), 1000 );
+			add_action( 'admin_enqueue_scripts', array( $this, 'retrieve_image_options' ), 11 );
+			add_action( 'admin_enqueue_scripts', array( $this, 'localize_menu' ), 1000 );
+			add_action( 'admin_enqueue_scripts', array( $this, 'localize_media_frame' ), 1000 );
 		}
 	}
 
@@ -241,7 +241,7 @@ class cb_parallax_menu_localisation {
 		return array(
 			'imageTitleText' => __( 'Background Image', $this->plugin_domain ),
 			'imageSectionTitleText' => __( 'Background Image Settings', $this->plugin_domain ),
-			'pluginSectionTitleText' => __( 'Plugin Settings', $this->plugin_domain )
+			'pluginSectionTitleText' => __( 'General Settings', $this->plugin_domain )
 		);
 	}
 
@@ -274,7 +274,7 @@ class cb_parallax_menu_localisation {
 	}
 
 	/**
-	 * Localizes the meta box.
+	 * Localizes the settings page.
 	 *
 	 * @hooked_action
 	 *
@@ -284,8 +284,8 @@ class cb_parallax_menu_localisation {
 	 */
 	public function localize_menu( $hook_suffix ) {
 
-		if ( isset( $hook_suffix ) && $hook_suffix === 'settings_page_cb_parallax_settings_page' )
-		{
+		if ( isset( $hook_suffix ) && $hook_suffix === 'settings_page_cb_parallax_settings_page' ) {
+
 			wp_localize_script(
 				$this->plugin_name . '-menu-js',
 				'cbParallax',

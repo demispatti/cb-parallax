@@ -42,15 +42,6 @@ class cb_parallax_menu {
 	private $plugin_version;
 
 	/**
-	 * The loader that's responsible for maintaining and registering all hooks that power the plugin.
-	 *
-	 * @since    0.6.0
-	 * @access   private
-	 * @var      object $loader
-	 */
-	private $loader;
-
-	/**
 	 * The reference to the image_options class.
 	 *
 	 * @since  0.6.0
@@ -71,18 +62,18 @@ class cb_parallax_menu {
 	 *
 	 * @return void
 	 */
-	public function __construct( $plugin_name, $plugin_domain, $plugin_version, $loader ) {
+	public function __construct( $plugin_name, $plugin_domain, $plugin_version ) {
 
 		$this->plugin_name    = $plugin_name;
 		$this->plugin_domain  = $plugin_domain;
 		$this->plugin_version = $plugin_version;
-		$this->loader         = $loader;
 
 		$this->init();
 		$this->load_dependencies();
 		$this->define_settings();
 		$this->define_options();
-		$this->define_menu_localisation();
+
+		$this->add_hooks();
 	}
 
 	/**
@@ -159,6 +150,14 @@ class cb_parallax_menu {
 
 		if ( isset( $hook_suffix ) && $hook_suffix === 'settings_page_cb_parallax_settings_page' ) {
 
+			// Font Awesome.
+			$fa_url = 'https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css';
+			$fa_cdn = wp_remote_get( $fa_url );
+			if ( (int) wp_remote_retrieve_response_code( $fa_cdn ) !== 200 ) {
+				$fa_url = plugin_dir_url( __FILE__ ) . '../../vendor/font-awesome/font-awesome.min.css';
+			}
+			wp_enqueue_style( 'inc-font-awesome', $fa_url, false );
+
 			// Color picker.
 			wp_enqueue_script( 'wp-color-picker' );
 
@@ -177,7 +176,7 @@ class cb_parallax_menu {
 				true
 			);
 
-			// Menu. The dependencies are being loaded inside the admin class.
+			// Menu.
 			wp_enqueue_script(
 				$this->plugin_name . '-menu-js',
 				plugin_dir_url( __FILE__ ) . 'js/menu.js',
@@ -193,15 +192,20 @@ class cb_parallax_menu {
 		}
 	}
 
+	private function add_hooks() {
+
+		add_action( 'admin_enqueue_scripts', array( $this, 'define_menu_localisation' ) );
+	}
+
 	/**
 	 * Set a body class.
 	 *
 	 * @since  0.6.0
-	 * @return array $texts
+	 * @return string $classes
 	 */
 	public function add_body_class( $classes ) {
 
-			$classes = 'cb-parallax-settings-page';
+			$classes .= 'cb-parallax-settings-page';
 
 		return $classes;
 	}
@@ -218,8 +222,8 @@ class cb_parallax_menu {
 
 		$settings = new cb_parallax_settings( $this->get_plugin_name(), $this->get_plugin_domain() );
 
-		$this->loader->add_action( 'admin_init', $settings, 'register_settings', 1 );
-		$this->loader->add_action( 'admin_init', $settings, 'initialize_settings', 10 );
+		add_action( 'admin_init', array( $settings, 'register_settings' ), 1 );
+		add_action( 'admin_init', array( $settings, 'initialize_settings' ), 10 );
 	}
 
 	/**
@@ -238,16 +242,22 @@ class cb_parallax_menu {
 	/**
 	 * Instanciates the class responsible localizing the menu.
 	 *
+	 * @hooked_action
+	 *
 	 * @since    0.6.0
-	 * @access   private
+	 * @access   public
 	 * @return   void
 	 */
-	private function define_menu_localisation() {
-		$menu_localisation = new cb_parallax_menu_localisation( $this->get_plugin_name(), $this->get_plugin_domain(), $this->get_plugin_version(), $this->get_options() );
+	public function define_menu_localisation( $hook_suffix ) {
 
-		$this->loader->add_action( 'admin_enqueue_scripts', $menu_localisation, 'retrieve_image_options', 8 );
-		$this->loader->add_action( 'admin_enqueue_scripts', $menu_localisation, 'localize_menu', 1000 );
-		$this->loader->add_action( 'admin_enqueue_scripts', $menu_localisation, 'localize_media_frame', 1000 );
+		if ( isset( $hook_suffix ) && $hook_suffix === 'settings_page_cb_parallax_settings_page' ) {
+
+			$menu_localisation = new cb_parallax_menu_localisation( $this->get_plugin_name(), $this->get_plugin_domain(), $this->get_plugin_version(), $this->get_options() );
+
+			add_action( 'admin_enqueue_scripts', array( $menu_localisation, 'retrieve_image_options' ), 8 );
+			add_action( 'admin_enqueue_scripts', array( $menu_localisation, 'localize_menu' ), 1000 );
+			add_action( 'admin_enqueue_scripts', array( $menu_localisation, 'localize_media_frame' ), 1000 );
+		}
 	}
 
 	/**
@@ -265,7 +275,7 @@ class cb_parallax_menu {
 			'cbParallax',
 			'manage_options',
 			'cb_parallax_settings_page',
-			array( &$this, 'menu_display' )
+			array( $this, 'menu_display' )
 		);
 	}
 
@@ -276,7 +286,7 @@ class cb_parallax_menu {
 	 *
 	 * @param  $active_tab
 	 *
-	 * @return mixed
+	 * @return void / echo
 	 */
 	public function menu_display() {
 
@@ -285,7 +295,7 @@ class cb_parallax_menu {
 		<div class="wrap cb-parallax-admin-menu">
 			<!-- error message fix -->
 			<h2></h2>
-			<h2 class="cb-parallax-page-title"><?php echo __( 'cbParallax Settings', $this->plugin_domain ); ?></h2>
+			<!--<h2 class="cb-parallax-page-title"><?php /*echo __( 'cbParallax Settings', $this->plugin_domain ); */?></h2>-->
 
 			<form id="cb_parallax_form" method="POST" action="options.php">
 

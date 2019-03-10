@@ -14,7 +14,7 @@
 html,
 body,
 #cb_parallax_overlay,
-#cb_parallax_image_container
+#cb_parallax_canvas
 {
 	display: block;
 	box-sizing: border-box;
@@ -42,7 +42,7 @@ body
 	background: repeat;
 }
 
-#cb_parallax_image_container
+#cb_parallax_canvas
 {
 	position: fixed;
 	background: no-repeat fixed;
