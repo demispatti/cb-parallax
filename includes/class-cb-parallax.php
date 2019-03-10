@@ -1,9 +1,38 @@
 <?php
 
+namespace CbParallax\Includes;
+
+use CbParallax\Pub as Pub;
+use CbParallax\Admin as Admin;
+use CbParallax\Admin\Menu\Includes as MenuIncludes;
+
+/**
+ * If this file is called directly, abort.
+ */
+if ( ! defined( 'WPINC' ) ) {
+	die;
+}
+
+/**
+ * Require dependencies.
+ */
+if ( ! class_exists( 'Includes\cb_parallax_i18n' ) ) {
+	require_once CBPARALLAX_ROOT_DIR . 'includes/class-i18n.php';
+}
+if ( ! class_exists( 'Admin\cb_parallax_admin' ) ) {
+	require_once CBPARALLAX_ROOT_DIR . 'admin/class-admin.php';
+}
+if ( ! class_exists( 'Pub\cb_parallax_public' ) ) {
+	require_once CBPARALLAX_ROOT_DIR . 'public/class-public.php';
+}
+if ( ! class_exists( 'MenuIncludes\cb_parallax_options' ) ) {
+	require_once CBPARALLAX_ROOT_DIR . 'admin/menu/includes/class-options.php';
+}
+
 /**
  * The core class of the plugin.
  *
- * @link              https://github.com/demispatti/cb-parallax/
+ * @link
  * @since             0.1.0
  * @package           cb_parallax
  * @subpackage        cb_parallax/includes
@@ -13,172 +42,121 @@
  * License URI:       http://www.gnu.org/licenses/gpl-2.0.txt
  */
 class cb_parallax {
-
+	
 	/**
-	 * The unique identifier of this plugin.
+	 * The unique identifier of the plugin.
 	 *
+	 * @var string $name
 	 * @since    0.1.0
 	 * @access   private
-	 * @var      string $plugin_name
 	 */
-	private $plugin_name;
-
+	private $name;
+	
 	/**
-	 * The unique identifier of this plugin.
+	 * The domain of the plugin.
 	 *
+	 * @var string $domain
 	 * @since    0.1.0
 	 * @access   private
-	 * @var      string $plugin_domain
 	 */
-	private $plugin_domain;
-
+	private $domain;
+	
 	/**
 	 * The current version of the plugin.
 	 *
+	 * @var string $version
 	 * @since    0.1.0
 	 * @access   private
-	 * @var      string $plugin_version
 	 */
-	private $plugin_version;
-
+	private $version;
+	
 	/**
-	 * 1. Defines the plugin's name, domain and version, and loads its basic dependencies.
-	 * 2. Instanciates and assigns the loader.
-	 * 3. Loads the language files.
-	 * 4. Loads the admin part of the plugin.
-	 * 5. Loads the public part of the plugin.
+	 * The reference to the options class.
 	 *
-	 * @since  0.1.0
-	 * @access public
+	 * @since  0.6.0
+	 * @access private
+	 * @var    MenuIncludes\cb_parallax_options $options
+	 */
+	private $options;
+	
+	/**
+	 * Holds the object that references to the class responsible for
+	 * handling the user-defined options.
+	 *
+	 * @return void
+	 */
+	private function set_options_instance() {
+		
+		$this->options = new MenuIncludes\cb_parallax_options( $this->domain );
+	}
+	
+	/**
+	 * cb_parallax constructor.
 	 */
 	public function __construct() {
-
-		$this->plugin_name    = 'cb-parallax';
-		$this->plugin_domain  = $this->get_plugin_domain();
-		$this->plugin_version = '0.8.1';
-
-		$this->load_dependencies();
-		$this->set_i18n();
+		
+		$this->name = 'cb-parallax';
+		$this->domain = $this->name;
+		$this->version = '0.9.0';
+		
+		$this->set_options_instance();
+		$this->include_plugin_text_domain();
 	}
-
+	
 	/**
-	 * Register the hook with WordPress.
+	 * Calls the functions that register the initial hooks with WordPress
+	 * for both the admin area and the public area.
 	 *
-	 * @since    0.6.0
-	 * @access   public
-	 * @return   void
+	 * @return void
 	 */
 	public function run() {
-
-		$this->define_admin_hooks();
-		$this->define_public_hooks();
+		
+		$this->run_admin();
+		$this->run_public();
 	}
-
+	
 	/**
-	 * Loads the initial files needed by the plugin and assigns the loader object.
+	 * Instantiates the class responsible for the language localisation features
+	 * and calls the method that adds the hooks to WordPress.
 	 *
-	 * The class responsible for orchestrating the hooks of the plugin.
-	 * The class responsible for defining the internationalization functionality of the plugin.
-	 * The class that defines the admin part of the plugin.
-	 * The class that defines the public part of the plugin.
-	 *
-	 * @since  0.1.0
-	 * @access private
 	 * @return void
 	 */
-	private function load_dependencies() {
-
-		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-cb-parallax-i18n.php';
-
-		require_once plugin_dir_path( dirname( __FILE__ ) ) . "admin/class-cb-parallax-admin.php";
-
-		require_once plugin_dir_path( dirname( __FILE__ ) ) . "public/class-cb-parallax-public.php";
+	private function include_plugin_text_domain() {
+		
+		$i18n = new cb_parallax_i18n( $this->domain );
+		$i18n->add_hooks();
 	}
-
+	
 	/**
-	 * Loads the translation files.
+	 * Runs the admin part of the plugin,
+	 * if we're on the admin part of the website.
 	 *
-	 * @since  0.1.0
-	 * @access private
 	 * @return void
 	 */
-	private function set_i18n() {
-
-		$i18n = new cb_parallax_i18n( $this->get_plugin_domain() );
-
-		add_action( 'init', array( $i18n, 'load_plugin_textdomain') );
+	private function run_admin() {
+		
+		if ( ! is_admin() ) {
+			return;
+		}
+		
+		$admin = new Admin\cb_parallax_admin( $this->domain, $this->version, $this->options );
+		$admin->add_hooks();
 	}
-
+	
 	/**
-	 * Instanciates the admin object and registers the hooks that shall be executed on it.
+	 * Runs the public part of the plugin,
+	 * if we're on the public part of the website.
 	 *
-	 * @since    0.1.0
-	 * @access   private
-	 * @return   void
+	 * @return void
 	 */
-	private function define_admin_hooks() {
-
-		$admin = new cb_parallax_admin( $this->get_plugin_name(), $this->get_plugin_domain(), $this->get_plugin_version() );
-
-		add_action( 'admin_enqueue_scripts', array( $admin, 'enqueue_styles' ) );
-		add_action( 'admin_enqueue_scripts', array( $admin, 'enqueue_scripts' ) );
-		add_action( 'admin_init', array( $admin, 'check_cap' ) );
-		add_action( 'plugin_row_meta', array( $admin, 'plugin_row_meta' ), 10, 2 );
+	private function run_public() {
+		
+		if ( is_admin() ) {
+			return;
+		}
+		
+		$public = new Pub\cb_parallax_public( $this->domain, $this->options );
+		$public->add_hooks();
 	}
-
-	/**
-	 * Register all of the hooks related to the public-facing functionality of the plugin.
-	 *
-	 * @since    0.1.0
-	 * @access   private
-	 */
-	private function define_public_hooks() {
-
-		$public = new cb_parallax_public( $this->get_plugin_name(), $this->get_plugin_domain(), $this->get_plugin_version() );
-
-		add_action( 'wp_enqueue_scripts', array( $public, 'check_for_nicescrollr_plugin' ), 10 );
-		add_action( 'admin_enqueue_scripts', array( $public, 'check_for_nicescrollr_plugin' ), 10 );
-		add_action( 'wp', array( $public, 'define_public_localisation' ) );
-		add_action( 'wp_enqueue_scripts', array( $public, 'enqueue_styles' ), 11 );
-		add_action( 'wp_enqueue_scripts', array( $public, 'enqueue_scripts' ), 12 );
-	}
-
-	/**
-	 * Retrieves the name of the plugin used to uniquely identify it within the context of
-	 * WordPress and to define internationalization functionality.
-	 *
-	 * @since     0.1.0
-	 * @access    public
-	 * @return    string    The name of the plugin.
-	 */
-	public function get_plugin_name() {
-
-		return $this->plugin_name;
-	}
-
-	/**
-	 * Retrieves the domain of the plugin used to uniquely identify it within the context of
-	 * WordPress and to abstract internationalization functionality.
-	 *
-	 * @since     0.1.0
-	 * @access    public
-	 * @return    string    The domain of the plugin.
-	 */
-	public function get_plugin_domain() {
-
-		return $this->get_plugin_name();
-	}
-
-	/**
-	 * Retrieves the version number of the plugin.
-	 *
-	 * @since     0.1.0
-	 * @access    public
-	 * @return    string  $plugin_version
-	 */
-	public function get_plugin_version() {
-
-		return $this->plugin_version;
-	}
-
+	
 }

@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: cb-parallax\n"
-"POT-Creation-Date: 2017-02-14 00:45+0100\n"
-"PO-Revision-Date: 2017-02-14 00:47+0100\n"
+"POT-Creation-Date: 2019-02-18 20:50+0100\n"
+"PO-Revision-Date: 2019-02-18 21:49+0100\n"
 "Last-Translator: Demis Patti <demispatti@gmail.com>\n"
 "Language-Team: Demis Patti <demispatti@gmail.com>\n"
 "Language: de_DE\n"
@@ -10,7 +10,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 1.8.11\n"
+"X-Generator: Poedit 1.8.12\n"
 "X-Poedit-Basepath: ..\n"
 "X-Poedit-WPHeader: cb-parallax.php\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -20,225 +20,210 @@ msgstr ""
 "X-Poedit-SearchPath-0: .\n"
 "X-Poedit-SearchPathExcluded-0: *.js\n"
 
-#: admin/class-cb-parallax-admin.php:365
+#: admin/class-admin.php:349
 msgid "Plugin support"
 msgstr "Plugin-Support"
 
-#: admin/class-cb-parallax-admin.php:366
+#: admin/class-admin.php:350
 msgid "Rate plugin"
 msgstr "Plugin bewerten"
 
-#: admin/class-cb-parallax-admin.php:367
+#: admin/class-admin.php:351
 msgid "Donate"
 msgstr "Spendier mir ein Bier :-)"
 
-#: admin/includes/class-cb-parallax-help-tab.php:44
-msgid "HELP"
-msgstr "Hilfe"
-
-#: admin/includes/class-cb-parallax-help-tab.php:44
-msgid "cbParallax help"
+#: admin/includes/class-contextual-help.php:97
+#, fuzzy
+#| msgid "cbParallax help"
+msgid "cbParallax Help"
 msgstr "cbParallax Hilfe"
 
-#: admin/includes/class-cb-parallax-help-tab.php:106
-msgid ""
-"This plugin enables you to have a fullscreen background image with a "
-"parallax effect with any image that meets the minimum dimensional "
-"requirements ( 1920 x 1200px for vertical parallax, wider for horizontal "
-"parallax)."
-msgstr ""
-"Responsives Fullscreen Hintergrundbild, mit oder mit ohne Parallax-Effekt. "
-"Parallax lässt sich ab einer Bildgrösse von mindestens 1920px x 1200px "
-"nutzen,"
-
-#: admin/includes/class-cb-parallax-help-tab.php:108
-msgid "You can choose an overlay image and define it's settings."
-msgstr ""
-"Zudem kann ein Überlagerungsbild (ein Overlay) ausgewählt und eingestellt "
-"werden."
-
-#: admin/includes/class-cb-parallax-help-tab.php:110
-msgid ""
-"The indicated directions are meant to be met while scrolling down the "
-"content."
-msgstr "DIe Richtungsangaben beziehen sich auf das Herunterscrollen."
-
-#: admin/includes/class-cb-parallax-help-tab.php:112
-msgid "Enjoy!"
-msgstr "Viel Spass!"
-
-#: admin/includes/class-cb-parallax-meta-box-localisation.php:200
-#: admin/includes/class-cb-parallax-meta-box-localisation.php:202
-#: admin/includes/class-cb-parallax-meta-box-localisation.php:268
-#: admin/menu/includes/class-cb-parallax-menu-localisation.php:298
-#: admin/menu/includes/class-cb-parallax-options.php:324
-#: admin/menu/includes/class-cb-parallax-options.php:328
-#: admin/menu/includes/class-cb-parallax-settings.php:488
-#: admin/menu/includes/class-cb-parallax-settings.php:546
-#: admin/menu/includes/class-cb-parallax-validation.php:566
-#: admin/menu/includes/class-cb-parallax-validation.php:624
-#: public/includes/class-cb-parallax-public-localisation.php:457
-#: public/includes/class-cb-parallax-public-localisation.php:515
-msgid "vertical"
-msgstr "vertikal"
-
-#: admin/includes/class-cb-parallax-meta-box-localisation.php:205
-#: admin/menu/includes/class-cb-parallax-options.php:323
-#: admin/menu/includes/class-cb-parallax-options.php:329
-#: admin/menu/includes/class-cb-parallax-settings.php:485
-#: admin/menu/includes/class-cb-parallax-settings.php:549
-#: admin/menu/includes/class-cb-parallax-validation.php:563
-#: admin/menu/includes/class-cb-parallax-validation.php:627
-#: public/includes/class-cb-parallax-public-localisation.php:454
-#: public/includes/class-cb-parallax-public-localisation.php:518
-msgid "horizontal"
-msgstr "horizontal"
-
-#: admin/includes/class-cb-parallax-meta-box-localisation.php:265
-#: admin/menu/includes/class-cb-parallax-menu-localisation.php:258
-msgid "Background Color"
-msgstr "Hintergrundfarbe"
-
-#: admin/includes/class-cb-parallax-meta-box-localisation.php:266
-#: admin/menu/includes/class-cb-parallax-menu-localisation.php:259
-#: admin/menu/includes/class-cb-parallax-options.php:208
-msgid "Overlay Color"
-msgstr "Verlaufsüberlagerung-Farbe"
-
-#: admin/includes/class-cb-parallax-meta-box-localisation.php:267
-#: admin/menu/includes/class-cb-parallax-menu-localisation.php:260
-#: admin/menu/includes/class-cb-parallax-options.php:354
-#: admin/menu/includes/class-cb-parallax-settings.php:588
-#: admin/menu/includes/class-cb-parallax-validation.php:666
-#: includes/class-cb-parallax-upgrade.php:270
-#: includes/class-cb-parallax-upgrade.php:283
-#: public/includes/class-cb-parallax-public-localisation.php:557
-msgid "none"
-msgstr "kein"
-
-#: admin/includes/class-cb-parallax-meta-box-localisation.php:321
-#: admin/menu/includes/class-cb-parallax-menu-localisation.php:319
+#: admin/includes/class-localisation.php:254
 msgid "Set Background Image"
 msgstr "Hintergrundbild auswählen"
 
-#: admin/includes/class-cb-parallax-meta-box-localisation.php:322
-#: admin/menu/includes/class-cb-parallax-menu-localisation.php:320
+#: admin/includes/class-localisation.php:255
 msgid "Set background image"
 msgstr "Hintergrundbild auswählen"
 
-#: admin/includes/class-cb-parallax-meta-box.php:207
-msgid "cb Parallax"
-msgstr "cb Parallax"
+#: admin/includes/class-localisation.php:294
+#: admin/menu/includes/class-options.php:330
+#: admin/menu/includes/class-options.php:334
+msgid "vertical"
+msgstr "vertikal"
 
-#: admin/includes/class-cb-parallax-meta-box.php:279
-msgid "Parallax"
-msgstr "Parallax"
+#: admin/includes/class-localisation.php:297
+msgid "Background image settings saved."
+msgstr "Hintergrundbildeinstellungen gespeichert."
 
-#: admin/includes/class-cb-parallax-meta-box.php:297
-msgid "Mode"
-msgstr "Modus"
+#: admin/includes/class-localisation.php:298
+msgid "Error saving the background image settings."
+msgstr "Fehler beim Speichern der Hintergrundbildeinstellungen."
 
-#: admin/includes/class-cb-parallax-meta-box.php:308
-#: admin/menu/includes/class-cb-parallax-options.php:142
-msgid "Vertical Scroll Direction"
-msgstr "Vertikale Bildlaufrichtung"
+#: admin/includes/class-localisation.php:298
+#: admin/includes/class-localisation.php:300
+msgid "Please reload the page and try again."
+msgstr "Bitte laden Sie die Seite neu, und versuchen Sie es noch einmal."
 
-#: admin/includes/class-cb-parallax-meta-box.php:319
-#: admin/menu/includes/class-cb-parallax-options.php:153
-msgid "Horizontal Scroll Direction"
-msgstr "Horizontale Bildlaufrichtung"
+#: admin/includes/class-localisation.php:299
+msgid "Background image settings resetted."
+msgstr "Hintergrundbildeinstellungen wurden zurückgesetzt."
 
-#: admin/includes/class-cb-parallax-meta-box.php:334
-#: admin/menu/includes/class-cb-parallax-options.php:164
-msgid "Horizontal Alignment"
-msgstr "Horizontale Ausrichtung"
+#: admin/includes/class-localisation.php:300
+msgid "Error resetting the background image settings."
+msgstr "Fehler beim Zurücksetzen der Hintergrundbildeinstellungen."
 
-#: admin/includes/class-cb-parallax-meta-box.php:344
-#: admin/menu/includes/class-cb-parallax-options.php:175
-msgid "Vertical Alignment"
-msgstr "Vertikale Ausrichtung"
+#: admin/includes/class-localisation.php:303
+msgid "Reset the settings to default?"
+msgstr "Auf Standard-Einstellungen zurücksetzen?"
 
-#: admin/includes/class-cb-parallax-meta-box.php:354
-msgid "Background Repeat"
-msgstr "Hintergrundbild kacheln"
+#: admin/includes/class-localisation.php:312
+#: admin/menu/includes/class-options.php:89
+msgid "Background Color"
+msgstr "Hintergrundfarbe"
 
-#: admin/includes/class-cb-parallax-meta-box.php:364
-msgid "Background Attachment"
-msgstr "Attachment-Typ"
+#: admin/includes/class-localisation.php:313
+#: admin/menu/includes/class-options.php:232
+msgid "Overlay Color"
+msgstr "Overlay-Farbe"
 
-#: admin/includes/class-cb-parallax-meta-box.php:379
-msgid "Overlay Pattern"
-msgstr "Overlay-Bild"
+#: admin/includes/class-localisation.php:314
+#: admin/menu/includes/class-options.php:362
+#: admin/menu/includes/class-options.php:376
+#: public/includes/class-public-localisation.php:172
+msgid "none"
+msgstr "kein"
 
-#: admin/includes/class-cb-parallax-meta-box.php:389
-msgid "Overlay Pattern Opacity"
-msgstr "Opazität des Overlay-Bildes"
-
-#: admin/menu/class-cb-parallax-menu.php:298
-msgid "cbParallax Settings"
-msgstr "cbParallax Einstellungen"
-
-#: admin/menu/includes/class-cb-parallax-menu-localisation.php:242
-#: admin/menu/includes/class-cb-parallax-options.php:65
-#: admin/menu/includes/class-cb-parallax-options.php:555
+#: admin/includes/class-localisation.php:318
+#: admin/menu/includes/class-options.php:78
+#: admin/menu/includes/class-options.php:574
 msgid "Background Image"
 msgstr "Hintergrundbild"
 
-#: admin/menu/includes/class-cb-parallax-menu-localisation.php:243
+#: admin/includes/class-localisation.php:319
+#: admin/partials/class-settings-display.php:321
 msgid "Background Image Settings"
 msgstr "Hintergrundbild-Einstellungen"
 
-#: admin/menu/includes/class-cb-parallax-menu-localisation.php:244
-msgid "Plugin Settings"
-msgstr "Plugin-Einstellungen"
+#: admin/includes/class-localisation.php:320
+#: admin/menu/includes/class-options.php:583
+#: admin/partials/class-help-tab-display.php:37
+msgid "General Settings"
+msgstr "Allgemeine Einstellungen"
 
-#: admin/menu/includes/class-cb-parallax-options.php:87
-msgid "Repeat"
-msgstr "Repeat"
+#: admin/includes/class-localisation.php:324
+#, fuzzy
+msgid "Do you really want to reset the settings?"
+msgstr "Willst du wirklich die folgenden Eistellungen zurücksetzen?"
 
-#: admin/menu/includes/class-cb-parallax-options.php:90
+#: admin/includes/class-meta-box.php:178
+msgid "cb Parallax"
+msgstr "cb Parallax"
+
+#: admin/includes/class-meta-box.php:249 admin/menu/class-settings-page.php:298
+msgid "Save"
+msgstr "Speichern"
+
+#: admin/includes/class-meta-box.php:250 admin/menu/class-settings-page.php:299
+msgid "Reset"
+msgstr "Zurücksetzen"
+
+#: admin/menu/class-settings-page.php:218
+msgid "cbParallax Settings Page"
+msgstr "cbParallax Einstellungsseite"
+
+#: admin/menu/includes/class-ajax.php:64
+msgid "That won't do."
+msgstr "Das geht nicht."
+
+#: admin/menu/includes/class-ajax.php:133
+#: admin/menu/includes/class-ajax.php:190
+msgid "Please try again later."
+msgstr "Bitte versuchen Sie es später erneut."
+
+#: admin/menu/includes/class-ajax.php:143
+msgid "Settings saved."
+msgstr "Einstellungen gespeichert."
+
+#: admin/menu/includes/class-ajax.php:199
+msgid "Settings restored to default."
+msgstr "Auf Standardeinstellungen zurückgesetzt."
+
+#: admin/menu/includes/class-options.php:67
+msgid "Attachment ID"
+msgstr "ID des Anhangs"
+
+#: admin/menu/includes/class-options.php:92
+msgid ""
+"Set a background color. Best to be used with partially transparent images."
+msgstr ""
+"Wähle eine Hintergrundfarbe aus, wenn Du dies möchtest. Dieses Feature ist "
+"für teiltransparente Bilder gedacht, bei welchen Du die Hintergrundfarbe "
+"steuern kannst."
+
+#: admin/menu/includes/class-options.php:100
+msgid "Enable Parallax Features"
+msgstr "Parallax Features aktivieren"
+
+#: admin/menu/includes/class-options.php:103
+msgid "Enable parallax"
+msgstr "Parallax aktivieren"
+
+#: admin/menu/includes/class-options.php:111
+msgid "Image Repeat"
+msgstr "Hintergrundbild wiederholen"
+
+#: admin/menu/includes/class-options.php:114
 msgid "Set repeat property."
 msgstr "Repeat-Eigenschaft setzen."
 
-#: admin/menu/includes/class-cb-parallax-options.php:98
-msgid "Position X"
-msgstr "Position X"
+#: admin/menu/includes/class-options.php:122
+msgid "Horizontal Position"
+msgstr "Horizontale Position"
 
-#: admin/menu/includes/class-cb-parallax-options.php:101
+#: admin/menu/includes/class-options.php:125
 msgid "Set the horizontal position of the background image."
 msgstr "Lege die horizontale Position des Hintergrundbildes fest."
 
-#: admin/menu/includes/class-cb-parallax-options.php:109
-msgid "Position Y"
-msgstr "Position Y"
+#: admin/menu/includes/class-options.php:133
+msgid "Vertical Position"
+msgstr "Vertikale Position"
 
-#: admin/menu/includes/class-cb-parallax-options.php:112
+#: admin/menu/includes/class-options.php:136
 msgid "Set the vertical position of the background image."
 msgstr "Lege die vertikale Position des Hintergrundbildes fest."
 
-#: admin/menu/includes/class-cb-parallax-options.php:120
-msgid "Attachment"
-msgstr "Attachment"
+#: admin/menu/includes/class-options.php:144
+msgid "Background Attachment"
+msgstr "Attachment-Typ"
 
-#: admin/menu/includes/class-cb-parallax-options.php:123
+#: admin/menu/includes/class-options.php:147
 msgid "Set the attachment."
 msgstr "Attachment-Typ auswählen."
 
-#: admin/menu/includes/class-cb-parallax-options.php:131
-msgid "Direction"
-msgstr "Richtung"
+#: admin/menu/includes/class-options.php:155
+msgid "Image Moving Direction"
+msgstr "Bildlauf-Richtung"
 
-#: admin/menu/includes/class-cb-parallax-options.php:134
+#: admin/menu/includes/class-options.php:158
 msgid "Choose horizontal or vertical parallax direction."
 msgstr "Bestimme die Bildlaufrichtung."
 
-#: admin/menu/includes/class-cb-parallax-options.php:145
-msgid "Choose whether the image should move up- or downwards on page scroll."
+#: admin/menu/includes/class-options.php:166
+#: admin/menu/includes/class-options.php:177
+msgid "While Scrolling Down The Background Image Moves"
+msgstr "Das Hintergrundbild bewegt sich beim runterscrollen"
+
+#: admin/menu/includes/class-options.php:169
+#, fuzzy
+#| msgid ""
+#| "Choose whether the image should move up- or downwards on page scroll."
+msgid "Choose whether the image should move up or downwards on page scroll."
 msgstr ""
 "Bestimme hier, ob sich das Bild nach oben oder nach unten bewegen soll, wenn "
 "herunter gescrollt wird."
 
-#: admin/menu/includes/class-cb-parallax-options.php:156
+#: admin/menu/includes/class-options.php:180
 msgid ""
 "Choose whether the image should move to the left or to the right on page "
 "scroll."
@@ -246,47 +231,47 @@ msgstr ""
 "Bestimme hier, ob sich das Bild nach links oder nach rechts bewegen soll, "
 "wenn herunter gescrollt wird."
 
-#: admin/menu/includes/class-cb-parallax-options.php:167
+#: admin/menu/includes/class-options.php:188
+msgid "Horizontal Alignment"
+msgstr "Horizontale Ausrichtung"
+
+#: admin/menu/includes/class-options.php:191
 msgid "Align the image horizontally."
 msgstr "Richte das Hintergrundbild horizontal aus."
 
-#: admin/menu/includes/class-cb-parallax-options.php:178
+#: admin/menu/includes/class-options.php:199
+msgid "Vertical Alignment"
+msgstr "Vertikale Ausrichtung"
+
+#: admin/menu/includes/class-options.php:202
 msgid "Align the image vertically."
 msgstr "Richte das Hintergrundbild vertikal aus."
 
-#: admin/menu/includes/class-cb-parallax-options.php:186
+#: admin/menu/includes/class-options.php:210
 msgid "Overlay Image"
 msgstr "Überlagerungsmuster"
 
-#: admin/menu/includes/class-cb-parallax-options.php:189
+#: admin/menu/includes/class-options.php:213
 msgid "Select an overlay image if you like."
 msgstr "Wähle ein Überlagerungsmuster, wenn Du möchtest."
 
-#: admin/menu/includes/class-cb-parallax-options.php:197
+#: admin/menu/includes/class-options.php:221
 msgid "Overlay Opacity"
 msgstr "Überlagerungsdeckkraft"
 
-#: admin/menu/includes/class-cb-parallax-options.php:200
+#: admin/menu/includes/class-options.php:224
 msgid "Set overlay opacity."
 msgstr "Überlagerungsmuster-Deckkraft setzen."
 
-#: admin/menu/includes/class-cb-parallax-options.php:211
+#: admin/menu/includes/class-options.php:235
 msgid "Select overlay color."
 msgstr "Überlagerungsmuster-Farbe wählen."
 
-#: admin/menu/includes/class-cb-parallax-options.php:235
-msgid "Parallax Enabled"
-msgstr "Parallax-Effekt"
+#: admin/menu/includes/class-options.php:255
+msgid "Use These Settings On Every Page"
+msgstr "Diese Einstellungen auf allen Seiten verwenden"
 
-#: admin/menu/includes/class-cb-parallax-options.php:238
-msgid "Enable parallax"
-msgstr "Parallax aktivieren"
-
-#: admin/menu/includes/class-cb-parallax-options.php:246
-msgid "Global"
-msgstr "Global (website-weit)"
-
-#: admin/menu/includes/class-cb-parallax-options.php:249
+#: admin/menu/includes/class-options.php:258
 msgid ""
 "Enable this feature to apply this image and it's settings to all supported "
 "post types."
@@ -294,11 +279,11 @@ msgstr ""
 "Aktivieren, um obiges Bild mitsamt den Einstellungen auf jeder Seite aller "
 "unterstützten Beitragstypen an zu zeigen."
 
-#: admin/menu/includes/class-cb-parallax-options.php:257
-msgid "Allow Override"
-msgstr "Überschreiben aktivieren"
+#: admin/menu/includes/class-options.php:266
+msgid "Allow Custom Settings On Posts And Pages"
+msgstr "Einstellungen für Posts und Seiten zulassen"
 
-#: admin/menu/includes/class-cb-parallax-options.php:260
+#: admin/menu/includes/class-options.php:269
 msgid ""
 "Individual settings on a per post -/ per page basis will be used instead of "
 "this image and it's settings. On pages where no background image is defined, "
@@ -308,24 +293,11 @@ msgstr ""
 "genenüber obiger genereller Einstellung bevorzugt. Auf Seiten ohne "
 "individuell definiertem Hintergrundbild wird stattdessen Obiges angezeigt."
 
-#: admin/menu/includes/class-cb-parallax-options.php:268
-msgid "Preserve Scrolling"
-msgstr "Scrollverhalten beibehalten"
+#: admin/menu/includes/class-options.php:277
+msgid "Disable Parallax Effect On Mobile Devices"
+msgstr "Parallax-Effekt auf mobilen Endgeräten deaktivieren."
 
-#: admin/menu/includes/class-cb-parallax-options.php:271
-msgid ""
-"With this option activated, the scroll behaviour will be the same on all "
-"pages, even if there is no parallax background image defined."
-msgstr ""
-"Ist diese Option aktiviert, wird das Scroll-Verhalten auch auf Seiten ohne "
-"Parallax-Hintergrundbild bei behalten, um ein konsistentes Nutzererlebnis zu "
-"gewährleisten."
-
-#: admin/menu/includes/class-cb-parallax-options.php:279
-msgid "Disable On Mobile Devices"
-msgstr "Auf Mobilgeräten deaktivieren"
-
-#: admin/menu/includes/class-cb-parallax-options.php:282
+#: admin/menu/includes/class-options.php:280
 msgid ""
 "Disable parallax-effect on mobile devices. This may be useful <i>if</i> you "
 "encounter performance issues."
@@ -334,125 +306,272 @@ msgstr ""
 "Hintergrundbild einfach statisch angezeigt. Dies kann helfen, <i>sollten</i> "
 "Performance-Problemen auftreten."
 
-#: admin/menu/includes/class-cb-parallax-options.php:304
-#: admin/menu/includes/class-cb-parallax-options.php:343
-#: admin/menu/includes/class-cb-parallax-settings.php:515
-#: admin/menu/includes/class-cb-parallax-validation.php:593
-#: public/includes/class-cb-parallax-public-localisation.php:484
+#: admin/menu/includes/class-options.php:310
+#: admin/menu/includes/class-options.php:349
 msgid "left"
 msgstr "links"
 
-#: admin/menu/includes/class-cb-parallax-options.php:305
-#: admin/menu/includes/class-cb-parallax-options.php:311
-#: admin/menu/includes/class-cb-parallax-options.php:344
-#: admin/menu/includes/class-cb-parallax-options.php:350
-#: admin/menu/includes/class-cb-parallax-settings.php:502
-#: admin/menu/includes/class-cb-parallax-settings.php:518
-#: admin/menu/includes/class-cb-parallax-validation.php:580
-#: admin/menu/includes/class-cb-parallax-validation.php:596
-#: public/includes/class-cb-parallax-public-localisation.php:471
-#: public/includes/class-cb-parallax-public-localisation.php:487
+#: admin/menu/includes/class-options.php:311
+#: admin/menu/includes/class-options.php:317
+#: admin/menu/includes/class-options.php:350
+#: admin/menu/includes/class-options.php:356
 msgid "center"
 msgstr "mittig"
 
-#: admin/menu/includes/class-cb-parallax-options.php:306
-#: admin/menu/includes/class-cb-parallax-options.php:345
-#: admin/menu/includes/class-cb-parallax-settings.php:521
-#: admin/menu/includes/class-cb-parallax-validation.php:599
-#: public/includes/class-cb-parallax-public-localisation.php:490
+#: admin/menu/includes/class-options.php:312
+#: admin/menu/includes/class-options.php:351
 msgid "right"
 msgstr "rechts"
 
-#: admin/menu/includes/class-cb-parallax-options.php:310
-#: admin/menu/includes/class-cb-parallax-options.php:349
-#: admin/menu/includes/class-cb-parallax-settings.php:499
-#: admin/menu/includes/class-cb-parallax-validation.php:577
-#: public/includes/class-cb-parallax-public-localisation.php:468
+#: admin/menu/includes/class-options.php:316
+#: admin/menu/includes/class-options.php:355
 msgid "top"
 msgstr "oben"
 
-#: admin/menu/includes/class-cb-parallax-options.php:312
-#: admin/menu/includes/class-cb-parallax-options.php:351
-#: admin/menu/includes/class-cb-parallax-settings.php:505
-#: admin/menu/includes/class-cb-parallax-validation.php:583
-#: public/includes/class-cb-parallax-public-localisation.php:474
+#: admin/menu/includes/class-options.php:318
+#: admin/menu/includes/class-options.php:357
 msgid "bottom"
 msgstr "unten"
 
-#: admin/menu/includes/class-cb-parallax-options.php:316
-#: admin/menu/includes/class-cb-parallax-settings.php:531
-#: admin/menu/includes/class-cb-parallax-validation.php:609
-#: public/includes/class-cb-parallax-public-localisation.php:500
+#: admin/menu/includes/class-options.php:322
 msgid "fixed"
-msgstr "fixed"
+msgstr "fixiert"
 
-#: admin/menu/includes/class-cb-parallax-options.php:317
-#: admin/menu/includes/class-cb-parallax-settings.php:534
-#: admin/menu/includes/class-cb-parallax-validation.php:612
-#: public/includes/class-cb-parallax-public-localisation.php:503
+#: admin/menu/includes/class-options.php:323
 msgid "scroll"
-msgstr "scroll"
+msgstr "scrollen"
 
-#: admin/menu/includes/class-cb-parallax-options.php:321
-#: admin/menu/includes/class-cb-parallax-settings.php:479
-#: admin/menu/includes/class-cb-parallax-validation.php:557
-#: public/includes/class-cb-parallax-public-localisation.php:448
+#: admin/menu/includes/class-options.php:327
 msgid "no-repeat"
-msgstr "no-repeat"
+msgstr "nicht wiederholen"
 
-#: admin/menu/includes/class-cb-parallax-options.php:322
-#: admin/menu/includes/class-cb-parallax-settings.php:482
-#: admin/menu/includes/class-cb-parallax-validation.php:560
-#: public/includes/class-cb-parallax-public-localisation.php:451
+#: admin/menu/includes/class-options.php:328
 msgid "repeat"
-msgstr "repeat"
+msgstr "wiederholen"
 
-#: admin/menu/includes/class-cb-parallax-options.php:333
-#: admin/menu/includes/class-cb-parallax-settings.php:560
-#: admin/menu/includes/class-cb-parallax-validation.php:638
-#: public/includes/class-cb-parallax-public-localisation.php:529
+#: admin/menu/includes/class-options.php:329
+#: admin/menu/includes/class-options.php:335
+msgid "horizontal"
+msgstr "horizontal"
+
+#: admin/menu/includes/class-options.php:339
 msgid "to top"
 msgstr "hoch"
 
-#: admin/menu/includes/class-cb-parallax-options.php:334
-#: admin/menu/includes/class-cb-parallax-settings.php:563
-#: admin/menu/includes/class-cb-parallax-validation.php:641
-#: public/includes/class-cb-parallax-public-localisation.php:532
+#: admin/menu/includes/class-options.php:340
 msgid "to bottom"
 msgstr "runter"
 
-#: admin/menu/includes/class-cb-parallax-options.php:338
-#: admin/menu/includes/class-cb-parallax-settings.php:574
-#: admin/menu/includes/class-cb-parallax-validation.php:652
-#: public/includes/class-cb-parallax-public-localisation.php:543
+#: admin/menu/includes/class-options.php:344
 msgid "to the left"
 msgstr "nach links"
 
-#: admin/menu/includes/class-cb-parallax-options.php:339
-#: admin/menu/includes/class-cb-parallax-settings.php:577
-#: admin/menu/includes/class-cb-parallax-validation.php:655
-#: public/includes/class-cb-parallax-public-localisation.php:546
+#: admin/menu/includes/class-options.php:345
 msgid "to the right"
 msgstr "nach rechts"
 
-#: admin/menu/includes/class-cb-parallax-options.php:357
-#: admin/menu/includes/class-cb-parallax-settings.php:598
-#: admin/menu/includes/class-cb-parallax-validation.php:676
-#: public/includes/class-cb-parallax-public-localisation.php:567
+#: admin/menu/includes/class-options.php:366
 msgid "default"
 msgstr "Standard"
 
-#: admin/menu/includes/class-cb-parallax-options.php:557
+#: admin/menu/includes/class-options.php:576
 msgid "Customize the background image image_options."
 msgstr "Hintergrundbild-Einstellungen anpassen."
 
-#: admin/menu/includes/class-cb-parallax-options.php:564
-msgid "General Settings"
-msgstr "Allgemeine Einstellungen"
-
-#: admin/menu/includes/class-cb-parallax-options.php:566
+#: admin/menu/includes/class-options.php:585
 msgid "General settings."
 msgstr "Allgemeine Einstellungen."
+
+#: admin/menu/includes/class-options.php:884
+msgid "There's nothing new to save."
+msgstr "Keine Änderungen zu speichern."
+
+#: admin/menu/includes/class-options.php:887
+msgid "Failed to save settings."
+msgstr "Fehler beim Speichern der Einstellungen."
+
+#: admin/menu/includes/class-options.php:915
+msgid "Failed to reset settings. Please refresh the page and try again."
+msgstr ""
+"Fehler beim Zurücksetzen der Einstellungen. Bitte aktualisieren Sie die "
+"Seite und versuchen Sie es erneut."
+
+#: admin/partials/class-help-sidebar-display.php:38
+#, fuzzy
+msgid "For more information on SALT-Keys, please"
+msgstr "Für weitere Informationen zu SALT-Keys, bitte"
+
+#: admin/partials/class-help-sidebar-display.php:40
+#, fuzzy
+msgid "read more"
+msgstr "weiterlesen"
+
+#: admin/partials/class-help-sidebar-display.php:40
+#, fuzzy
+msgid "(english)"
+msgstr "(englisch)"
+
+#: admin/partials/class-help-tab-display.php:38
+#, fuzzy
+msgid "How It Works"
+msgstr "So funktioniert es"
+
+#: admin/partials/class-help-tab-display.php:39
+#, fuzzy
+msgid "Plugin Information and Privacy Notices"
+msgstr "Plugin-Informationen und Datenschutzhinweise"
+
+#: admin/partials/class-help-tab-display.php:67
+#: admin/partials/class-help-tab-display.php:120
+#, fuzzy
+msgid "Prerequisites"
+msgstr "Voraussetzungen"
+
+#: admin/partials/class-help-tab-display.php:70
+#: admin/partials/class-help-tab-display.php:72
+#, fuzzy
+msgid "needs to be installed and activated."
+msgstr "wurde erfolgreich installiert und aktiviert."
+
+#: admin/partials/class-help-tab-display.php:74
+#, fuzzy
+msgid ""
+"For full functionality, you need to have received some messages via Flamingo "
+"since plugin installation."
+msgstr ""
+"Für die volle Funktionalität müssen Sie seit der Plugin-Installation einige "
+"Nachrichten über Flamingo erhalten haben."
+
+#: admin/partials/class-help-tab-display.php:76
+#, fuzzy
+msgid "Naming conventions"
+msgstr "Namenskonventionen"
+
+#: admin/partials/class-help-tab-display.php:77
+#, fuzzy
+msgid ""
+"In order to function propperly, please make sure that you do not use \"Mail "
+"2\" option in Contact Form 7, and that the default input fields keep their "
+"default names:"
+msgstr ""
+"Stellen Sie sicher, dass Sie die Option \"Mail 2\" in Kontaktformular 7 "
+"nicht verwenden und die Standardeingabefelder ihre Standardnamen "
+"beibehalten, damit sie ordnungsgemäß funktionieren."
+
+#: admin/partials/class-help-tab-display.php:79
+#: admin/partials/class-help-tab-display.php:122
+#, fuzzy
+msgid "your-name"
+msgstr "Ihr Name"
+
+#: admin/partials/class-help-tab-display.php:80
+#: admin/partials/class-help-tab-display.php:123
+#, fuzzy
+msgid "your-email"
+msgstr "Ihre E-Mail"
+
+#: admin/partials/class-help-tab-display.php:81
+#: admin/partials/class-help-tab-display.php:124
+#, fuzzy
+msgid "your-subject"
+msgstr "Ihr Betreff"
+
+#: admin/partials/class-help-tab-display.php:82
+#: admin/partials/class-help-tab-display.php:125
+#, fuzzy
+msgid "your-message"
+msgstr "Ihre Nachricht Anfrage zu Führung: Bamberg"
+
+#: admin/partials/class-help-tab-display.php:114
+#, fuzzy
+msgid ""
+"You can send replies to messages you recieve trough Contact Form 7 and got "
+"stored by Flamingo. Register the email account that is\n"
+"            related to it in order to send replies and to save your reply in "
+"your mailserver's \"Sent Items\" folder."
+msgstr ""
+"Sie können Antworten an Mitteilungen senden, die Sie über das "
+"Kontaktformular 7 erhalten und von Flamingo gespeichert haben. Registrieren "
+"Sie das zugehörige E-Mail-Konto, um Antworten zu senden und Ihre Antwort im "
+"Ordner \"Gesendete Objekte\" Ihres Mailservers zu speichern."
+
+#: admin/partials/class-help-tab-display.php:118
+#, fuzzy
+msgid ""
+"As an example, you find the values for a Gmail account on the respective "
+"tooltip next to the input field."
+msgstr ""
+"Als Beispiel finden Sie die Werte für ein Google Mail-Konto in der "
+"jeweiligen QuickInfo neben dem Eingabefeld."
+
+#: admin/partials/class-help-tab-display.php:127
+#: admin/partials/class-help-tab-display.php:175
+#, fuzzy
+msgid "Privacy notices"
+msgstr "DATENSCHUTZ HINWEISE:"
+
+#: admin/partials/class-help-tab-display.php:128
+#, fuzzy
+msgid "With the default configuration, this plugin, does not:"
+msgstr "Mit der Standardkonfiguration kann dieses Plugin nicht"
+
+#: admin/partials/class-help-tab-display.php:130
+#: admin/partials/class-help-tab-display.php:178
+#, fuzzy
+msgid "Track users"
+msgstr "Benutzer-Nachverfolgung"
+
+#: admin/partials/class-help-tab-display.php:131
+#: admin/partials/class-help-tab-display.php:179
+#, fuzzy
+msgid ""
+"Write personal user data to the database other than the necessary email "
+"account settings, and attaching the senders email\n"
+"                address to the messages meta data, which is necessary to "
+"link the message to the email account in use."
+msgstr ""
+"Schreiben Sie persönliche Benutzerdaten in die Datenbank, mit Ausnahme der "
+"erforderlichen E-Mail-Kontoeinstellungen, und hängen Sie die E-Mail-Adresse "
+"des Absenders an die Metadaten der Nachricht an, die erforderlich ist, um "
+"die Nachricht mit dem verwendeten E-Mail-Konto zu verknüpfen."
+
+#: admin/partials/class-help-tab-display.php:134
+#: admin/partials/class-help-tab-display.php:182
+#, fuzzy
+msgid ""
+"Send any data to external servers other than your reply and/or the data "
+"necessary to reach, connect and authenticate to\n"
+"                the mail server. Once while sending it to it's recipient, "
+"and once to store it in your mail server's \"sent items\" folder if you\n"
+"                choose to do so. The original message will not be attached "
+"and sent by this plugin, in both cases not."
+msgstr ""
+"Senden Sie beliebige Daten an andere externe Server als Ihre Antwort und / "
+"oder die Daten, die erforderlich sind, um mit dem Mail-Server zu "
+"kommunizieren, eine Verbindung herzustellen und sich zu authentifizieren. "
+"Einmal während des Sendens an den Empfänger und einmal, um es im Ordner "
+"\"Gesendete Objekte\" Ihres Mail-Servers zu speichern, falls Sie dies "
+"wünschen. In beiden Fällen wird die Originalnachricht nicht von diesem "
+"Plugin angehängt und gesendet."
+
+#: admin/partials/class-help-tab-display.php:138
+#: admin/partials/class-help-tab-display.php:186
+#, fuzzy
+msgid "Use cookies"
+msgstr "Cookies verwenden"
+
+#: admin/partials/class-help-tab-display.php:176
+#, fuzzy
+msgid "With the default configuration, this plugin does not:"
+msgstr "Mit der Standardkonfiguration kann dieses Plugin nicht"
+
+#: admin/partials/class-settings-display.php:341
+msgid "Parallax Image Settings"
+msgstr "Parallax Bild Einstellungen"
+
+#: admin/partials/class-settings-display.php:342
+msgid "Static Image Settings"
+msgstr "Statische Bild-Einstellungen"
 
 #. Plugin Name of the plugin/theme
 msgid "cbParallax"
@@ -482,12 +601,108 @@ msgstr ""
 "all!"
 
 #. Author of the plugin/theme
-msgid "Demis Patti <demispatti@gmail.com>"
-msgstr "Demis Patti <demispatti@gmail.com>"
+#, fuzzy
+#| msgid "demispatti"
+msgid "Demis Patti"
+msgstr "Demis Patti"
 
 #. Author URI of the plugin/theme
-msgid "http://demispatti.ch"
-msgstr "http://demispatti.ch"
+msgid "https://demispatti.ch"
+msgstr "https://demispatti.ch"
+
+#~ msgid "HELP"
+#~ msgstr "Hilfe"
+
+#~ msgid ""
+#~ "This plugin enables you to have a fullscreen background image with a "
+#~ "parallax effect with any image that meets the minimum dimensional "
+#~ "requirements ( 1920 x 1200px for vertical parallax, wider for horizontal "
+#~ "parallax)."
+#~ msgstr ""
+#~ "Responsives Fullscreen Hintergrundbild, mit oder mit ohne Parallax-"
+#~ "Effekt. Parallax lässt sich ab einer Bildgrösse von mindestens 1920px x "
+#~ "1200px nutzen,"
+
+#~ msgid "You can choose an overlay image and define it's settings."
+#~ msgstr ""
+#~ "Zudem kann ein Überlagerungsbild (ein Overlay) ausgewählt und eingestellt "
+#~ "werden."
+
+#~ msgid ""
+#~ "The indicated directions are meant to be met while scrolling down the "
+#~ "content."
+#~ msgstr "DIe Richtungsangaben beziehen sich auf das Herunterscrollen."
+
+#~ msgid "Enjoy!"
+#~ msgstr "Viel Spass!"
+
+#~ msgid "Smooth Scroll"
+#~ msgstr "Sanftes Scrollen"
+
+#~ msgid ""
+#~ "With this option activated, the scroll behaviour will be the same on all "
+#~ "pages, even if there is no parallax background image defined."
+#~ msgstr ""
+#~ "Ist diese Option aktiviert, wird das Scroll-Verhalten auch auf Seiten "
+#~ "ohne Parallax-Hintergrundbild bei behalten, um ein konsistentes "
+#~ "Nutzererlebnis zu gewährleisten."
+
+#~ msgid "Background Image Moves"
+#~ msgstr "Das Hintergrundbild bewegt sich"
+
+#~ msgid "Parallax Enabled"
+#~ msgstr "Parallax-Effekt"
+
+#~ msgid "Position X"
+#~ msgstr "Position X"
+
+#~ msgid "Position Y"
+#~ msgstr "Position Y"
+
+#~ msgid "Attachment"
+#~ msgstr "Anhang"
+
+#~ msgid "Direction"
+#~ msgstr "Richtung"
+
+#~ msgid "Vertical Scroll Direction"
+#~ msgstr "Vertikale Bildlaufrichtung"
+
+#~ msgid "Horizontal Scroll Direction"
+#~ msgstr "Horizontale Bildlaufrichtung"
+
+#~ msgid "Global"
+#~ msgstr "Global (website-weit)"
+
+#~ msgid "Allow Override"
+#~ msgstr "Überschreiben aktivieren"
+
+#~ msgid "Preserve Scrolling"
+#~ msgstr "Scrollverhalten beibehalten"
+
+#~ msgid "Disable On Mobile Devices"
+#~ msgstr "Auf Mobilgeräten deaktivieren"
+
+#~ msgid "Parallax"
+#~ msgstr "Parallax"
+
+#~ msgid "Mode"
+#~ msgstr "Modus"
+
+#~ msgid "Background Repeat"
+#~ msgstr "Hintergrundbild kacheln"
+
+#~ msgid "Overlay Pattern"
+#~ msgstr "Overlay-Bild"
+
+#~ msgid "Overlay Pattern Opacity"
+#~ msgstr "Opazität des Overlay-Bildes"
+
+#~ msgid "Plugin Settings"
+#~ msgstr "Plugin-Einstellungen"
+
+#~ msgid "Demis Patti <demispatti@gmail.com>"
+#~ msgstr "Demis Patti <demispatti@gmail.com>"
 
 #~ msgid "Customize the plugin settings."
 #~ msgstr "Die Plugin-Einstellungen anpassen."
@@ -511,12 +726,6 @@ msgstr "http://demispatti.ch"
 
 #~ msgid "Remove background image"
 #~ msgstr "Hintergrundbild entfernen"
-
-#~ msgid "Vertical Position"
-#~ msgstr "Vertikale Position"
-
-#~ msgid "Horizontal Position"
-#~ msgstr "Horizontale Position"
 
 #~ msgid "Choose a background image."
 #~ msgstr "Wähle das Hintergrund-Bild."
@@ -555,13 +764,6 @@ msgstr "http://demispatti.ch"
 
 #~ msgid "Demis Patti <demis@demispatti.ch>"
 #~ msgstr "Demis Patti <demis@demispatti.ch>"
-
-#~ msgid ""
-#~ "Set a background color. Best to be used with partially transparent images."
-#~ msgstr ""
-#~ "Wähle eine Hintergrundfarbe aus, wenn Du dies möchtest. Dieses Feature "
-#~ "ist für teiltransparente Bilder gedacht, bei welchen Du die "
-#~ "Hintergrundfarbe steuern kannst."
 
 #~ msgid "Select overlay color (experimental, ev. disabled in this release)."
 #~ msgstr ""
@@ -641,9 +843,6 @@ msgstr "http://demispatti.ch"
 
 #~ msgid "Preserve Scrolling Behaviour."
 #~ msgstr "Das Scrollverhalten auf Seiten ohne animierten Hintergrund nutzen."
-
-#~ msgid "Disable parallax-effect on mobile devices."
-#~ msgstr "Parallax-Effekt auf Mobilgeräten deaktivieren."
 
 #~ msgid "no repeat"
 #~ msgstr "keine Wiederholung (no-repeat)"

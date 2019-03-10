@@ -1,16 +1,15 @@
 === cbParallax ===
 
 Tags: parallax, responsive, fullscreen, image, background, Hintergrund, Bild, Hintergrundbild
-
-Requires at least: 4.5
-Tested up to: 4.7.3
-Stable tag: 0.8.1
-Version: 0.8.1
+Requires at least: 4.9
+Tested up to: 5.1
+Requires PHP: 5.6
+Stable tag: 0.8.0
+Version: 0.8.0
 License: GPLv2 or later
-License URI: http://www.gnu.org/licenses/gpl-2.0.html
-Contributors: demispatti
-
-Responsive, parallaxing fullscreen background image.
+License URI: https://www.gnu.org/licenses/gpl-2.0.html
+Author: Demis Patti
+Author URI: https://demispatti.ch
 
 == Description ==
 
@@ -28,13 +27,13 @@ Responsive, parallaxing fullscreen background image.
 
 == Requirements ==
 
-Your theme must support the core WordPress implementation of the [Custom Backgrounds](http://codex.wordpress.org/Custom_Backgrounds) theme feature.
+Your theme must support the core WordPress implementation of the [Custom Backgrounds](https://codex.wordpress.org/Custom_Backgrounds) theme feature.
 
 In order to use the parallax feature, I decided to set the minimum required image dimensions to 1920px * 1200px, so that covers a fullHD screen with a slight vertical parallax movement ( Image height - viewport height, so 1200px - 1080px gives 120px offset to move the image. I hope you get the point here.).
 
 Your theme's layout must be "boxed" somehow or an opacity should be added to the page content container for the background image to be seen. This is up to you.
 
-PHP version 5.3 or above.
+PHP version 5.6 or above.
 
 == Installation ==
 
@@ -44,28 +43,23 @@ PHP version 5.3 or above.
 
 == Frequently Asked Questions ==
 
-= Where do I interact with this plugin? =
+= Where do I interact with this plugin and how does it work? =
 
-You find the plugin's settings page in the "Settings > cbParallax" menu.
-You will find the "cbParallax" meta box on edit screens of all supported posts, pages and products.
-
-= How does it work? =
-
-Within the meta box, you could:
+Within the meta box, a small box on the post and page edit screen titled "cbParallax", you could:
 
 1. Choose a background image. Depending on its dimensions you will be presented with a switch for enabling the parallax effect.
 2. Leave the switch off, since you should first set the options for a static state.
-3. Set the options below as you need.
+3. Set the options below the image as you need.
 4. Turn on the switch.
-5. Set the options below as you need.
+5. Set the options below the image as you need.
 
-Within the settings page, you could:
+Within the settings page located under "Settings > cbParallax", you could:
 
 1. Choose a background image. Depending on its dimensions you will be presented with a switch for enabling the parallax effect.
 2. Leave the switch off, since you should first set the options for a static state.
-3. Set the options below as you need.
+3. Set the options below the image as you need.
 4. Turn on the switch.
-5. Set the options below as you need.
+5. Set the options below the image as you need.
 6. Choose whether to use these settings globally for all pages (global).
 7. Choose whether to allow overriding these settings with the image you define on single posts and pages.
 8. Set the options for "scroll behaviour" and "mobile", and you're good to go :-)
@@ -94,7 +88,7 @@ Assuming your theme does support `custom-background` and this plugin still isn't
 
 = How do I add support for this in a theme? =
 
-Your theme must support the [Custom Backgrounds](http://codex.wordpress.org/Custom_Backgrounds) feature for this plugin to work.
+Your theme must support the [Custom Backgrounds](https://codex.wordpress.org/Custom_Backgrounds) feature for this plugin to work.
 
 If you're a theme author, consider adding support for this if you can make it fit in with your design.  The following is the basic code, but check out the above link.
 
@@ -117,6 +111,46 @@ Yes. I have a look at the plugin's support page two or three times a week and I 
 3. Custom background meta box on the edit post screen.
 
 == Changelog ==
+
+= Version 0.9.0 =
+1. Face lifted the user interface
+2. Re-written most of the code
+3. Uses smoothscroll.js in favour of nicescroll.js as scrolling engine
+4. Some Bugfixes
+ 
+= Version 0.8.8 =
+1. Extended the color picker to accept rgba colors
+2. The color picker accepts input via keyboard again
+3. Re-introduced a background color for the parallax image
+4. Minor code changes
+5 Minor code clean up
+6. Some bug fixes
+7. Removed Github link
+8. Slowed down scrolling speed
+
+= Version 0.8.7 =
+1. Fixed compatibility with Chrome Browser
+2. Checked compatibility with the latest version of WordPress
+
+= Version 0.8.6 =
+1. Updated a few included libraries
+2. Improved some scripts
+
+= Version 0.8.5 =
+1. Rearranged the hooks for the frontend
+2. re-added theme support for custom-background
+
+= Version 0.8.4 =
+1. Resolved a bug preventing the image data from being loaded.
+2. Removed unnecessary comments.
+3. Minor code cleanup.
+
+= Version 0.8.3 =
+1. The Frontend script will only load if a background image is defined.
+2. The overlay container will only be created if an overlay image is defined.
+
+= Version 0.8.2 =
+1. Fixed missing remove image button on edit screens.
 
 = Version 0.8.1 =
 1. Made compatible with some premium themes.

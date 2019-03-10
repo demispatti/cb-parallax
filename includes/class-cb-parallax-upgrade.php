@@ -1,9 +1,33 @@
 <?php
 
+namespace CbParallax\Includes;
+
+use CbParallax\Admin\Includes as AdminIncludes;
+use CbParallax\Admin\Menu\Includes as MenuIncludes;
+
+/**
+ * If this file is called directly, abort.
+ */
+if ( ! defined( 'WPINC' ) ) {
+	die;
+}
+
+/**
+ * Require dependencies.
+ */
+if ( ! class_exists( 'MenuIncludes\cb_parallax_options' ) ) {
+	require_once CBPARALLAX_ROOT_DIR . 'admin/menu/includes/class-options.php';
+}
+if ( ! class_exists( 'AdminIncludes\cb_parallax_post_type_support' ) ) {
+	require_once CBPARALLAX_ROOT_DIR . 'admin/includes/class-post-type-support.php';
+}
+
+//include CBPARALLAX_ROOT_DIR . '../../../wp-includes/l10n.php';
+
 /**
  * Executes function such as migrating image_options and refactoring existing meta_keys.
  *
- * @link              https://github.com/demispatti/cb-parallax/
+ * @link
  * @since             0.6.0
  * @package           cb_parallax
  * @subpackage        cb_parallax/includes
@@ -13,43 +37,34 @@
  * License URI:       http://www.gnu.org/licenses/gpl-2.0.txt
  */
 class cb_parallax_upgrade {
-
-	/**
-	 * The name of the plugin.
-	 *
-	 * @since    0.6.0
-	 * @access   private
-	 * @var      string $plugin_name
-	 */
-	private $plugin_name;
-
+	
 	/**
 	 * The domain of the plugin.
 	 *
 	 * @since    0.6.0
 	 * @access   private
-	 * @var      string $plugin_domain
+	 * @var      string $domain
 	 */
-	private $plugin_domain;
-
+	private $domain;
+	
 	/**
 	 * The version number of the plugin.
 	 *
 	 * @since    0.6.0
 	 * @access   private
-	 * @var      string $plugin_version
+	 * @var      string $version
 	 */
-	private $plugin_version;
-
+	private $version;
+	
 	/**
 	 * The reference to the image_options class.
 	 *
 	 * @since  0.6.0
 	 * @access private
-	 * @var    object $image_options
+	 * @var    object MenuIncludes\$image_options
 	 */
 	private $options;
-
+	
 	/**
 	 * Maintains the allowed option values.
 	 *
@@ -58,7 +73,7 @@ class cb_parallax_upgrade {
 	 * @var    array $image_options_whitelist
 	 */
 	public $image_options_whitelist;
-
+	
 	/**
 	 * Maintains the default image image_options
 	 *
@@ -67,7 +82,7 @@ class cb_parallax_upgrade {
 	 * @var    array $default_image_options
 	 */
 	public $default_image_options;
-
+	
 	/**
 	 * Maintains the default plugin image_options
 	 *
@@ -76,309 +91,109 @@ class cb_parallax_upgrade {
 	 * @var    array $default_plugin_options
 	 */
 	public $default_plugin_options;
-
-	/**
-	 * 1. Defines the plugin's name, domain and version, and loads its basic dependencies.
-	 * 2. Instanciates and assigns the loader.
-	 * 3. Loads the language files.
-	 * 4. Loads the admin part of the plugin.
-	 * 5. Loads the public part of the plugin.
-	 *
-	 * @since  0.1.0
-	 * @access public
-	 */
-	public function __construct( $plugin_name, $plugin_domain, $plugin_version ) {
-
-		$this->plugin_name = $plugin_name;
-		$this->plugin_domain = $plugin_domain;
-		$this->plugin_version = $plugin_version;
-
-		$this->load_dependencies();
+	
+	public $supported_post_types;
+	
+	public function __construct( $domain, $version ) {
+		
+		$this->domain = $domain;
+		$this->version = $version;
+		
+		//$this->load_dependencies();
 		$this->retrieve_options();
 	}
-
-	/**
-	 * Calls the function that upgrades the database.
-	 *
-	 * @hooked_action
-	 *
-	 * @since    0.6.0
-	 * @return   void
-	 * @access   public
-	 */
+	
 	public function run() {
-
-		$this->upgrade_postmeta();
-		$this->migrate_options();
+		
+		$this->migrate_stored_post_meta();
+		$this->migrate_stored_options();
 	}
-
-	/**
-	 * Loads it's dependencies.
-	 *
-	 * @since  0.6.0
-	 * @access private
-	 * @return void
-	 */
-	private function load_dependencies() {
-		// The class that maintains all data like default values and their meta data.
-		require_once plugin_dir_path( dirname( __FILE__ ) ) . "admin/menu/includes/class-cb-parallax-options.php";
-	}
-
-	/**
-	 * Sets the allowed image_options
-	 *
-	 * @since  0.6.0
-	 * @access private
-	 * @return void
-	 */
+	
 	private function retrieve_options() {
-
-		$this->options = new cb_parallax_options( $this->get_plugin_name(), $this->get_plugin_domain() );
-
+		
+		$this->options = new MenuIncludes\cb_parallax_options( $this->domain );
 		$this->image_options_whitelist = $this->options->get_image_options_whitelist();
-
 		$this->default_image_options = $this->options->get_default_image_options();
-
 		$this->default_plugin_options = $this->options->get_default_plugin_options();
+		$a = 2;
 	}
-
-	/**
-	 * Calls the function that upgrades the database.
-	 **
-	 * @since    0.6.0
-	 * @return   void
-	 * @access   private
-	 */
-	private function upgrade_postmeta() {
-
-		global $wpdb;
-
-		$querystr = "
-		    SELECT $wpdb->postmeta.post_id
-		    FROM $wpdb->postmeta
-		    WHERE $wpdb->postmeta.meta_key = 'cb_parallax'
-		    ORDER BY $wpdb->postmeta.post_id ASC
-		";
-		$postmeta = $wpdb->get_results( $querystr, OBJECT );
-
-
-		if( ! empty( $postmeta ) ) {
-
-			foreach ( $postmeta as $i => $post ) {
-
-				$pattern = '/cb_parallax_/';
-				// Get the post meta data related to this plugin.
-				$input = get_post_meta( $post->post_id, 'cb_parallax', true );
-
-				// Retrieves the first key of the options array.
-				$first_key = key( $input );
-
-				// Here we check for a persistent meta_key value. If this one is not yet prefixed with "cb_parallax_",
-				// we know we have to refactor this image_options array in order to upgrade the entries.
-				if ( false == preg_match( $pattern, $first_key ) ) {
-
-					// Retrieve the post meta data with refactored meta_keys.
-					$output = $this->refactor_option_keys( $input );
-
-					// Get the image name if there is one stored.
-					$name = isset( $output['cb_parallax_overlay_image'] ) ? $output['cb_parallax_overlay_image'] : false;
-					if( false !== $name ) {
-						// Remane the overlay image.
-						$output['cb_parallax_overlay_image'] = $this->refactor_initial_overlay_image_name( $name );
+	
+	private function get_supported_post_types() {
+		
+		$post_type_support = new AdminIncludes\cb_parallax_post_type_support();
+		
+		return $post_type_support->get_supported_post_types();
+	}
+	
+	public function migrate_stored_post_meta() {
+		
+		$args = array(
+			'posts_per_page' => - 1,
+			'post_type' => $this->get_supported_post_types(),
+			'meta_key' => 'cb_parallax'
+		);
+		$posts = new \WP_Query( $args );
+		
+		foreach ( $posts->posts as $i => $post ) {
+			
+			$input = get_post_meta( $post->ID, 'cb_parallax', true );
+			$output = $this->migrate_options( $input );
+			delete_post_meta( $post->ID, 'cb_parallax' );
+			add_post_meta( $post->ID, 'cb_parallax', $output);
+		}
+		
+		return true;
+	}
+	
+	private function migrate_stored_options() {
+		
+		$output = null;
+		$input = get_option( 'cb_parallax_options' );
+		if ( is_array( $input ) ) {
+			$output = $this->migrate_options( $input );
+			update_option( 'cb_parallax_options', $output, true );
+		}
+	}
+	
+	private function migrate_options( $post_meta ) {
+		
+		$image_option_keys = $this->options->get_all_option_keys( 'image' );
+		
+		$options_meta = $this->options->get_options_arguments();
+		foreach ( $image_option_keys as $i => $key ) {
+			
+			if ( 'select' === $options_meta[ $key ]['input_type'] ) {
+				$stored_value = isset( $post_meta[ $key ] ) ? $post_meta[ $key ] : $options_meta[ $key ]['default_value'];
+				$select_values = $options_meta[ $key ]['select_values'];
+				
+				foreach ( $select_values as $option_key => $select_value ) {
+					
+					// Replaces the value from a maybe localized value to its english version
+					if ( $stored_value === $select_value ) {
+						$post_meta[ $key ] = $option_key;
 					}
-
-					// Delete the post meta opition
-					delete_post_meta( $post->post_id, 'cb_parallax' );
-					// Save the newly created array to th edatabase.
-					update_post_meta( $post->post_id, 'cb_parallax', $output );
+					// Renames values or conforms values to English expressions
+					if('cb_parallax_vertical_scroll_direction' === $key ){
+						if( 'bottom' === $stored_value || 'to bottom' === $stored_value || 'runter' === $stored_value ){
+							$post_meta[ $key ] = 'to bottom';
+						}
+						if ( 'top' === $stored_value || 'to top' === $stored_value || 'hoch' === $stored_value ) {
+							$post_meta[ $key ] = 'to top';
+						}
+					}
+					if ( 'cb_parallax_horizontal_scroll_direction' === $key ) {
+						if ( 'left' === $stored_value || 'to the left' === $stored_value || 'nach links' === $stored_value ) {
+							$post_meta[ $key ] = 'to the left';
+						}
+						if ( 'right' === $stored_value || 'to the right' === $stored_value || 'nach rechts' === $stored_value ) {
+							$post_meta[ $key ] = 'to the right';
+						}
+					}
 				}
 			}
 		}
-
+		
+		return $post_meta;
 	}
-
-	/**
-	 * Moves the plugin image_options to the new image_options array
-	 **
-	 * @since    0.6.0
-	 * @return   void
-	 * @access   private
-	 */
-	private function migrate_options() {
-
-		// The deprecated image_options array
-		$input  = get_option( 'cb_parallax' );
-		$output = null;
-
-		// If there are image_options stored in the deprecated image_options array
-		if( false !== $input && is_array( $input ) ) {
-
-			$output = $this->migrate( $input );
-			// Here we save the now prefixed image_options back to the new image_options array.
-			update_option( 'cb_parallax_options', $output );
-			// Clean up unneeded option entry.
-			delete_option( 'cb_parallax' );
-		}
-
-	}
-
-	/**
-	 * Renames the option keys.
-	 *
-	 * @param array $input
-	 *
-	 * @since    0.6.0
-	 * @return   array $updated_meta_values
-	 * @access   private
-	 */
-	private function refactor_option_keys( $input ) {
-
-		$pattern = '/cb_parallax_/';
-		$prefix = 'cb_parallax_';
-		$output = null;
-		// Prefix the option keys.
-		foreach( $input as $key => $value) {
-			// ...if necessary.
-			if( ! preg_match( $pattern, $key ) ) {
-				$output[ $prefix . $key ] = $value;
-			}
-		}
-
-		// Correct the option key for the background image url manually.
-		if( ! array_key_exists( 'cb_parallax_background_image_url', $input ) ) {
-
-			$output['cb_parallax_background_image_url'] = $output['cb_parallax_background_image'];
-			unset( $output['cb_parallax_background_image'] );
-		}
-
-		return $this->add_default_image_options( $output );
-	}
-
-	/**
-	 * Renames the option keys.
-	 *
-	 * @param array $input
-	 *
-	 * @since    0.6.0
-	 * @return   mixed
-	 * @access   private
-	 */
-	private function refactor_initial_overlay_image_name( $name ) {
-
-		// The old overlay image names.
-		$old_image_names = array(
-			'none' => __( 'none', $this->plugin_domain ),
-			'01'   => '01.png',
-			'02'   => '02.png',
-			'03'   => '03.png',
-			'04'   => '04.png',
-			'05'   => '05.png',
-			'06'   => '06.png',
-			'07'   => '07.png',
-			'08'   => '08.png',
-			'09'   => '09.png',
-		);
-
-		$new_image_names = array(
-			'none' => __( 'none', $this->plugin_domain ),
-			'01'   => '01',
-			'02'   => '02',
-			'03'   => '03',
-			'04'   => '04',
-			'05'   => '05',
-			'06'   => '06',
-			'07'   => '07',
-			'08'   => '08',
-			'09'   => '09',
-		);
-
-		// Get the key.
-		$key = array_search( $name, $old_image_names );
-		// Set the new overlay image name.
-		$name = $new_image_names[$key];
-
-		return $name;
-	}
-
-	/**
-	 * Adds default image settings to the image_options array.
-	 *
-	 * @since  0.6.0
-	 * @access private
-	 * @return array
-	 */
-	private function add_default_image_options( $output ) {
-
-		return array_merge( $this->default_plugin_options, $output );
-	}
-
-	/**
-	 * Moves the stored image_options into a new image_options array.
-	 **
-	 * @since    0.6.0
-	 * @access   private
-	 */
-	private function migrate( $input ) {
-
-		$new_array = null;
-		$prefix = 'cb_parallax_';
-
-		foreach($input as $key => $value ) {
-
-			$new_array[$prefix . $key] = $value;
-		}
-
-		return $this->add_default_plugin_options( $new_array );
-	}
-
-	/**
-	 * Merge default image_options into the image_options-array.
-	 *
-	 * @param $output
-	 *
-	 * @since  0.6.0
-	 * @access private
-	 * @return array $output
-	 */
-	private function add_default_plugin_options( $output ) {
-
-		return array_merge( $this->default_plugin_options, $output );
-	}
-
-	/**
-	 * Retrieve the name of the plugin.
-	 *
-	 * @since     0.6.0
-	 * @access    public
-	 * @return    string $plugin_name
-	 */
-	public function get_plugin_name() {
-
-		return $this->plugin_name;
-	}
-
-	/**
-	 * Retrieve the domain of the plugin.
-	 *
-	 * @since     0.6.0
-	 * @access    public
-	 * @return    string $plugin_domain
-	 */
-	public function get_plugin_domain() {
-
-		return $this->plugin_domain;
-	}
-
-	/**
-	 * Retrieve the version number of the plugin.
-	 *
-	 * @since     0.6.0
-	 * @access    public
-	 * @return    string $plugin_version
-	 */
-	public function get_plugin_version() {
-
-		return $this->plugin_version;
-	}
-
+	
 }

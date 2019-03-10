@@ -1,12 +1,21 @@
 <?php
 
+namespace CbParallax;
+
+use CbParallax\Includes as Includes;
+
+/**
+ * If this file is called directly, abort.
+ */
+if ( ! defined( 'WPINC' ) ) {
+	die;
+}
+
 /**
  * The plugin bootstrap file.
- *
- * This is a plugin for custom backgrounds on single posts, products and pages, with a parallax effect..
- * The parallax effect requires an image with a width of at least 1920px and a height of at least 1200px.
+ * This is a plugin for custom backgrounds on single posts, products and pages, with a parallax effect.
+ * The parallax effect requires an image with a width of at least 1920px and a height of at least 1200px for vertical parallax effect
  * Have Fun!
- *
  * in memoriam of Bender ( 1999 to 2013 )
  * Built with Tom McFarlin's WordPress Plugin Boilerplate in mind -
  * which is now maintained by Devin Vinson.
@@ -19,21 +28,40 @@
  * Plugin Name:       cbParallax
  * Plugin URI:        https://wordpress.org/plugins/cb-parallax/
  * Description:       Let's you add <a href="http://codex.wordpress.org/Custom_Backgrounds" target="_blank">custom background</a> - with or without vertical or horizontal parallax effect - for single posts, pages and products. It requires your theme to support the WordPress <code>custom-background</code> feature. It also requires you to set your theme's layout to "boxed" and / or to add a transparency to the container that holds the content in order to make the background image visible / shine trough.
- * Author:            Demis Patti <demispatti@gmail.com>
- * Author URI:        http://demispatti.ch
+ * Author:            Demis Patti
+ * Author URI:        https://demispatti.ch
  * License:           GPL-2.0+
- * License URI:       http://www.gnu.org/licenses/gpl-2.0.txt
- * Version:           0.8.1
- * Stable tag:        0.8.1
+ * License URI:       https://www.gnu.org/licenses/gpl-2.0.txt
+ * Version:           0.8.0
+ * Stable tag:        0.8.0
+ * Requires at least: 4.9
+ * Tested up to:      5.1
+ * Requires PHP:      5.6
  * Text Domain:       cb-parallax
  * Domain Path:       /languages
  */
 
 /**
- * If this file is called directly, abort.
+ * Define the constants for the plugin paths.
  */
-if ( ! defined( 'WPINC' ) ) {
-	die;
+if ( ! defined( 'CBPARALLAX_ROOT_DIR' ) ) {
+	define( 'CBPARALLAX_ROOT_DIR', plugin_dir_path( __FILE__ ) );
+}
+if ( ! defined( 'CBPARALLAX_ROOT_URL' ) ) {
+	define( 'CBPARALLAX_ROOT_URL', plugin_dir_url( __FILE__ ) );
+}
+
+/**
+ * Require the initial classes.
+ */
+if ( ! class_exists( 'Includes\cb_parallax_activator' ) ) {
+	require_once CBPARALLAX_ROOT_DIR . 'includes/class-activator.php';
+}
+if ( ! class_exists( 'Includes\cb_parallax_deactivator' ) ) {
+	require_once CBPARALLAX_ROOT_DIR . 'includes/class-deactivator.php';
+}
+if ( ! class_exists( 'CbParallax\cb_parallax' ) ) {
+	require_once CBPARALLAX_ROOT_DIR . 'includes/class-cb-parallax.php';
 }
 
 /**
@@ -43,12 +71,9 @@ if ( ! defined( 'WPINC' ) ) {
  * @since    0.1.0
  * @return   void
  */
-function activate_cb_parallax() {
-
-	require_once plugin_dir_path( __FILE__ ) . 'includes/class-cb-parallax-activator.php';
-
-	$activator = new cb_parallax_activator();
-	$activator->activate();
+function activate_plugin() {
+	
+	Includes\cb_parallax_activator::activate();
 }
 
 /**
@@ -58,12 +83,9 @@ function activate_cb_parallax() {
  * @since    0.1.0
  * @return   void
  */
-function deactivate_cb_parallax() {
-
-	require_once plugin_dir_path( __FILE__ ) . 'includes/class-cb-parallax-deactivator.php';
-
-	$deactivator = new cb_parallax_deactivator();
-	$deactivator->deactivate();
+function deactivate_plugin() {
+	
+	Includes\cb_parallax_deactivator::deactivate();
 }
 
 /**
@@ -71,15 +93,8 @@ function deactivate_cb_parallax() {
  *
  * @since    0.1.0
  */
-register_activation_hook( __FILE__, 'activate_cb_parallax' );
-register_deactivation_hook( __FILE__, 'deactivate_cb_parallax' );
-
-/**
- * Include the core plugin class.
- *
- * @since    0.1.0
- */
-require plugin_dir_path( __FILE__ ) . 'includes/class-cb-parallax.php';
+register_activation_hook( __FILE__, 'CbParallax\activate_plugin' );
+register_deactivation_hook( __FILE__, 'CbParallax\deactivate_plugin' );
 
 /**
  * Runs the plugin.
@@ -88,10 +103,9 @@ require plugin_dir_path( __FILE__ ) . 'includes/class-cb-parallax.php';
  * @return   void
  */
 function run_cb_parallax() {
-
-	$plugin = new cb_parallax();
-
+	
+	$plugin = new Includes\cb_parallax();
 	$plugin->run();
 }
 
-run_cb_parallax();
+add_action( 'plugins_loaded', 'CbParallax\run_cb_parallax' );
