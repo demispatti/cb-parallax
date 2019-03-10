@@ -131,13 +131,11 @@ class cb_parallax_admin {
 	 */
 	public function add_hooks() {
 		
+		add_action( 'admin_init', array( $this, 'include_meta_box' ), 20 );
 		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_styles' ), 10 );
 		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_scripts' ), 10 );
-		
-		add_action( 'admin_init', array( $this, 'include_meta_box' ), 20 );
-		add_action( 'admin_enqueue_scripts', array( $this, 'include_script_localisation' ) );
+		add_action( 'admin_enqueue_scripts', array( $this, 'include_script_localisation' ), 20 );
 		add_action( 'plugin_row_meta', array( $this, 'filter_plugin_row_meta' ), 10, 2 );
-		
 		add_action( 'upgrader_process_complete', array($this, 'run_cb_parallax_upgrade'), 10, 2 );
 	}
 	
@@ -152,9 +150,9 @@ class cb_parallax_admin {
 		$screen = get_current_screen();
 		
 		if ( in_array( $screen->id, $this->screen_ids, true ) ) {
-			
+
 			wp_enqueue_style( 'jquery-ui-smoothness-theme',
-				CBPARALLAX_ROOT_URL . 'vendor/jquery-ui/jquery-ui.theme.min.css',
+				CBPARALLAX_ROOT_URL . 'vendor/jquery-ui/themes/jquery-ui.min.css',
 				array(),
 				'all',
 				'all'
@@ -196,12 +194,6 @@ class cb_parallax_admin {
 		
 		if ( in_array( $screen->id, $this->screen_ids, true ) ) {
 			
-			// jQuery UI Libs
-			wp_enqueue_script( 'jquery-ui-core' );
-			wp_enqueue_script( 'jquery-ui-tabs' );
-			wp_enqueue_script( 'jquery-ui-widget' );
-			wp_enqueue_script( 'jquery-effects-core' );
-			
 			// Color picker.
 			wp_enqueue_script( 'wp-color-picker' );
 			wp_enqueue_script( 'wp-color-picker-alpha',
@@ -230,23 +222,31 @@ class cb_parallax_admin {
 				true
 			);
 			
+			// jQuery UI Libs
+			wp_enqueue_script( 'jquery-ui' );
+			wp_enqueue_script( 'jquery-ui-core' );
+			wp_enqueue_script( 'jquery-ui-tabs' );
+			wp_enqueue_script( 'jquery-ui-widget' );
+			wp_enqueue_script( 'jquery-effects-core' );
+			
 			// Admin part.
 			wp_enqueue_script( 'cb-parallax-settings-display-js',
 				CBPARALLAX_ROOT_URL . 'admin/js/settings-display.js',
 				array(
 					'jquery',
 					//
+					'wp-color-picker',
+					'media-views',
+					//
 					'jquery-ui-core',
 					'jquery-ui-tabs',
 					'jquery-ui-widget',
 					'jquery-effects-core',
 					//
-					'wp-color-picker',
-					'media-views',
 					'cb-parallax-inc-fancy-select-js',
 				),
 				'all',
-				true
+				false
 			);
 		}
 	}
@@ -301,13 +301,9 @@ class cb_parallax_admin {
 	 * @return void
 	 */
 	private function include_contextual_help() {
-		
-		// Show up on all following post type's edit screens:
-		if ( isset( $_REQUEST['page'] ) && $_REQUEST['page'] == 'cb-parallax.php' ) {
-			
-			$Help_Tab = new AdminIncludes\cb_parallax_contextual_help( $this->domain );
-			$Help_Tab->add_hooks();
-		}
+
+		$Help_Tab = new AdminIncludes\cb_parallax_contextual_help( $this->domain );
+		$Help_Tab->add_hooks();
 	}
 	
 	/**
@@ -347,13 +343,16 @@ class cb_parallax_admin {
 		if ( $file == $plugin ) {
 			$meta[] = '<a href="https://wordpress.org/support/plugin/cb-parallax" target="_blank">' . __( 'Plugin support', $this->domain ) . '</a>';
 			$meta[] = '<a href="https://wordpress.org/plugins/cb-parallax" target="_blank">' . __( 'Rate plugin', $this->domain ) . '</a>';
-			$meta[] = '<a href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=XLMMS7C62S76Q" target="_blank">' . __( 'Donate', $this->domain ) . '</a>';
+			$meta[] = '<a href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=XLMMS7C62S76Q" target="_blank">' . __( 'Buy me a beer!', $this->domain ) . '</a>';
 		}
 		
 		return $meta;
 	}
 	
-	
+	/**
+	 * Instantiates the class responsible for the options upgrades
+	 * and runs it.
+	 */
 	public function run_cb_parallax_upgrade() {
 		
 		if ( ! class_exists( 'Includes\cb_parallax_upgrade' ) ) {

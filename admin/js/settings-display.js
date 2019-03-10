@@ -17,6 +17,7 @@
         constructor(){
             // localized values
             this.cb_Parallax = Cb_Parallax_Admin;
+            this.canParallax = undefined !== this.cb_Parallax.image_options.can_parallax ? this.cb_Parallax.image_options.can_parallax : '0';
             // 'movable parts' :)
             this.parallaxEnabledSwitch = null;
             this.placeholderImage = null;
@@ -41,31 +42,18 @@
             this.horizontalScrollDirectionContainer = null;
             this.verticalAlignmentContainer = null;
             this.horizontalAlignmentContainer = null;
-            // objects
-            this.parallaxEnabledSwitch = $( '.cb_parallax_parallax_enabled' );
-            this.placeholderImage = $( '.cb_parallax_placeholder_image' );
-            this.backgroundImage = $( '.cb_parallax_background_image' );
-            this.attachmentId = $( ".cb_parallax_attachment_id" );
-            this.CheckBoxes = $( '.cb-parallax-input-checkbox' );
-            this.parallaxDirectionSelectBox = $( "[data-key='cb_parallax_direction']" );
-            this.parallaxSettingsTitle = $( 'h3.parallax' );
-            this.staticSettingsTitle = $( 'h3.static' );
-            this.addMediaButton = $( '.cb-parallax-media-url' );
-            this.removeMediaButton = $( ".cb-parallax-remove-media" );
-            this.settingsForm = $( '#cb_parallax_settings_form' );
-            this.submitButton = $( '#cb_parallax_form_submit' );
-            this.resetButton = $( '#cb_parallax_form_reset' );
 
             this.direction = undefined !== this.cb_Parallax.image_options.cb_parallax_direction ? this.cb_Parallax.image_options.cb_parallax_direction : this.cb_Parallax.default_options.cb_parallax_direction;
         }
 
         init(){
-            this.localizeScript();
-            this.assembleSettingsContainers();
             CbParallaxSettingsDisplay.initColorpicker();
             CbParallaxSettingsDisplay.initFancySelect();
+            this.assembleSettingsContainers();
+            this.localizeScript();
             this.initSettingsDisplay();
             this.addEvents();
+            CbParallaxSettingsDisplay.initContextualHelp();
         }
 
         assembleSettingsContainers(){
@@ -80,6 +68,22 @@
             this.horizontalScrollDirectionContainer = $( '#cb_parallax_horizontal_scroll_direction_container' );
             this.verticalAlignmentContainer = $( '#cb_parallax_vertical_alignment_container' );
             this.horizontalAlignmentContainer = $( '#cb_parallax_horizontal_alignment_container' );
+
+            // objects
+            this.parallaxEnabledSwitch = $( '.cb_parallax_parallax_enabled' );
+            this.placeholderImage = $( '.cb_parallax_placeholder_image' );
+            this.backgroundImage = $( '.cb_parallax_background_image' );
+            this.attachmentId = $( ".cb_parallax_attachment_id" );
+            this.CheckBoxes = $( '.cb-parallax-input-checkbox' );
+            this.parallaxDirectionSelectBox = $( "[data-key='cb_parallax_direction']" );
+            this.parallaxDirectionSelectBoxTrigger = $( "#cb_parallax_direction_container" ).find( 'div.trigger' );
+            this.parallaxSettingsTitle = $( 'h3.parallax' );
+            this.staticSettingsTitle = $( 'h3.static' );
+            this.addMediaButton = $( '.cb-parallax-media-url' );
+            this.removeMediaButton = $( ".cb-parallax-remove-media" );
+            this.settingsForm = $( '#cb_parallax_settings_form' );
+            this.submitButton = $( '#cb_parallax_form_submit' );
+            this.resetButton = $( '#cb_parallax_form_reset' );
         }
 
         static initColorpicker(){
@@ -98,7 +102,7 @@
         // Events
         addEvents(){
             this.CheckBoxes.on( 'click', this.toggleCheckbox );
-            this.parallaxEnabledSwitch.on( 'change', { context : this }, this.toggleParallaxEnabledCheckbox );
+            this.parallaxDirectionSelectBoxTrigger.on( 'change', { context : this }, this.toggleParallaxEnabledCheckbox );
             this.parallaxEnabledSwitch.on( 'change', { context : this }, this.initSettingsDisplay );
             this.parallaxDirectionSelectBox.on( 'change.fs', { context : this }, this.toggleParallaxEnabledCheckbox );
             this.removeMediaButton.on( 'click', { context : this }, CbParallaxSettingsDisplay.removeMedia );
@@ -116,27 +120,17 @@
             // Hide all options at first
             $this.allImageOptions.hide();
             $this.removeMediaButton.hide();
-            // If there is an attachment...
-            if ( $this.backgroundImage.attr( 'src' ) !== '' ){
-                $this.removeMediaButton.show();
-                // If parallax is not possible with this attachment...
-                if ( $this.attachmentWidth < 1920 || $this.attachmentHeight < 1200 ){
-                    $this.parallaxImageOptions.hide();
-                    $this.staticImageOptions.show();
-                }
-                // else if parallax is possible AND "off"
-                else if ( ( $this.attachmentWidth >= 1920 && $this.attachmentHeight >= 1200 ) && '0' === $this.parallaxEnabledSwitch.val() ){
-                    $this.parallaxImageOptions.hide();
-                    $this.staticImageOptions.show();
-                }
-                // else if parallax is possible AND "on"
-                else if ( $this.attachmentWidth >= 1920 && $this.attachmentHeight >= 1200 && '1' === $this.parallaxEnabledSwitch.val() ){
-                    $this.staticImageOptions.hide();
-                    $this.parallaxImageOptions.show();
-                }
-            }
-            $this.toggleParallaxEnabledCheckbox();
+            $this.removeMediaButton.show();
 
+            if('1' === $this.canParallax && $this.parallaxEnabledSwitch.prop( 'checked' )){
+                $this.staticImageOptions.hide();
+                $this.parallaxImageOptions.show();
+            } else {
+                $this.parallaxImageOptions.hide();
+                $this.staticImageOptions.show();
+            }
+
+            $this.toggleParallaxEnabledCheckbox();
         }
 
         toggleParallaxEnabledCheckbox( event ){
@@ -150,13 +144,13 @@
             $this.parallaxSettingsTitle.addClass( 'hidden' );
             $this.staticSettingsTitle.addClass( 'hidden' );
 
-            $this.parallaxDirectionSelectBox.trigger( 'change.$' );
+            $($this.parallaxDirectionSelectBox).trigger( 'change.$' );
 
-            if ( $this.parallaxEnabledSwitch.prop( 'checked' ) ){
+            if ( '' !== $this.backgroundImage.attr( 'src' ) ){
                 $this.parallaxSettingsTitle.removeClass( 'hidden' );
 
-                if ( $this.backgroundImage.attr( 'src' ) !== '' ){
-                    if ( $this.parallaxDirectionSelectBox.val() === 'horizontal' ){
+                if ( $this.parallaxEnabledSwitch.prop( 'checked' ) ){
+                    if ( $this.parallaxDirectionSelectBoxTrigger.text() === 'horizontal' ){
                         $this.horizontalScrollDirectionContainer.show();
                         $this.verticalAlignmentContainer.show();
                         $this.verticalScrollDirectionContainer.hide();
@@ -334,6 +328,11 @@
             // Reset the values that are held in hidden fields
             $( "[data-key='cb_parallax_background_image_url_hidden']" ).val( '' );
             $( "[data-key='cb_parallax_attachment_id']" ).val( '' );
+        }
+
+        // Help Tab
+        static initContextualHelp(){
+            $( "#cb-parallax-help-tabs" ).tabs();
         }
     }
 

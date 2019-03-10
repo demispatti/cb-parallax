@@ -123,7 +123,7 @@ class cb_parallax_localisation {
 		
 		$current_screen = get_current_screen();
 		
-		if ( in_array( $current_screen->base, $this->screen_ids ) ) {
+		if ( in_array( $current_screen->base, $this->screen_ids ) && isset($_REQUEST['post']) ) {
 			$section = 'image';
 			$image_options = get_post_meta( (int) $_REQUEST['post'], 'cb_parallax', true );
 		} else {
@@ -230,6 +230,7 @@ class cb_parallax_localisation {
 			$stored_image_options['cb_parallax_attachment_id'] = '';
 			$stored_image_options['cb_parallax_background_image_url'] = '';
 		}
+		$stored_image_options['can_parallax'] = $this->can_parallax( $image_data );
 		
 		$data = array_merge(
 			array( 'image_options' => $stored_image_options ),
@@ -305,7 +306,7 @@ class cb_parallax_localisation {
 			// Switches Texts
 			array(
 				'locale' => get_locale(),
-				'switches_text' => array( 'On' => translate( 'On', $this->domain ), 'Off' => translate( 'Off', $this->domain ) ),
+				'switches_text' => array( 'On' => __( 'On', $this->domain ), 'Off' => __( 'Off', $this->domain ) ),
 			),
 			// Background Color Texts
 			array(
@@ -324,6 +325,21 @@ class cb_parallax_localisation {
 				'reset_settings_confirmation' => __( 'Do you really want to reset the settings?', $this->domain )
 			)
 		);
+	}
+	
+	/**
+	 * Checks the image for the minimum width and height required to make use of the parallax effect.
+	 *
+	 * @param array $image_data
+	 *
+	 * @return string $image_data javascript-conform value for true or false
+	 */
+	private function can_parallax( $image_data ) {
+		
+		$min_width = '1920';
+		$min_height = '1200';
+		
+		return $image_data['image_width'] >= $min_width && $image_data['image_height'] >= $min_height ? '1' : '0';
 	}
 	
 }

@@ -94,6 +94,12 @@ class cb_parallax_upgrade {
 	
 	public $supported_post_types;
 	
+	/**
+	 * cb_parallax_upgrade constructor.
+	 *
+	 * @param $domain
+	 * @param $version
+	 */
 	public function __construct( $domain, $version ) {
 		
 		$this->domain = $domain;
@@ -103,21 +109,33 @@ class cb_parallax_upgrade {
 		$this->retrieve_options();
 	}
 	
+	/**
+	 * Kicks off the options upgrader.
+	 */
 	public function run() {
 		
 		$this->migrate_stored_post_meta();
 		$this->migrate_stored_options();
 	}
 	
+	/**
+	 * Instantiates the class responsible for handling the options
+	 * and sets the required option values.
+	 */
 	private function retrieve_options() {
 		
 		$this->options = new MenuIncludes\cb_parallax_options( $this->domain );
 		$this->image_options_whitelist = $this->options->get_image_options_whitelist();
 		$this->default_image_options = $this->options->get_default_image_options();
 		$this->default_plugin_options = $this->options->get_default_plugin_options();
-		$a = 2;
 	}
 	
+	/**
+	 * Instantiates the class responsible for 'post type support'
+	 * and returns an array containing the supported post types.
+	 *
+	 * @return array
+	 */
 	private function get_supported_post_types() {
 		
 		$post_type_support = new AdminIncludes\cb_parallax_post_type_support();
@@ -125,6 +143,11 @@ class cb_parallax_upgrade {
 		return $post_type_support->get_supported_post_types();
 	}
 	
+	/**
+	 * Migrates the stored post meta data.
+	 *
+	 * @return bool
+	 */
 	public function migrate_stored_post_meta() {
 		
 		$args = array(
@@ -145,6 +168,9 @@ class cb_parallax_upgrade {
 		return true;
 	}
 	
+	/**
+	 * Migrates the stored options.
+	 */
 	private function migrate_stored_options() {
 		
 		$output = null;
@@ -155,6 +181,14 @@ class cb_parallax_upgrade {
 		}
 	}
 	
+	/**
+	 * Replaces values that may were stored in a localized language with the English version
+	 * and fixes a bug regarding the 'scroll down' action ( 'bottom' -> 'to bottom').
+	 *
+	 * @param array $post_meta
+	 *
+	 * @return array $post_meta
+	 */
 	private function migrate_options( $post_meta ) {
 		
 		$image_option_keys = $this->options->get_all_option_keys( 'image' );

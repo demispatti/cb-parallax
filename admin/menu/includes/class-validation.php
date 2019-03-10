@@ -149,7 +149,6 @@ class cb_parallax_validation {
 		
 		$options_meta = $this->options->get_options_arguments( 'image' );
 		$data = array();
-		$errors = array();
 		$validation_value = null;
 		$rgba_pattern = '/(^[a-zA-Z]+$)|(#(?:[0-9a-f]{2}){2,4}|#[0-9a-f]{3}|(?:rgba?|hsla?)\((?:\d+%?(?:deg|rad|grad|turn)?(?:,|\s)+){2,3}[\s\/]*[\d\.]+%?\))/i';
 		$url_pattern = '/^(http:\/\/www\.|https:\/\/www\.|http:\/\/|https:\/\/)?[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(:[0-9]{1,5})?(\/.*)?$/i';

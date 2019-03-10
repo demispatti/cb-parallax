@@ -64,7 +64,6 @@
 
             this.body = $( 'body' );
             this.html = $( 'html' );
-            this.isScrolling = '0';
             this.window = $( window );
             this.imageAspectRatio = this.getBackgroundImageAspectRatio();
             this.context = null;

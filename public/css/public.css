@@ -10,32 +10,15 @@
  * License:           GPL-2.0+
  * License URI:       http://www.gnu.org/licenses/gpl-2.0.txt
  */
-html,
-body,
-#cb_parallax_overlay {
+body {
   display: block;
   box-sizing: border-box;
   margin: 0 auto;
   padding: 0;
   width: 100%;
   height: 100%;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
-}
-
-body.no-nicescroll {
-  background: transparent;
-  overflow-x: auto;
-  overflow-y: scroll;
-}
-
-body.has-nicescroll {
-  background: transparent;
   overflow-x: auto;
   overflow-y: auto;
-  cursor: default !important;
 }
 
 #cb_parallax_overlay {

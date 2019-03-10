@@ -63,6 +63,11 @@ class cb_parallax_post_type_support {
 		}
 	}
 	
+	/**
+	 * Returns an array containing the supported post types.
+	 *
+	 * @return array
+	 */
 	public function get_supported_post_types() {
 		
 		return $this->post_types;

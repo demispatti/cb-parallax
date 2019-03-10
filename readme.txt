@@ -4,8 +4,8 @@ Tags: parallax, responsive, fullscreen, image, background, Hintergrund, Bild, Hi
 Requires at least: 4.9
 Tested up to: 5.1
 Requires PHP: 5.6
-Stable tag: 0.8.0
-Version: 0.8.0
+Stable tag: 0.9.0
+Version: 0.9.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 Author: Demis Patti
@@ -13,25 +13,24 @@ Author URI: https://demispatti.ch
 
 == Description ==
 
-Responsive, parallaxing fullscreen background image.
+Responsive, fullscreen background image with a parallax effect.
 
 == Features ==
 
 - Custom background image
 - One Image for all pages or individual images and effects on a per post basis
-- Compatible with posts, pages and products
+- Compatible with posts, pages, products, and many more
 - Optional fullscreen background parallax effect
 - Works vertically and, for fun, horizontally
-- Supports and is supported by Nicescroll
 - Various overlays to choose from
 
 == Requirements ==
 
 Your theme must support the core WordPress implementation of the [Custom Backgrounds](https://codex.wordpress.org/Custom_Backgrounds) theme feature.
 
-In order to use the parallax feature, I decided to set the minimum required image dimensions to 1920px * 1200px, so that covers a fullHD screen with a slight vertical parallax movement ( Image height - viewport height, so 1200px - 1080px gives 120px offset to move the image. I hope you get the point here.).
+In order to use the parallax feature, I decided to set the minimum required image dimensions to 1920px * 1200px, which covers a fullHD screen with a slight vertical parallax movement ( Image height - viewport height, so 1200px - 1080px gives 120px offset to move the image. I hope you get the point here.).
 
-Your theme's layout must be "boxed" somehow or an opacity should be added to the page content container for the background image to be seen. This is up to you.
+You most likely need to edit some css in order to "uncover" the background image or parts of it respectively. Your theme's layout should be "boxed", or an opacity should be added to the page content container for the background image to be seen.
 
 PHP version 5.6 or above.
 
@@ -45,31 +44,7 @@ PHP version 5.6 or above.
 
 = Where do I interact with this plugin and how does it work? =
 
-Within the meta box, a small box on the post and page edit screen titled "cbParallax", you could:
-
-1. Choose a background image. Depending on its dimensions you will be presented with a switch for enabling the parallax effect.
-2. Leave the switch off, since you should first set the options for a static state.
-3. Set the options below the image as you need.
-4. Turn on the switch.
-5. Set the options below the image as you need.
-
-Within the settings page located under "Settings > cbParallax", you could:
-
-1. Choose a background image. Depending on its dimensions you will be presented with a switch for enabling the parallax effect.
-2. Leave the switch off, since you should first set the options for a static state.
-3. Set the options below the image as you need.
-4. Turn on the switch.
-5. Set the options below the image as you need.
-6. Choose whether to use these settings globally for all pages (global).
-7. Choose whether to allow overriding these settings with the image you define on single posts and pages.
-8. Set the options for "scroll behaviour" and "mobile", and you're good to go :-)
-9. Enjoy!
-
-Save your work and visit the page :-)
-
-= What was that about "Nicescroll"? =
-
-I really like Nicescroll. I like its scroll behaviour, its momentum-scroll, its easing,... smile. It is perfect for parallaxing.  So I implemented it for a smooth cross-browser scrolling experience. I modified it slightly, tough, to preserve the browser-specific default vertical scrollbar. If you bring your "own" Nicescroll library, which could be the case with other plugins or your theme, this mod will not be loaded. So there won't be any conflict regarding this popular library, preserving it's unique scrolling behaviour.
+Please visit the plugin help tab for further information.
 
 = Why doesn't it work with my theme? =
 
@@ -82,15 +57,13 @@ You'll need to check with your theme author to see if they'll add support or swi
 
 That's unlikely.
 Just to make sure, check with your theme author and make sure that they support the WordPress `custom-background` theme feature.
-It can't be something custom your theme author created.  It must be the WordPress feature.
-
-Assuming your theme does support `custom-background` and this plugin still isn't working, your theme is most likely implementing the custom background feature incorrectly.  However, I'll be more than happy to take a look.
+Also, make sure that no container element is covering the element that holds the background image
 
 = How do I add support for this in a theme? =
 
-Your theme must support the [Custom Backgrounds](https://codex.wordpress.org/Custom_Backgrounds) feature for this plugin to work.
+Your theme must support the [Custom Backgrounds] (https://codex.wordpress.org/Custom_Backgrounds) feature for this plugin to work.
 
-If you're a theme author, consider adding support for this if you can make it fit in with your design.  The following is the basic code, but check out the above link.
+If you're a theme author, consider adding support for this feature if you can make it fit in with your design.  The following is the basic code, but check out the above link.
 
 	add_theme_support( 'custom-background' );
 
@@ -100,9 +73,11 @@ This is not really a limitation of functionality, but since the background image
 
 = Can you help me? =
 
-Yes. I have a look at the plugin's support page two or three times a week and I provide some basic support there.
+Yes. I have a look at the plugin's support page two or three times a month and I provide some basic support there.
 
 = Are there any known issues? =
+
+1. Nope
 
 == Screenshots ==
 
@@ -111,6 +86,11 @@ Yes. I have a look at the plugin's support page two or three times a week and I 
 3. Custom background meta box on the edit post screen.
 
 == Changelog ==
+
+= Version 0.9.1 =
+1. Fixed bugs related to 'image move direction'
+2. Extended the contextual help
+3. Updated readme file
 
 = Version 0.9.0 =
 1. Face lifted the user interface
@@ -123,7 +103,7 @@ Yes. I have a look at the plugin's support page two or three times a week and I 
 2. The color picker accepts input via keyboard again
 3. Re-introduced a background color for the parallax image
 4. Minor code changes
-5 Minor code clean up
+5. Minor code clean up
 6. Some bug fixes
 7. Removed Github link
 8. Slowed down scrolling speed

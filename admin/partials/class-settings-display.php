@@ -185,12 +185,13 @@ class cb_parallax_settings_display {
 		
 		$placeholder_image_class = '' === $url ? '' : 'hidden';
 		$postfix = 'plugin' === $section ? '' : '-small';
-		$placeholder_image_url = CBPARALLAX_ROOT_URL . 'admin/menu/images/placeholder' . $postfix . '.png';
+		$img_postfix = 'de_DE' === get_locale() ? 'de' : 'default';
+		$placeholder_image_url = CBPARALLAX_ROOT_URL . 'admin/menu/images/placeholder' . $postfix . '-' . $img_postfix . '.png';
 		
 		ob_start();
 		?>
         <div class="cb-parallax-image-container">
-            <a href="#" class="cb-parallax-media-url <?php /*echo $class*/ ?>">
+            <a href="#" class="cb-parallax-media-url">
                 <img id="cb_parallax_options[cb_parallax_background_image_url]" class="cb_parallax_background_image" alt=""
                     src="<?php echo esc_url( $url ) ?>" data-key="cb_parallax_background_image_url" data-input="cb-parallax"/>
                 <img id="cb_parallax_placeholder_image" class="cb_parallax_placeholder_image <?php echo $placeholder_image_class ?>" alt=""
@@ -297,8 +298,7 @@ class cb_parallax_settings_display {
                     class="floating-element fancy-select cb-parallax-fancy-select cb-parallax-input-select" data-key="<?php echo $option_key; ?>"
                     data-input="cb-parallax" id="<?php echo 'cb_parallax_options' ?>[<?php echo $option_key; ?>]">
 					<?php foreach ( $select_values as $key => $select_value ) { ?>
-                        <option
-                            value="<?php echo $value ?>" <?php echo selected( $value, $select_value, false ); ?> ><?php echo translate( $select_value, $this->domain ); ?></option>
+                        <option value="<?php echo $select_value ?>" <?php echo selected( $value, $select_value, false ); ?> ><?php echo translate( $select_value, $this->domain ); ?></option>
 					<?php } ?>
                 </select>
             </p>

@@ -76,7 +76,7 @@ class cb_parallax_contextual_help {
 	 * @since 0.9.0
 	 * @return void
 	 */
-	public function initialize() {
+	private function initialize() {
 		
 		add_action( "load-{$GLOBALS['pagenow']}", array( $this, 'add_contextual_help' ), 15 );
 	}

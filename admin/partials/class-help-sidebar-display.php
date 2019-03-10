@@ -35,10 +35,7 @@ class cb_parallax_help_sidebar_display {
 		ob_start();
 		?>
 
-        <p><?php echo __( 'More Info', $domain ) ?>
-            <a target="_blank"
-                href="#"><?php echo __( 'Coming Soon', $domain ) ?></a>.
-        </p>
+        <p><?php /*echo __( 'More Info', $domain )*/ ?></p>
 		
 		<?php
 		$html .= ob_get_contents();
