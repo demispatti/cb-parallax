@@ -49,8 +49,8 @@ if ( ! class_exists( 'AdminMenu\cb_parallax_menu' ) ) {
  * @since             0.1.0
  * @package           cb_parallax
  * @subpackage        cb_parallax/admin
- * Author:            Demis Patti <demis@demispatti.ch>
- * Author URI:        http://demispatti.ch
+ * Author:            Demis Patti <demispatti@gmail.com>
+ * Author URI:
  * License:           GPL-2.0+
  * License URI:       http://www.gnu.org/licenses/gpl-2.0.txt
  */

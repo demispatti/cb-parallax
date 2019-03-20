@@ -29,7 +29,7 @@ if ( ! defined( 'WPINC' ) ) {
  * Plugin URI:        https://wordpress.org/plugins/cb-parallax/
  * Description:       Let's you add <a href="http://codex.wordpress.org/Custom_Backgrounds" target="_blank">custom background</a> - with or without vertical or horizontal parallax effect - for single posts, pages and products. It requires your theme to support the WordPress <code>custom-background</code> feature. It also requires you to set your theme's layout to "boxed" and / or to add a transparency to the container that holds the content in order to make the background image visible / shine trough.
  * Author:            Demis Patti
- * Author URI:        https://demispatti.ch
+ * Author URI:
  * License:           GPL-2.0+
  * License URI:       https://www.gnu.org/licenses/gpl-2.0.txt
  * Version:           0.9.1

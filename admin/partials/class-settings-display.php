@@ -22,8 +22,8 @@ if ( ! class_exists( 'MenuIncludes\cb_parallax_validation' ) ) {
  * @since             0.6.0
  * @package           cb_parallax
  * @subpackage        cb_parallax/admin/menu/includes
- * Author:            Demis Patti <demis@demispatti.ch>
- * Author URI:        http://demispatti.ch
+ * Author:            Demis Patti <demispatti@gmail.com>
+ * Author URI:
  * License:           GPL-2.0+
  * License URI:       http://www.gnu.org/licenses/gpl-2.0.txt
  */
