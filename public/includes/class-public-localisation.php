@@ -18,8 +18,8 @@ if ( ! defined( 'WPINC' ) ) {
  * @since             0.1.0
  * @package           cb_parallax
  * @subpackage        cb_parallax/public/includes
- * Author:            Demis Patti <demispatti@gmail.com>
- * Author URI:
+ * Author:            Demis Patti <demis@demispatti.ch>
+ * Author URI:        http://demispatti.ch
  * License:           GPL-2.0+
  *  License URI:       http://www.gnu.org/licenses/gpl-2.0.txt
  */
@@ -177,6 +177,7 @@ class cb_parallax_public_localisation {
 		$overlay_options = $this->get_overlay_options( $stored_image_options );
 		$stored_image_options['can_parallax'] = $this->can_parallax( $image_data );
 		$has_nsr = '1' === get_transient( 'cb_parallax_has_nsr' ) ? '1' : '0';
+		$image_source = $this->options->determine_options_source( $post );
 		
 		$data = array_merge(
 			array( 'strings' => $none_string ),
@@ -184,13 +185,14 @@ class cb_parallax_public_localisation {
 			array( 'image_data' => $image_data ),
 			array( 'image_options' => $stored_image_options ),
 			array( 'overlay_options' => $overlay_options ),
-			array( 'nicescrollr' => array( 'cb_parallax_has_nsr' => $has_nsr ) )
+			array( 'nicescrollr' => array( 'cb_parallax_has_nsr' => $has_nsr ) ),
+			array( 'image_source' => array('source' => $image_source) )
 		);
 		
 		$prepared_data = array();
 		foreach ( $data as $section => $array ) {
 			foreach ( $array as $key => $value ) {
-				$key = preg_replace( '/cb_parallax_/', '', $key );
+				$key = str_replace( 'cb_parallax_', '', $key );
 				$prepared_data[ $section ][ $key ] = $value;
 			}
 		}
@@ -243,5 +245,5 @@ class cb_parallax_public_localisation {
 		
 		return $image_data['image_width'] >= $min_width && $image_data['image_height'] >= $min_height ? '1' : '0';
 	}
-	
+
 }

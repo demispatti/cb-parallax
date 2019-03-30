@@ -572,8 +572,10 @@
     }
 
     $( document ).one( 'ready', function(){
-        let cbParallaxPublic = new CbParallaxPublic();
-        cbParallaxPublic.init();
+        if('none' !== Cb_Parallax_Public.image_source.source){
+            let cbParallaxPublic = new CbParallaxPublic();
+            cbParallaxPublic.init();
+        }
     } );
 
 } )( jQuery );

@@ -26,8 +26,8 @@ if ( ! class_exists( 'PublicIncludes\cb_parallax_public_localisation' ) ) {
  * @since             0.1.0
  * @package           cb_parallax
  * @subpackage        cb_parallax/public
- * Author:            Demis Patti <demispatti@gmail.com>
- * Author URI:
+ * Author:            Demis Patti <demis@demispatti.ch>
+ * Author URI:        http://demispatti.ch
  * License:           GPL-2.0+
  * License URI:       http://www.gnu.org/licenses/gpl-2.0.txt
  */

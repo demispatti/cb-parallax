@@ -788,8 +788,8 @@ msgstr "https://demispatti.ch"
 #~ msgid "https://github.com/demispatti/cb-parallax"
 #~ msgstr "https://github.com/demispatti/cb-parallax"
 
-#~ msgid "Demis Patti <demispatti@gmail.com>"
-#~ msgstr "Demis Patti <demispatti@gmail.com>"
+#~ msgid "Demis Patti <demis@demispatti.ch>"
+#~ msgstr "Demis Patti <demis@demispatti.ch>"
 
 #~ msgid "Select overlay color (experimental, ev. disabled in this release)."
 #~ msgstr ""

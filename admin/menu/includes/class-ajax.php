@@ -17,7 +17,7 @@ if ( ! defined( 'WPINC' ) ) {
  * @since             0.9.0
  * @package           bonaire
  * @subpackage        bonaire/admin/includes
- * @author            Demis Patti <demispatti@gmail.com>
+ * @author            Demis Patti <demis@demispatti.ch>
  */
 class cb_parallax_ajax {
 	
@@ -110,7 +110,7 @@ class cb_parallax_ajax {
 		}
 		
 		// Save options
-		$result = $this->options->save_options( $post_id, $data );
+		$result = $this->options->save_options( $data, $post_id );
 		if ( is_wp_error( $result ) ) {
 			/**
 			 * @var \WP_Error $result

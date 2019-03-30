@@ -23,8 +23,8 @@ if ( ! defined( 'WPINC' ) ) {
  * @since             0.1.0
  * @package           cb_parallax
  * @subpackage        cb_parallax/admin/includes
- * Author:            Demis Patti <demispatti@gmail.com>
- * Author URI:
+ * Author:            Demis Patti <demis@demispatti.ch>
+ * Author URI:        http://demispatti.ch
  * License:           GPL-2.0+
  * License URI:       http://www.gnu.org/licenses/gpl-2.0.txt
  */
@@ -286,7 +286,7 @@ class cb_parallax_meta_box {
 			$data[ $key ] = isset( $posted_data[ $key ] ) ? $posted_data[ $key ] : null;
 		}
 		
-		$this->options->save_options( (int) $post_id, $data );
+		$this->options->save_options( $data, (int) $post_id );
 	}
 	
 }

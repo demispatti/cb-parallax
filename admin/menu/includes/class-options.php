@@ -20,8 +20,8 @@ if ( ! defined( 'WPINC' ) ) {
  * @since             0.6.0
  * @package           cb_parallax
  * @subpackage        cb_parallax/admin/menu/includes
- * Author:            Demis Patti <demispatti@gmail.com>
- * Author URI:
+ * Author:            Demis Patti <demis@demispatti.ch>
+ * Author URI:        http://demispatti.ch
  * License:           GPL-2.0+
  * License URI:       http://www.gnu.org/licenses/gpl-2.0.txt
  */
@@ -735,7 +735,7 @@ class cb_parallax_options {
 	/**
 	 * Returns the plugin options based on the plugin settings or the post meta data respectively.
 	 *
-	 * @param bool false | \WP_Post $post
+	 * @param mixed | \WP_Post $post | bool false
 	 *
 	 * @return array
 	 */
@@ -748,17 +748,15 @@ class cb_parallax_options {
 		$plugin_options_keys[] = 'cb_parallax_parallax_enabled';
 		
 		// If a page or post is requested AND the options are fetched on a per post basis
-		if ( is_a( $post, 'WP_Post' ) ) {
+		if ( is_a( $post, '\WP_Post' ) && 'per_page' === $this->determine_options_source( $post ) ) {
 			/**
 			 * @var \WP_Post $post
 			 */
-			if ( 'per_page' === $this->determine_options_source( $post ) ) {
-				$post_meta = get_post_meta( $post->ID, 'cb_parallax', true );
-				// Check the stored value and set it to '0' if it isn't set
-				$stored_options['cb_parallax_parallax_enabled'] = isset( $stored_options['cb_parallax_parallax_enabled'] ) ? $stored_options['cb_parallax_parallax_enabled'] : '0';
-				// Maybe overwrite the value with the one from the post meta data
-				$stored_options['cb_parallax_parallax_enabled'] = isset( $post_meta['cb_parallax_parallax_enabled'] ) ? $post_meta['cb_parallax_parallax_enabled'] : $stored_options['cb_parallax_parallax_enabled'];
-			}
+			$post_meta = get_post_meta( $post->ID, 'cb_parallax', true );
+			// Check the stored value and set it to '0' if it isn't set
+			$stored_options['cb_parallax_parallax_enabled'] = isset( $stored_options['cb_parallax_parallax_enabled'] ) ? $stored_options['cb_parallax_parallax_enabled'] : '0';
+			// Maybe overwrite the value with the one from the post meta data
+			$stored_options['cb_parallax_parallax_enabled'] = isset( $post_meta['cb_parallax_parallax_enabled'] ) ? $post_meta['cb_parallax_parallax_enabled'] : $stored_options['cb_parallax_parallax_enabled'];
 		}
 		
 		foreach ( $plugin_options_keys as $i => $key ) {
@@ -771,7 +769,7 @@ class cb_parallax_options {
 	/**
 	 * Returns the image options based on the plugin settings or the post meta data respectively.
 	 *
-	 * @param bool false | \WP_Post $post
+	 * @param mixed | \WP_Post $post | bool false
 	 *
 	 * @return array $image_options
 	 */
@@ -783,12 +781,13 @@ class cb_parallax_options {
 		$default_plugin_options = $this->get_default_plugin_options();
 		
 		// If a page or post is requested AND the options are fetched on a per post basis
+		$serve_image_how = $this->determine_options_source( $post );
 		if ( is_a( $post, '\WP_Post' ) ) {
 			/**
 			 * @var \WP_Post $post
 			 */
-			$serve_image_how = $this->determine_options_source( $post );
-			if ( ! is_admin() && 'per_page' === $serve_image_how || is_admin() ) {
+			//$serve_image_how = $this->determine_options_source( $post );
+			if ( (! is_admin() && 'per_page' === $serve_image_how) || is_admin() ) {
 				$post_meta = get_post_meta( $post->ID, 'cb_parallax', true );
 				// Merge the optons to get the plugin options combined with the overridden image options from 'post meta'.
 				if ( is_array( $post_meta ) ) {
@@ -819,26 +818,26 @@ class cb_parallax_options {
 	 *
 	 * @return string $result
 	 */
-	private function determine_options_source( $post ) {
+	public function determine_options_source( $post ) {
 		
 		$stored_options = get_option( 'cb_parallax_options' );
-		$is_global = isset($stored_options['cb_parallax_global']) ? $stored_options['cb_parallax_global'] : '1';
-		$is_allow_override = isset($stored_options['cb_parallax_allow_override']) ? $stored_options['cb_parallax_allow_override'] : '0';
-		
-		// Determines the options source: 'global' === from stored options, 'per_page' === from post meta
-		$result = 'global';
-		if ( '1' === $is_global && '1' === $is_allow_override ) {
-			$result = 'per_page';
+		$is_sidewide = isset($stored_options['cb_parallax_global']) && '1' === $stored_options['cb_parallax_global'];
+		$is_per_page_allowed = isset($stored_options['cb_parallax_allow_override']) && '1' === $stored_options['cb_parallax_allow_override'];
+		$is_post = isset($post);
+		$has_image_url_in_post_meta = false;
+		if($is_post){
+			$has_image_url_in_post_meta = isset( get_post_meta( $post->ID, 'cb_parallax', true )['cb_parallax_background_image_url'] ) && '' !== get_post_meta( $post->ID, 'cb_parallax', true )['cb_parallax_background_image_url'];
 		}
-		// If 'per_page', get the 'post_meta' from the requested page or post to determine if there is a background image to display
-		if ( 'per_page' === $result ) {
-			$post_meta = get_post_meta( $post->ID, 'cb_parallax', true );
-			if ( isset( $post_meta['cb_parallax_background_image_url'] ) && '' === $post_meta['cb_parallax_background_image_url'] ) {
-				$result = 'global';
-			}
-		}
-		if ( '0' === $is_global ) {
+		$has_image_url_in_options = false === $is_post ? $stored_options['cb_parallax_background_image_url'] : false;
+
+		// Determine image source
+		$result = 'none';
+		if ( $is_sidewide && false === $is_per_page_allowed  && $has_image_url_in_options ) {
 			$result = 'global';
+		} else if ( $is_sidewide && $is_per_page_allowed && false === $has_image_url_in_post_meta && $has_image_url_in_options ) {
+			$result = 'global';
+		} else if ( $is_per_page_allowed && $has_image_url_in_post_meta ) {
+			$result = 'per_page';
 		}
 		
 		return $result;
@@ -852,7 +851,7 @@ class cb_parallax_options {
 	 *
 	 * @return bool|\WP_Error
 	 */
-	public function save_options( $post_id = '', $input ) {
+	public function save_options( $input, $post_id = '' ) {
 		
 		$validation = new MenuIncludes\cb_parallax_validation( $this->domain, $this );
 		

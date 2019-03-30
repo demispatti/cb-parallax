@@ -27,7 +27,7 @@ if ( ! class_exists( 'AdminPartials\cb_parallax_help_sidebar_display' ) ) {
  * @since             0.9.0
  * @package           bonaire
  * @subpackage        bonaire/admin/includes
- * @author            Demis Patti <demispatti@gmail.com>
+ * @author            Demis Patti <demis@demispatti.ch>
  */
 class cb_parallax_contextual_help {
 	

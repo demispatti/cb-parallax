@@ -2,7 +2,7 @@
 
 namespace CbParallax;
 
-use CbParallax\Includes as Includes;
+use CbParallax\Includes;
 
 /**
  * If this file is called directly, abort.
@@ -24,19 +24,20 @@ if ( ! defined( 'WPINC' ) ) {
  * @link              https://wordpress.org/plugins/cb-parallax/
  * @since             0.1.0
  * @package           cb_parallax
+ * @author            demispatti
  * @wordpress-plugin
  * Plugin Name:       cbParallax
  * Plugin URI:        https://wordpress.org/plugins/cb-parallax/
  * Description:       Let's you add <a href="http://codex.wordpress.org/Custom_Backgrounds" target="_blank">custom background</a> - with or without vertical or horizontal parallax effect - for single posts, pages and products. It requires your theme to support the WordPress <code>custom-background</code> feature. It also requires you to set your theme's layout to "boxed" and / or to add a transparency to the container that holds the content in order to make the background image visible / shine trough.
  * Author:            Demis Patti
- * Author URI:
+ * Author URI:        https://demispatti.ch
  * License:           GPL-2.0+
  * License URI:       https://www.gnu.org/licenses/gpl-2.0.txt
- * Version:           0.9.1
- * Stable tag:        0.9.1
+ * Version:           0.9.2.2
+ * Stable tag:        0.9.2.2
  * Requires at least: 4.9
  * Tested up to:      5.1
- * Requires PHP:      5.6
+ * Requires PHP:      5.4+
  * Text Domain:       cb-parallax
  * Domain Path:       /languages
  */
@@ -45,10 +46,10 @@ if ( ! defined( 'WPINC' ) ) {
  * Define the constants for the plugin paths.
  */
 if ( ! defined( 'CBPARALLAX_ROOT_DIR' ) ) {
-	define( 'CBPARALLAX_ROOT_DIR', plugin_dir_path( __FILE__ ) );
+	define( 'CBPARALLAX_ROOT_DIR',  plugin_dir_path( __FILE__ ) );
 }
 if ( ! defined( 'CBPARALLAX_ROOT_URL' ) ) {
-	define( 'CBPARALLAX_ROOT_URL', plugin_dir_url( __FILE__ ) );
+	define( 'CBPARALLAX_ROOT_URL',  plugin_dir_url( __FILE__ ) );
 }
 
 /**
