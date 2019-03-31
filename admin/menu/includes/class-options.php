@@ -828,7 +828,7 @@ class cb_parallax_options {
 		if($is_post){
 			$has_image_url_in_post_meta = isset( get_post_meta( $post->ID, 'cb_parallax', true )['cb_parallax_background_image_url'] ) && '' !== get_post_meta( $post->ID, 'cb_parallax', true )['cb_parallax_background_image_url'];
 		}
-		$has_image_url_in_options = false === $is_post ? $stored_options['cb_parallax_background_image_url'] : false;
+		$has_image_url_in_options = true === $is_post ? $stored_options['cb_parallax_background_image_url'] : false;
 
 		// Determine image source
 		$result = 'none';

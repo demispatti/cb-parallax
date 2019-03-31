@@ -4,8 +4,8 @@ Tags: parallax, responsive, fullscreen, image, background, Hintergrund, Bild, Hi
 Requires at least: 4.9
 Tested up to: 5.1
 Requires PHP: 5.6
-Stable tag: 0.9.2.2
-Version: 0.9.2.2
+Stable tag: 0.9.2.3
+Version: 0.9.2.3
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 Author: Demis Patti
