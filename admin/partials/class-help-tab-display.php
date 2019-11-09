@@ -72,7 +72,7 @@ class cb_parallax_help_tab_display {
 				<?php echo __( 'Background Image Settings', $domain ) ?>
             </h4>
             <div class="image-holder">
-                <img src="<?php echo CBPARALLAX_ROOT_URL . 'admin/images/contextual-help/tab-1/settings-page-' . $img_postfix . '.png' ?>);" alt="Contextual Help Image"/>
+                <img src="<?php echo CBPARALLAX_ROOT_URL . 'admin/images/contextual-help/tab-1/settings-page-' . $img_postfix . '.png'?>" alt="Contextual Help Image"/>
             </div>
             <div class="item-description">
 				<?php /*echo __( 'Soon, there will be more.', $domain )*/ ?>

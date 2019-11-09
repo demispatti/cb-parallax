@@ -1,28 +1,35 @@
 .contextual-help-tabs-wrap {
   padding: 8px 0 0 0;
 }
+
 .contextual-help-tabs-wrap p, .contextual-help-tabs-wrap a, .contextual-help-tabs-wrap span, .contextual-help-tabs-wrap strong, .contextual-help-tabs-wrap ul, .contextual-help-tabs-wrap li {
   font-size: 13px !important;
   line-height: 1.95rem !important;
 }
+
 .contextual-help-tabs-wrap #tab-panel-cb-parallax-help-tab {
   margin-right: 0;
   margin-bottom: 0;
 }
+
 .contextual-help-tabs-wrap ul.ui-corner-all {
   border: unset;
   border-radius: unset;
   background: unset;
 }
+
 .contextual-help-tabs-wrap ul.ui-corner-all li {
   border-color: #E1E1E1;
 }
+
 .contextual-help-tabs-wrap ul.ui-corner-all li a {
   padding-top: 3px;
 }
+
 .contextual-help-tabs-wrap ul.ui-corner-all li a:active, .contextual-help-tabs-wrap ul.ui-corner-all li a:focus {
   outline: none;
 }
+
 .contextual-help-tabs-wrap .item-container {
   display: block;
   box-sizing: border-box;
@@ -32,24 +39,27 @@
   /*@include flexbox();
   flex-direction: row;
   flex-basis: 60%;*/
-                /*padding-right: 20px;
-                overflow: hidden;
+    /*padding-right: 20px;
+    overflow: hidden;
 
-                &:last-of-type {
-                    padding-right: 0;
-                }*/
+    &:last-of-type {
+        padding-right: 0;
+    }*/
 }
+
 .contextual-help-tabs-wrap .item-container .item-description,
 .contextual-help-tabs-wrap .item-container .item-images {
   flex-direction: column;
   overflow: hidden;
 }
+
 .contextual-help-tabs-wrap .item-container .item-description {
   width: 34%;
   padding-right: 20px;
   flex-basis: 40%;
   margin-bottom: 60px;
 }
+
 .contextual-help-tabs-wrap .item-container div.image-holder {
   box-sizing: border-box;
   display: block;
@@ -60,6 +70,7 @@
   background-repeat: no-repeat;
   overflow: hidden;
 }
+
 .contextual-help-tabs-wrap .item-container div.image-holder img {
   box-sizing: border-box;
   display: block;
@@ -69,6 +80,7 @@
   margin-right: 20px;
   overflow: hidden;
 }
+
 .contextual-help-tabs-wrap #cb-parallax-help-tabs {
   padding: 0 24px 24px 24px;
   border: unset;
@@ -76,21 +88,27 @@
   background: unset;
   overflow: hidden;
 }
+
 .contextual-help-tabs-wrap #cb-parallax-help-tabs .cb-parallax-help-tabs {
   overflow: hidden;
 }
+
 .contextual-help-tabs-wrap #cb-parallax-help-tabs #tabs-1 .item-container {
   width: 80%;
 }
+
 .contextual-help-tabs-wrap #cb-parallax-help-tabs #tabs-1 img {
   width: 80%;
 }
+
 .contextual-help-tabs-wrap #cb-parallax-help-tabs #tabs-3 .item-container {
   width: 80%;
 }
+
 .contextual-help-tabs-wrap #cb-parallax-help-tabs #tabs-3 img {
   width: 80%;
 }
+
 .contextual-help-tabs-wrap #cb-parallax-help-tabs ul.nav {
   display: -webkit-box;
   display: -moz-box;
@@ -100,19 +118,24 @@
   flex-wrap: wrap;
   border-bottom: 1px solid #eee;
 }
+
 .contextual-help-tabs-wrap #cb-parallax-help-tabs ul.nav li {
   list-style: none;
 }
+
 .contextual-help-tabs-wrap #cb-parallax-help-tabs ul.nav li a {
   font-size: 13px !important;
   line-height: 1.95rem !important;
 }
+
 .contextual-help-tabs-wrap #cb-parallax-help-tabs ul.nav li.ui-state-default {
   background: #fafafa;
 }
+
 .contextual-help-tabs-wrap #cb-parallax-help-tabs ul.nav li.ui-state-default.ui-state-active {
   background: #fff;
 }
+
 .contextual-help-tabs-wrap .ui-tabs-panel {
   display: -webkit-box;
   display: -moz-box;
@@ -126,13 +149,16 @@
   background: #fff;
   overflow: hidden;
 }
+
 .contextual-help-tabs-wrap span.info {
   background-color: rgba(0, 0, 0, 0.08);
   border-bottom: rgba(0, 0, 0, 0.6);
 }
+
 .contextual-help-tabs-wrap ul.list {
   margin-top: 0;
 }
+
 .contextual-help-tabs-wrap ul.list li {
   list-style: none;
 }
@@ -142,10 +168,12 @@
     width: 100%;
     padding: 0;
   }
+
   .contextual-help-tabs-wrap .item-images {
     width: 100%;
     flex-direction: column;
   }
+
   .contextual-help-tabs-wrap .item-images div {
     margin-bottom: 20px;
     padding-right: 0;
@@ -155,10 +183,12 @@
   .contextual-help-tabs-wrap .item-description {
     margin-bottom: 20px;
   }
+
   .contextual-help-tabs-wrap .item-images {
     width: 100%;
     flex-direction: column;
   }
+
   .contextual-help-tabs-wrap .ui-tabs-panel {
     flex-direction: column;
   }
@@ -319,20 +349,25 @@
   box-sizing: border-box;
   width: 100%;
 }
+
 #cb_parallax_settings_form .fancy-select {
   box-sizing: border-box;
   width: 100%;
 }
+
 #cb_parallax_settings_form .fancy-select select {
   box-sizing: border-box;
   width: 100%;
 }
+
 #cb_parallax_settings_form .fancy-select select:focus + div.trigger {
   box-shadow: 0 0 0 2px #4b5468;
 }
+
 #cb_parallax_settings_form .fancy-select select:focus + div.trigger.open {
   box-shadow: none;
 }
+
 #cb_parallax_settings_form .fancy-select div.trigger {
   box-sizing: border-box;
   border-radius: 4px;
@@ -349,20 +384,24 @@
   height: 100%;
   transition: all 0.1s ease-out;
 }
+
 #cb_parallax_settings_form .fancy-select div.trigger:after {
   content: "";
   border: 5px solid transparent;
   border-top-color: #F1F1F1;
 }
+
 #cb_parallax_settings_form .fancy-select div.trigger.open {
   background: #F1F1F1;
   border: 1px solid #F1F1F1;
   color: #444;
   box-shadow: none;
 }
+
 #cb_parallax_settings_form .fancy-select div.trigger.open:after {
   border-top-color: #F1F1F1;
 }
+
 #cb_parallax_settings_form .fancy-select ul.options {
   width: 102%;
   border-top-color: #F1F1F1;
@@ -370,24 +409,30 @@
   margin: 0 auto;
   overflow-y: scroll !important;
 }
+
 #cb_parallax_settings_form .fancy-select ul.options::-webkit-scrollbar {
   -webkit-appearance: none;
   width: 7px;
 }
+
 #cb_parallax_settings_form .fancy-select ul.options::-webkit-scrollbar-thumb {
   border-radius: 4px;
   background-color: rgba(0, 0, 0, 0.5);
   -webkit-box-shadow: 0 0 1px rgba(255, 255, 255, 0.5);
 }
+
 #cb_parallax_settings_form .fancy-select ul.options.open {
   z-index: 1000000;
 }
+
 #cb_parallax_settings_form .fancy-select ul.options.overflowing {
   transition: opacity 0.1s ease-out, bottom 0.1s ease-out, visibility 0.1s ease-out;
 }
+
 #cb_parallax_settings_form .fancy-select ul.options.overflowing.open {
   transition: opacity 0.1s ease-out, bottom 0.1s ease-out;
 }
+
 #cb_parallax_settings_form .fancy-select ul.options li {
   color: #444;
   cursor: pointer;
@@ -397,10 +442,12 @@
   padding: 8px 12px;
   margin: 0 0 0 0;
 }
+
 #cb_parallax_settings_form .fancy-select ul.options li.selected {
   background: #f1f1f1 !important;
   color: #444;
 }
+
 #cb_parallax_settings_form .fancy-select ul.options li.hover {
   color: #444;
 }
@@ -410,6 +457,7 @@
   width: auto;
   overflow: hidden;
 }
+
 #cb_parallax_settings_form .wp-picker-container.wp-picker-active {
   z-index: 1000001;
 }
@@ -442,11 +490,13 @@
   overflow: visible;
   margin: 0 0 20px 0;
 }
+
 .cb-parallax-single-option-container#cb_parallax_parallax_enabled_container, .cb-parallax-single-option-container#cb_parallax_global_container, .cb-parallax-single-option-container#cb_parallax_allow_override_container, .cb-parallax-single-option-container#cb_parallax_preserve_scrolling_container, .cb-parallax-single-option-container#cb_parallax_disable_on_mobile_container {
   padding-top: 10px;
   height: 40px;
   margin: 0 0 0 0;
 }
+
 .cb-parallax-single-option-container#cb_parallax_background_color_container, .cb-parallax-single-option-container#cb_parallax_overlay_color_container {
   overflow: hidden;
   min-height: 80px;
@@ -563,6 +613,7 @@
   z-index: 10;
   margin-bottom: 0;
 }
+
 .cb-parallax-media-url.disabled {
   pointer-events: none;
 }
@@ -574,6 +625,7 @@
   z-index: 10;
   margin-bottom: 0;
 }
+
 #cb_parallax_placeholder_image.hidden {
   display: none;
 }
@@ -597,6 +649,7 @@
   text-align: right;
   width: 100%;
 }
+
 .cb-parallax-remove-media-button-container + div {
   height: auto;
   max-height: unset;

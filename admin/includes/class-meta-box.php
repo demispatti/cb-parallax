@@ -266,7 +266,12 @@ class cb_parallax_meta_box {
 		if ( ! isset( $_POST['cb_parallax_nonce'] ) || ! wp_verify_nonce( $_POST['cb_parallax_nonce'], 'cb_parallax_nonce_field' ) ) {
 			return;
 		}
-		// Get the post type object.
+
+		/**
+		 * Get the post type object.
+		 *
+		 * @var WP_Post $post_type
+		 */
 		$post_type = get_post_type_object( $post->post_type );
 		// Check if the current user has permission to edit the post.
 		if ( ! current_user_can( $post_type->cap->edit_post, $post_id ) ) {

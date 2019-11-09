@@ -4,12 +4,11 @@ Tags: parallax, responsive, fullscreen, image, background, Hintergrund, Bild, Hi
 Requires at least: 5.1  
 Tested up to: 5.3  
 Requires PHP: 5.6+  
-Stable tag: 0.9.2.3   
-Version: 0.9.2.3  
+Stable tag: 0.9.3  
+Version: 0.9.3  
 License: GPLv2 or later  
 License URI: https://www.gnu.org/licenses/gpl-2.0.html  
 Author: Demis Patti  
-Author URI: https://demispatti.ch  
 
 == Description ==
 
@@ -86,6 +85,10 @@ Yes. I have a look at the plugin's support page two or three times a month and I
 3. Custom background meta box on the edit post screen.
 
 == Changelog ==
+
+= Version 0.9.3 =
+1. Fixed issues with older IE versions
+2. Fixed issues with contextual help
 
 = Version 0.9.2 =
 1. Fixed image source detection
