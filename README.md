@@ -1,6 +1,6 @@
 === cbParallax ===  
 Tags: parallax, responsive, fullscreen, image, background, Hintergrund, Bild, Hintergrundbild  
-Requires at least: 5.3  
+Requires at least: 5.1  
 Tested up to: 5.3  
 Requires PHP: 5.6+  
 Stable tag: 0.9.4  
@@ -57,7 +57,6 @@ If you're a theme author, consider adding support for this feature if you can ma
 	add_theme_support( 'custom-background' );
 
 = Are there any known limitations? =
-* As of version 0.9.4, Internet Explorer up to version 11 is not supported anymore. Microsoft Edge browser works as expected.
 * This is not really a limitation of functionality, but since the background image container wraps the body element, it usually resembles the viewport dimensions. This means, that on themes where the navigation bar is on the side, the sidebar covers a part of the viewport and thus also a part of the image (logic, but noteworthy).
 
 = Can you help me? =  
@@ -76,7 +75,6 @@ Yes. I have a look at the plugin's support page two or three times a month and I
 
 = Version 0.9.4 = 
 1. Optimized CSS for WordPress version 5.3
-2. Set minimum WordPress version to 5.3
 
 = Version 0.9.3 =
 1. Fixed issues with older IE versions
