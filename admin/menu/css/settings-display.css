@@ -382,6 +382,7 @@
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
   width: 100%;
   height: 100%;
+  max-height: 40px;
   transition: all 0.1s ease-out;
 }
 
@@ -589,7 +590,6 @@
 
 .cb_parallax_background_image {
   width: 100%;
-  max-width: 254px;
   height: auto;
   overflow-y: visible;
   z-index: 11;
@@ -608,7 +608,7 @@
 
 .cb-parallax-media-url {
   display: block;
-  width: 254px;
+  width: 100%;
   height: 159px;
   z-index: 10;
   margin-bottom: 0;
@@ -631,7 +631,7 @@
 }
 
 .cb-parallax-image-container-empty {
-  width: 254px;
+  width: 100%;
   height: 159px;
 }
 
@@ -643,42 +643,49 @@
   cursor: default !important;
 }
 
-.cb-parallax-remove-media-button-container {
-  display: block;
+#cb_parallax_settings_form .cb-parallax-remove-media-button-container {
+  display: inline-block;
   height: 0;
   text-align: right;
   width: 100%;
 }
-
-.cb-parallax-remove-media-button-container + div {
+#cb_parallax_settings_form .cb-parallax-remove-media-button-container + div {
   height: auto;
   max-height: unset;
   overflow: hidden;
 }
-
-.cb-parallax-remove-media {
+#cb_parallax_settings_form .cb-parallax-remove-media {
+  display: inline-block !important;
+  box-sizing: border-box;
   position: relative;
-  right: 6px;
-  top: 8px;
-  font-size: 16px;
-  width: 20px;
-  height: 20px;
+  right: 10px;
+  top: 26px;
+  width: 32px;
+  height: 32px;
+  margin-right: 0;
   border-radius: 50%;
   background-color: rgba(255, 255, 255, 0.82);
   text-decoration: none;
+  margin-left: 0 !important;
 }
-
-.cb-parallax-remove-media i {
-  width: 20px;
-  height: 20px;
-}
-
-.cb-parallax-remove-media i:before {
+#cb_parallax_settings_form .cb-parallax-remove-media i {
+  display: inline-block;
+  box-sizing: border-box;
   position: relative;
   right: 0;
   top: 0;
-  width: 20px;
-  height: 20px;
+  width: 32px;
+  height: 32px;
+}
+#cb_parallax_settings_form .cb-parallax-remove-media i:before {
+  font-size: 32px;
+  display: block;
+  box-sizing: border-box;
+  position: relative;
+  right: 0;
+  top: 0;
+  width: 32px;
+  height: 32px;
 }
 
 .cb-parallax-parallax-enabled-container {
@@ -693,7 +700,7 @@
 .label-for-cb-parallax-switch {
   display: inline-block;
   margin-top: 3px;
-  margin-right: 12px;
+  margin-right: 0;
 }
 
 /* option container */
@@ -752,4 +759,11 @@ form#cb_parallax_settings_form #cb_parallax_form_reset {
 form#cb_parallax_settings_form #cb_parallax_form_reset {
   float: right;
   margin-right: 0;
+}
+
+#wpbody-content span.color-alpha {
+  display: block;
+  box-sizing: border-box;
+  height: 100% !important;
+  width: 100%;
 }

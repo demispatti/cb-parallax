@@ -172,13 +172,15 @@ class cb_parallax_admin {
 				'all'
 			);
 			
-			// Admin Part
-			wp_enqueue_style( 'cb-parallax-metabox-display-css',
-				CBPARALLAX_ROOT_URL . 'admin/css/metabox-display.css',
-				array(),
-				'all',
-				'all'
-			);
+			// Metabox Display
+			if( "settings_page_cb-parallax" !== $screen->id ) {
+				wp_enqueue_style( 'cb-parallax-metabox-display-css',
+					CBPARALLAX_ROOT_URL . 'admin/css/metabox-display.css',
+					array(),
+					'all',
+					'all'
+				);
+			}
 		}
 	}
 	

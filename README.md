@@ -1,21 +1,18 @@
-=== cbParallax ===
-
+=== cbParallax ===  
 Tags: parallax, responsive, fullscreen, image, background, Hintergrund, Bild, Hintergrundbild  
-Requires at least: 5.1  
+Requires at least: 5.3  
 Tested up to: 5.3  
 Requires PHP: 5.6+  
-Stable tag: 0.9.3  
-Version: 0.9.3  
+Stable tag: 0.9.4  
+Version: 0.9.4  
 License: GPLv2 or later  
 License URI: https://www.gnu.org/licenses/gpl-2.0.html  
 Author: Demis Patti  
 
-== Description ==
-
+== Description ==  
 Responsive, fullscreen background image with a parallax effect.
 
-== Features ==
-
+== Features ==  
 - Custom background image
 - One Image for all pages or individual images and effects on a per post basis
 - Compatible with posts, pages, products, and many more
@@ -24,67 +21,62 @@ Responsive, fullscreen background image with a parallax effect.
 - Various overlays to choose from
 
 == Requirements ==
+* Your theme must support the core WordPress implementation of the [Custom Backgrounds](https://codex.wordpress.org/Custom_Backgrounds) theme feature.  
+* In order to use the parallax feature, I decided to set the minimum required image dimensions to 1920px * 1200px, which covers a fullHD screen with a slight vertical parallax movement ( Image height - viewport height, so 1200px - 1080px gives 120px offset to move the image. I hope you get the point here.).  
+* You most likely need to edit some css in order to "uncover" the background image or parts of it respectively. Your theme's layout should be "boxed", or an opacity should be added to the page content container for the background image to be seen.  
+* PHP version 5.6 or above.
 
-Your theme must support the core WordPress implementation of the [Custom Backgrounds](https://codex.wordpress.org/Custom_Backgrounds) theme feature.
-
-In order to use the parallax feature, I decided to set the minimum required image dimensions to 1920px * 1200px, which covers a fullHD screen with a slight vertical parallax movement ( Image height - viewport height, so 1200px - 1080px gives 120px offset to move the image. I hope you get the point here.).
-
-You most likely need to edit some css in order to "uncover" the background image or parts of it respectively. Your theme's layout should be "boxed", or an opacity should be added to the page content container for the background image to be seen.
-
-PHP version 5.6 or above.
-
-== Installation ==
-
+== Installation ==  
 1. Upload the `cb-parallax` folder to your `/wp-content/plugins/` directory.
 2. Activate the "cbParallax" plugin through the "Plugins" menu in WordPress.
 3. Edit a post to add a custom background.
 
-== Frequently Asked Questions ==
+== Frequently Asked Questions ==  
 
-= Where do I interact with this plugin and how does it work? =
+= Where do I interact with this plugin and how does it work? =  
 
 Please visit the plugin help tab for further information.
 
-= Why doesn't it work with my theme? =
+= Why doesn't it work with my theme? =  
 
 Most likely, this is because your theme doesn't support the WordPress `custom-background` theme feature.
 This plugin requires that your theme utilize this theme feature to work properly.
 Unfortunately, there's just no reliable way for the plugin to overwrite the background if the theme doesn't support this feature.
 You'll need to check with your theme author to see if they'll add support or switch to a different theme.
 
-= My theme supports 'custom-background' but it doesn't work! =
+= My theme supports 'custom-background' but it doesn't work! =  
 
-That's unlikely.
-Just to make sure, check with your theme author and make sure that they support the WordPress `custom-background` theme feature.
-Also, make sure that no container element is covering the element that holds the background image
+That's unlikely.  
+Just to make sure, check with your theme author and make sure that they support the WordPress `custom-background` theme feature.  
+Also, make sure that no container element is covering the element that holds the background image.
 
-= How do I add support for this in a theme? =
+= How do I add support for this in a theme? =   
 
-Your theme must support the [Custom Backgrounds] (https://codex.wordpress.org/Custom_Backgrounds) feature for this plugin to work.
-
-If you're a theme author, consider adding support for this feature if you can make it fit in with your design.  The following is the basic code, but check out the above link.
-
+Your theme must support the [Custom Backgrounds] (https://codex.wordpress.org/Custom_Backgrounds) feature for this plugin to work.  
+If you're a theme author, consider adding support for this feature if you can make it fit in with your design.  The following is the basic code, but check out the above link.  
 	add_theme_support( 'custom-background' );
 
 = Are there any known limitations? =
+* As of version 0.9.4, Internet Explorer up to version 11 is not supported anymore. Microsoft Edge browser works as expected.
+* This is not really a limitation of functionality, but since the background image container wraps the body element, it usually resembles the viewport dimensions. This means, that on themes where the navigation bar is on the side, the sidebar covers a part of the viewport and thus also a part of the image (logic, but noteworthy).
 
-This is not really a limitation of functionality, but since the background image container wraps the body element, it usually resembles the viewport dimensions. This means, that on themes where the navigation bar is on the side, the sidebar covers a part of the viewport and thus also a part of the image (logic, but noteworthy).
-
-= Can you help me? =
+= Can you help me? =  
 
 Yes. I have a look at the plugin's support page two or three times a month and I provide some basic support there.
 
 = Are there any known issues? =
+* Besides the known limitations, no.
 
-1. Nope
-
-== Screenshots ==
-
+== Screenshots ==  
 1. Multiple background views of a single post.
 2. Settings Page.
 3. Custom background meta box on the edit post screen.
 
-== Changelog ==
+== Changelog ==  
+
+= Version 0.9.4 = 
+1. Optimized CSS for WordPress version 5.3
+2. Set minimum WordPress version to 5.3
 
 = Version 0.9.3 =
 1. Fixed issues with older IE versions
@@ -235,5 +227,4 @@ Yes. I have a look at the plugin's support page two or three times a month and I
 6. Implemented a function that eases mousescroll.
 
 = Version 0.1.0 =
-
 First release :-)
