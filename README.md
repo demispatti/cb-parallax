@@ -88,15 +88,12 @@ If you're a theme author, consider adding support for this feature if you can ma
 #### Are there any known limitations?
 This is not really a limitation of functionality, but since the background image container wraps the body element, it usually resembles the viewport dimensions. This means, that on themes where the navigation bar is on the side, the sidebar covers a part of the viewport and thus also a part of the image (logic, but noteworthy).
 
-#### Can you help me?
-Yes. I have a look at the plugin's support page two or three times a month and I provide some basic support there.
-
 #### Are there any known issues?
 Besides the known limitations, no.
 
 ---
 ## Plugin Support
-If you need support or have a question, I check the WordPress plugin support section on [WordPress Plugin Repository](https://wordpress.org/support/plugin/cb-parallax/) once or twice a month.
+If you need support or have a question, I check the WordPress plugin support section on the [WordPress Plugin Repository](https://wordpress.org/support/plugin/cb-parallax/) once or twice a month.
 
 ---
 ## Bugs And Feature Requests
@@ -112,9 +109,9 @@ Editor preferences are available in the [editor config](https://github.com/demis
 
 ---
 ## Versioning
-For transparency into our release cycle and in striving to maintain backward compatibility, Bootstrap is maintained under [the Semantic Versioning guidelines](https://semver.org/). Sometimes we screw up, but we adhere to those rules whenever possible.
+For transparency into our release cycle and in striving to maintain backward compatibility, cbParallax is maintained under [the Semantic Versioning guidelines](https://semver.org/). Sometimes we screw up, but we adhere to those rules whenever possible.
 
-See [the Releases section of our GitHub project](https://github.com/demispatti/cb-parallax/releases) for changelogs for each release version of Bootstrap. Release announcement posts on [the official Bootstrap blog](https://blog.getbootstrap.com/) contain summaries of the most noteworthy changes made in each release.
+See [the Releases section of our GitHub project](https://github.com/demispatti/cb-parallax/releases) for changelogs for each release version of cbParallax.
 
 ---
 ## Creator
