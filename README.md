@@ -10,7 +10,7 @@
 <p align="center">
   A WordPress plugin for a responsive and fullscreen background image with parallax effect.
   <br>
-  <a href="https://wordpress.org/plugins/cb-parallax/" target="_blank"><strong>WordPress Plugin Repository Page</strong></a> <a href="https://downloads.wordpress.org/plugin/cb-parallax.zip" target="_blank"><strong>Get WordPress Plugin File</strong></a>
+  <a href="https://wordpress.org/plugins/cb-parallax/" target="_blank"><strong>WordPress Plugin Repository Page</strong></a> <a href="https://downloads.wordpress.org/plugin/cb-parallax.zip" target="_blank"><strong>Download</strong></a>
   <br>
   <br>
   <a href="https://github.com/demispatti/cb-parallax/issues/new?template=bug.md">Report A Bug</a>
