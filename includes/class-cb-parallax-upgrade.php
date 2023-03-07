@@ -1,9 +1,9 @@
 <?php
-
 namespace CbParallax\Includes;
 
 use CbParallax\Admin\Includes as AdminIncludes;
 use CbParallax\Admin\Menu\Includes as MenuIncludes;
+use WP_Query;
 
 /**
  * If this file is called directly, abort.
@@ -104,9 +104,7 @@ class cb_parallax_upgrade {
 		
 		$this->domain = $domain;
 		$this->version = $version;
-		
-		//$this->load_dependencies();
-		$this->retrieve_options();
+        $this->retrieve_options();
 	}
 	
 	/**
@@ -155,7 +153,7 @@ class cb_parallax_upgrade {
 			'post_type' => $this->get_supported_post_types(),
 			'meta_key' => 'cb_parallax'
 		);
-		$posts = new \WP_Query( $args );
+		$posts = new WP_Query( $args );
 		
 		foreach ( $posts->posts as $i => $post ) {
 			

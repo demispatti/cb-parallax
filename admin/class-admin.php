@@ -1,5 +1,4 @@
 <?php
-
 namespace CbParallax\Admin;
 
 use CbParallax\Includes as Includes;
@@ -91,15 +90,6 @@ class cb_parallax_admin {
 	private $screen_ids = array(
 		'post',
 		'page',
-		'product',
-		'portfolio',
-		'book',
-		'movie',
-		'project',
-		'work',
-		'cd',
-		'dvd',
-		'art',
 		'settings_page_cb-parallax'
 	);
 	
@@ -146,10 +136,10 @@ class cb_parallax_admin {
 	 * @return void
 	 */
 	public function enqueue_styles() {
-		
+
 		$screen = get_current_screen();
 		
-		if ( in_array( $screen->id, $this->screen_ids, true ) ) {
+		if ( in_array( $screen->base, $this->screen_ids, true ) ) {
 
 			wp_enqueue_style( 'jquery-ui-smoothness-theme',
 				CBPARALLAX_ROOT_URL . 'vendor/jquery-ui/themes/jquery-ui.min.css',
@@ -173,7 +163,7 @@ class cb_parallax_admin {
 			);
 			
 			// Metabox Display
-			if( "settings_page_cb-parallax" !== $screen->id ) {
+			if( 'settings_page_cb-parallax' !== $screen->base ) {
 				wp_enqueue_style( 'cb-parallax-metabox-display-css',
 					CBPARALLAX_ROOT_URL . 'admin/css/metabox-display.css',
 					array(),
@@ -194,7 +184,7 @@ class cb_parallax_admin {
 		
 		$screen = get_current_screen();
 		
-		if ( in_array( $screen->id, $this->screen_ids, true ) ) {
+		if ( in_array( $screen->base, $this->screen_ids, true ) ) {
 			
 			// Color picker.
 			wp_enqueue_script( 'wp-color-picker' );
@@ -247,8 +237,7 @@ class cb_parallax_admin {
 					//
 					'cb-parallax-inc-fancy-select-js',
 				),
-				'all',
-				false
+				'all'
 			);
 		}
 	}

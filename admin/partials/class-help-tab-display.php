@@ -1,5 +1,4 @@
 <?php
-
 namespace CbParallax\Admin\Partials;
 
 /**
@@ -172,7 +171,6 @@ class cb_parallax_help_tab_display {
                 <img src="<?php echo CBPARALLAX_ROOT_URL . 'admin/images/contextual-help/tab-2/horizontal-to-the-right-' . $img_postfix . '.png' ?> " alt="Contextual Help Image"/>
             </div>
             <div class="item-description">
-				<?php /*echo __( 'Soon, there will be more.', $domain )*/ ?>
             </div>
         </div>
 		

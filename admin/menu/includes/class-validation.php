@@ -1,5 +1,4 @@
 <?php
-
 namespace CbParallax\Admin\Menu\Includes;
 
 use CbParallax\Admin\Menu\Includes as MenuIncludes;

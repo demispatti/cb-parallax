@@ -1,10 +1,9 @@
 <?php
-
 namespace CbParallax\Admin\Menu\Includes;
 
 use CbParallax\Admin\Menu\Includes as MenuIncludes;
-
-//use WP_Query;
+use WP_Error;
+use WP_Post;
 
 /**
  * If this file is called directly, abort.
@@ -735,7 +734,7 @@ class cb_parallax_options {
 	/**
 	 * Returns the plugin options based on the plugin settings or the post meta data respectively.
 	 *
-	 * @param mixed | \WP_Post $post | bool false
+	 * @param mixed | WP_Post $post | bool false
 	 *
 	 * @return array
 	 */
@@ -750,7 +749,7 @@ class cb_parallax_options {
 		// If a page or post is requested AND the options are fetched on a per post basis
 		if ( is_a( $post, '\WP_Post' ) && 'per_page' === $this->determine_options_source( $post ) ) {
 			/**
-			 * @var \WP_Post $post
+			 * @var WP_Post $post
 			 */
 			$post_meta = get_post_meta( $post->ID, 'cb_parallax', true );
 			// Check the stored value and set it to '0' if it isn't set
@@ -769,7 +768,7 @@ class cb_parallax_options {
 	/**
 	 * Returns the image options based on the plugin settings or the post meta data respectively.
 	 *
-	 * @param mixed | \WP_Post $post | bool false
+	 * @param mixed | WP_Post $post | bool false
 	 *
 	 * @return array $image_options
 	 */
@@ -784,7 +783,7 @@ class cb_parallax_options {
 		$serve_image_how = $this->determine_options_source( $post );
 		if ( is_a( $post, '\WP_Post' ) ) {
 			/**
-			 * @var \WP_Post $post
+			 * @var WP_Post $post
 			 */
 			//$serve_image_how = $this->determine_options_source( $post );
 			if ( (! is_admin() && 'per_page' === $serve_image_how) || is_admin() ) {
@@ -814,7 +813,7 @@ class cb_parallax_options {
 	 *   we need to check that setting too.
 	 * - At last, we check if the requested image exists and can be served
 	 *
-	 * @param \WP_Post $post
+	 * @param WP_Post $post
 	 *
 	 * @return string $result
 	 */
@@ -828,7 +827,7 @@ class cb_parallax_options {
 		if($is_post){
 			$has_image_url_in_post_meta = isset( get_post_meta( $post->ID, 'cb_parallax', true )['cb_parallax_background_image_url'] ) && '' !== get_post_meta( $post->ID, 'cb_parallax', true )['cb_parallax_background_image_url'];
 		}
-		$has_image_url_in_options = true === $is_post ? $stored_options['cb_parallax_background_image_url'] : false;
+		$has_image_url_in_options = true === $is_post && isset($stored_options['cb_parallax_background_image_url']) ? $stored_options['cb_parallax_background_image_url'] : false;
 
 		// Determine image source
 		$result = 'none';
@@ -849,7 +848,7 @@ class cb_parallax_options {
 	 * @param string $post_id
 	 * @param array $input
 	 *
-	 * @return bool|\WP_Error
+	 * @return bool|WP_Error
 	 */
 	public function save_options( $input, $post_id = '' ) {
 		
@@ -880,10 +879,10 @@ class cb_parallax_options {
 			$diff = array_diff( $data, $stored_options );
 			if ( empty( $diff ) ) {
 				
-				return new \WP_Error( - 1, __( 'There\'s nothing new to save.', $this->domain ) );
+				return new WP_Error( - 1, __( 'There\'s nothing new to save.', $this->domain ) );
 			}
 			
-			return new \WP_Error( - 2, __( 'Failed to save settings.', $this->domain ) );
+			return new WP_Error( - 2, __( 'Failed to save settings.', $this->domain ) );
 		}
 		
 		return true;
@@ -894,7 +893,7 @@ class cb_parallax_options {
 	 *
 	 * @param $post_id
 	 *
-	 * @return  \WP_Error | bool true
+	 * @return  WP_Error | bool true
 	 */
 	public function reset_options( $post_id ) {
 		
@@ -911,7 +910,7 @@ class cb_parallax_options {
 		
 		if ( false === $result ) {
 			
-			return new \WP_Error( - 3, __( 'Failed to reset settings. Please refresh the page and try again.', $this->domain ) );
+			return new WP_Error( - 3, __( 'Failed to reset settings. Please refresh the page and try again.', $this->domain ) );
 		}
 		
 		return true;
@@ -946,7 +945,7 @@ class cb_parallax_options {
 	 * Since the ids for attachments will most likely be assigned in a different order after website migrations,
 	 * we check the file by it's file name, too. We rather serve no file instead of a wrong one.
 	 *
-	 * @param \WP_Post $post
+	 * @param WP_Post $post
 	 *
 	 * @return bool
 	 */
@@ -983,5 +982,10 @@ class cb_parallax_options {
 		
 		return true;
 	}
+
+    public function has_stored_options() {
+
+        return !(false === get_option('cb_parallax_options'));
+    }
 	
 }

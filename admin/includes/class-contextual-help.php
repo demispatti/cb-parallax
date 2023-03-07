@@ -1,5 +1,4 @@
 <?php
-
 namespace CbParallax\Admin\Includes;
 
 use CbParallax\Admin\Partials as AdminPartials;
@@ -99,7 +98,7 @@ class cb_parallax_contextual_help {
 			)
 		);
 		
-		$current_screen->set_help_sidebar( AdminPartials\cb_parallax_help_sidebar_display::help_sidebar_display( $this->domain, $current_screen ) );
+		$current_screen->set_help_sidebar( AdminPartials\cb_parallax_help_sidebar_display::help_sidebar_display( $current_screen ) );
 	}
 	
 }

@@ -1,5 +1,4 @@
 <?php
-
 namespace CbParallax\Includes;
 
 use CbParallax\Pub as Pub;

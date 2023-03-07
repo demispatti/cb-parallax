@@ -1,9 +1,9 @@
 <?php
-
 namespace CbParallax\Admin\Includes;
 
 use CbParallax\Admin\Menu\Includes as MenuIncludes;
 use CbParallax\Admin\Partials as Partials;
+use WP_Post;
 
 if ( ! class_exists( 'Partials\cb_parallax_settings_display' ) ) {
 	require_once CBPARALLAX_ROOT_DIR . 'admin/partials/class-settings-display.php';
@@ -82,7 +82,7 @@ class cb_parallax_meta_box {
 	 * @access   private
 	 * @var      array $screen_ids
 	 */
-	private $screen_ids;
+    private $screen_ids;
 	
 	/**
 	 * cb_parallax_meta_box constructor.
@@ -124,9 +124,7 @@ class cb_parallax_meta_box {
 	 * @return void
 	 */
 	public function add_hooks() {
-		
-		//add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
-		
+
 		/* Only load on the edit post screen. */
 		add_action( 'load-post.php', array( $this, 'load_post' ) );
 		add_action( 'load-post-new.php', array( $this, 'load_post' ) );
@@ -173,7 +171,7 @@ class cb_parallax_meta_box {
 		
 		$screen = get_current_screen();
 		
-		if ( in_array( $screen->id, $this->screen_ids ) ) {
+		if ( in_array( $screen->base, $this->screen_ids ) ) {
 			
 			add_meta_box( 'cb-parallax-meta-box', __( 'cb Parallax', $this->domain ), array(
 				$this,
@@ -185,7 +183,7 @@ class cb_parallax_meta_box {
 	/**
 	 * Retrieves the user-defined optuons and orchestrates the functions that display the form and the settings fields.
 	 *
-	 * @param \WP_Post $post
+	 * @param WP_Post $post
 	 */
 	public function edit_screen_display( $post ) {
 		
@@ -256,7 +254,7 @@ class cb_parallax_meta_box {
 	 * Retrieves the plugin-related input, preprocesses it and uses the reference of the options class to process and finally store the plugin-related data.
 	 *
 	 * @param int $post_id
-	 * @param \WP_Post $post
+	 * @param WP_Post $post
 	 *
 	 * @return void
 	 */

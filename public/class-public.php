@@ -1,9 +1,9 @@
 <?php
-
 namespace CbParallax\Pub;
 
 use CbParallax\Pub\Includes as PublicIncludes;
 use CbParallax\Admin\Menu\Includes as MenuIncludes;
+use WP_Post;
 
 /**
  * If this file is called directly, abort.
@@ -108,7 +108,7 @@ class cb_parallax_public {
 		/**
 		 * If the image was not found, we bail early.
 		 */
-		if ( false === $this->options->is_image_in_media_library( $post ) ) {
+		if ( false === $this->options->is_image_in_media_library( $post ) || false === $this->options->has_stored_options() ) {
 			return;
 		}
 		
@@ -124,16 +124,19 @@ class cb_parallax_public {
 	public function enqueue_scripts() {
 		
 		/**
-		 * @var \WP_Post $post
+		 * @var WP_Post $post
 		 */
 		global $post;
 		
 		/**
 		 * If the image was not found, we bail early.
 		 */
-		if ( false === $this->options->is_image_in_media_library( $post ) ) {
-			return;
-		}
+        /**
+         * If the image was not found, we bail early.
+         */
+        if (false === $this->options->is_image_in_media_library($post) || false === $this->options->has_stored_options()) {
+            return;
+        }
 		
 		$this->set_plugin_options( $post );
 		

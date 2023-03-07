@@ -1,10 +1,10 @@
 <?php
-
 namespace CbParallax\Admin\Menu;
 
 use CbParallax\Admin\Includes as AdminIncludes;
 use CbParallax\Admin\Menu\Includes as MenuIncludes;
 use CbParallax\Admin\Partials as Partials;
+use WP_Post;
 
 /**
  * If this file is called directly, abort.
@@ -90,7 +90,7 @@ class cb_parallax_settings_page {
 	 */
 	public function add_hooks() {
 		
-		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_styles' ), 10 );
+		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_styles' ), 1000 );
 		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_scripts' ), 10 );
 		add_action( 'admin_enqueue_scripts', array( $this, 'include_menu_localisation' ) );
 		add_action( 'admin_menu', array( $this, 'add_options_page' ), 20 );
@@ -105,7 +105,7 @@ class cb_parallax_settings_page {
 		
 		if ( in_array( $this->screen_id, $this->screen_ids, true ) ) {
 			
-			add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_styles' ), 10 );
+			add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_styles' ), 1000 );
 			add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_scripts' ), 10 );
 		}
 	}
@@ -231,7 +231,7 @@ class cb_parallax_settings_page {
 	public function settings_display() {
 		
 		/**
-		 * @var \WP_Post $post
+		 * @var WP_Post $post
 		 */
 		global $post;
 		

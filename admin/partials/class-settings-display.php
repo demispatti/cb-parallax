@@ -1,5 +1,4 @@
 <?php
-
 namespace CbParallax\Admin\Partials;
 
 use CbParallax\Admin\Menu\Includes as MenuIncludes;
@@ -63,7 +62,7 @@ class cb_parallax_settings_display {
 	 * @access private
 	 * @var    array $default_image_options
 	 */
-	private $default_image_options;
+	private array $default_image_options;
 	
 	/**
 	 * The array containing the default plugin image_options.

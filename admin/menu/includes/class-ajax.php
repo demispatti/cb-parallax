@@ -1,8 +1,8 @@
 <?php
-
 namespace CbParallax\Admin\Menu\Includes;
 
 use CbParallax\Admin\Menu\Includes as MenuIncludes;
+use WP_Error;
 
 /**
  * If this file is called directly, abort.
@@ -113,7 +113,7 @@ class cb_parallax_ajax {
 		$result = $this->options->save_options( $data, $post_id );
 		if ( is_wp_error( $result ) ) {
 			/**
-			 * @var \WP_Error $result
+			 * @var WP_Error $result
 			 */
 			$code = $result->get_error_code();
 			$msg = $result->get_error_message();
@@ -180,7 +180,7 @@ class cb_parallax_ajax {
 		$result = $this->options->reset_options( $post_id );
 		if ( is_wp_error( $result ) ) {
 			/**
-			 * @var \WP_Error $result
+			 * @var WP_Error $result
 			 */
 			$code = $result->get_error_code();
 			$msg = $result->get_error_message();

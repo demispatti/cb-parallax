@@ -1,5 +1,4 @@
 <?php
-
 namespace CbParallax\Admin\Includes;
 
 /**

@@ -1,8 +1,8 @@
 <?php
-
 namespace CbParallax\Pub\Includes;
 
 use CbParallax\Admin\Menu\Includes as MenuIncludes;
+use WP_Post;
 
 /**
  * If this file is called directly, abort.
@@ -42,25 +42,7 @@ class cb_parallax_public_localisation {
 	 * @var    MenuIncludes\cb_parallax_options $options
 	 */
 	private $options;
-	
-	/**
-	 * Holds the allowed image option values.
-	 *
-	 * @var array $image_options_whitelist
-	 * @since  0.1.0
-	 * @access public
-	 */
-	public $image_options_whitelist;
-	
-	/**
-	 * Maintains the default image image_options.
-	 *
-	 * @var array $default_image_options
-	 * @since  0.1.0
-	 * @access public
-	 */
-	public $default_image_options;
-	
+
 	/**
 	 * Holds the current plugin options for the requested page or post
 	 *
@@ -114,9 +96,7 @@ class cb_parallax_public_localisation {
 	 * @return void
 	 */
 	public function add_hooks() {
-		
-		//add_action( 'wp_enqueue_scripts', array( $this, 'retrieve_image_data' ), 8 );
-		//add_action( 'wp_enqueue_scripts', array( $this, 'retrieve_image_options' ), 9 );
+
 		add_action( 'wp_enqueue_scripts', array( $this, 'localize_frontend' ), 40 );
 	}
 	
@@ -154,7 +134,7 @@ class cb_parallax_public_localisation {
 	public function localize_frontend() {
 		
 		/**
-		 * @var \WP_Post $post
+		 * @var WP_Post $post
 		 */
 		global $post;
 		
