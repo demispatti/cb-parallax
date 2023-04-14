@@ -1,5 +1,9 @@
 <?php
-namespace Bonaire\Pub;
+namespace CbParallax\Pub;
+
+use CbParallax\Pub\Includes as PublicIncludes;
+use CbParallax\Admin\Menu\Includes as MenuIncludes;
+use WP_Post;
 
 /**
  * If this file is called directly, abort.
@@ -9,110 +13,169 @@ if ( ! defined( 'WPINC' ) ) {
 }
 
 /**
- * The public-specific functionality of the plugin.
- * Defines the plugin name, version, and two examples hooks for how to
- * enqueue the public-specific stylesheet and JavaScript.
- *
- * @since      0.9.6
- * @package    Bonaire
- * @subpackage Bonaire/public
- * @author     Demis Patti <demispatti@gmail.com>
+ * Require dependencies.
  */
-class Bonaire_Public {
+if ( ! class_exists( 'PublicIncludes\cb_parallax_public_localisation' ) ) {
+	require_once CBPARALLAX_ROOT_DIR . 'public/includes/class-public-localisation.php';
+}
+
+/**
+ * The class responsible for the public facing part of the plugin.
+ *
+ * @link
+ * @since             0.1.0
+ * @package           cb_parallax
+ * @subpackage        cb_parallax/public
+ * Author:            Demis Patti <demis@demispatti.ch>
+ * Author URI:        http://demispatti.ch
+ * License:           GPL-2.0+
+ * License URI:       http://www.gnu.org/licenses/gpl-2.0.txt
+ */
+class cb_parallax_public {
+	
+	/**
+	 * The domain of the plugin.
+	 *
+	 * @var string $domain
+	 * @since    0.1.0
+	 * @access   private
+	 */
+	private $domain;
+	
+	/**
+	 * Holds the reference to the options class.
+	 *
+	 * @var    MenuIncludes\cb_parallax_options $options
+	 * @since  0.6.0
+	 * @access private
+	 */
+	private $options;
+	
+	/**
+	 * Holds the user-defined plugin settings.
+	 *
+	 * @var array $plugin_options
+	 */
+	private $plugin_options;
+	
+	/**
+	 * Retrieves the user-defined plugin settings.
+	 *
+	 * @param bool false | WP_Post $post
+	 */
+	private function set_plugin_options( $post = false ) {
+		
+		$this->plugin_options = $this->options->get_plugin_options( $post );
+	}
+	
+	/**
+	 * cb_parallax_public constructor.
+	 *
+	 * @param string $domain
+	 * @param MenuIncludes\cb_parallax_options $options
+	 */
+	public function __construct( $domain, $options ) {
+		
+		$this->domain = $domain;
+		$this->options = $options;
+		
+		$this->set_plugin_options();
+		$this->include_public_localisation();
+	}
 	
 	/**
 	 * Registers the methods that need to be hooked with WordPress.
 	 *
+	 * @since 0.9.0
 	 * @return void
-	 * @since 0.9.6
 	 */
 	public function add_hooks() {
 		
-		add_filter( 'wpcf7_posted_data', array( $this, 'filter_wpcf7_posted_data' ), 10, 1 );
-		add_action( 'wpcf7_mail_sent', array( $this, 'wpcf7_after_mail_sent' ), 10 );
+		add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_styles' ), 10 );
+		add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_scripts' ), 10 );
 	}
 	
 	/**
-	 * Creates or extends a transient containing
-	 * the internal 'contact form id' and a 'uniqid' attached as
-	 * field for identification purposes. The uniqid will be removed
-	 * from the posted data after having been processed on the admin side.
+	 * Registers the stylesheets with WordPress.
 	 *
-	 * @param $posted_data
-	 *
-	 * @return array $posted_data
-	 * @since 0.9.6
-	 * @see   /admin/includes/class-adapter.php / postprocess_messages()
-	 */
-	public function filter_wpcf7_posted_data( $posted_data ) {
-		
-		$uniqid = uniqid();
-		
-		$current_mails   = get_transient( 'bonaire_wpcf7_incoming' );
-		$data            = array( 'form_id' => $posted_data['_wpcf7'], 'posted_data_uniqid' => $uniqid );
-		$current_mails[] = $data;
-		// Store the data temporarily for usage by 'wpcf7_after_mail_sent()'
-		set_transient( 'bonaire_wpcf7_incoming', $current_mails );
-		
-		$posted_data['posted_data_uniqid'] = $uniqid;
-		
-		return $posted_data;
-	}
-	
-	/**
-	 * Retrieves the 'contact form name (channel)' and the 'recipient email address' in order to
-	 * be able to postprocess the message and relate it to the currently used email account.
-	 *
-	 * @param \WPCF7_ContactForm $contact_form
-	 *
+	 * @since 0.9.0
 	 * @return void
-	 * @since 0.9.6
 	 */
-	public function wpcf7_after_mail_sent( $contact_form ) {
+	public function enqueue_styles() {
 		
-		$current_mails = get_transient( 'bonaire_wpcf7_incoming' );
-		if ( false === $current_mails || ! is_array( $current_mails ) ) {
+		global $post;
+		
+		/**
+		 * If the image was not found, we bail early.
+		 */
+		if ( false === $this->options->is_image_in_media_library( $post ) || false === $this->options->has_stored_options() ) {
 			return;
 		}
 		
-		foreach ( $current_mails as $i => $current_mail ) {
-			
-			if ( ! isset( $current_mail['recipient'] ) ) {
-				$current_mails[ $i ]['channel']   = $contact_form->name();
-				$current_mails[ $i ]['form_id']   = $contact_form->id();
-				$properties                       = $contact_form->get_properties();
-				$current_mails[ $i ]['recipient'] = $this->crypt( sanitize_email( $properties['mail']['recipient'] ) );
-			}
-		}
-		
-		// Add the updated data to a transient for postprocessing by class '$Bonaire_Adapter'
-		set_transient( 'bonaire_wpcf7_queue', $current_mails );
+		wp_enqueue_style( 'cb-parallax-public-css', CBPARALLAX_ROOT_URL . 'public/css/public.css', array(), 'all', 'all' );
 	}
 	
 	/**
-	 * Encrypts and decrypts the password for the email account stored for replies.
+	 * Registers the javascript files with WordPress.
 	 *
-	 * @param string $string
-	 * @param string $action
-	 *
-	 * @return string $output|bool
-	 * @since 0.9.6
-	 * @see   \Bonaire\Admin\Includes\Bonaire_Mail decrypt()
+	 * @since 0.9.0
+	 * @return void
 	 */
-	private function crypt( $string ) {
+	public function enqueue_scripts() {
 		
-		$secret_key = defined( AUTH_KEY ) ? AUTH_KEY : 'r4RWH*ynn!AS.|A-j<qph!#))@!Gde5i,0&Z[R=i.]78f[Ine)aChIMwRpqZN$6~';
-		$secret_iv  = defined( AUTH_SALT ) ? AUTH_SALT : '=;.6h~xr5v/BZuKP-|GR B*Kb`K-Q@PH6r>My6=-gz$qTt+X!0Rc_6>N:&g5&1>R';
+		/**
+		 * @var WP_Post $post
+		 */
+		global $post;
 		
-		if ( '' === $secret_key || '' === $secret_iv ) {
-			return $string;
-		}
+		/**
+		 * If the image was not found, we bail early.
+		 */
+        /**
+         * If the image was not found, we bail early.
+         */
+        if (false === $this->options->is_image_in_media_library($post) || false === $this->options->has_stored_options()) {
+            return;
+        }
 		
-		$encrypt_method = 'AES-256-CBC';
-		$key            = hash( 'sha256', $secret_key );
-		$iv             = substr( hash( 'sha256', $secret_iv ), 0, 16 );
-
-		return base64_encode( openssl_encrypt( $string, $encrypt_method, $key, 0, $iv ) );
+		$this->set_plugin_options( $post );
+		
+		wp_enqueue_script(
+			'cb-parallax-inc-raf-js',
+			CBPARALLAX_ROOT_URL . 'vendor/raf/raf.js',
+			array( 'jquery' ),
+			'all',
+			true
+		);
+		
+		wp_enqueue_script(
+			'cb-parallax-inc-smoothscroll-min-js',
+			CBPARALLAX_ROOT_URL . 'vendor/smoothscroll/smoothscroll.js',
+			array( 'jquery' ),
+			'all',
+			true
+		);
+		
+		// Parallax script.
+		wp_enqueue_script(
+			'cb-parallax-public-js',
+			CBPARALLAX_ROOT_URL . 'public/js/public.js',
+			array( 'jquery', 'cb-parallax-inc-raf-js', 'cb-parallax-inc-smoothscroll-min-js' ),
+			'all',
+			true
+		);
+	}
+	
+	/**
+	 * Includes the class responsible for assembling and sending data to the respective javascript file.
+	 *
+	 * @since 0.9.0
+	 * @return void
+	 */
+	private function include_public_localisation() {
+		
+		$public_localisation = new PublicIncludes\cb_parallax_public_localisation( $this->domain, $this->options );
+		$public_localisation->add_hooks();
 	}
 	
 }

@@ -1,7 +1,5 @@
 <?php
-namespace Bonaire\Includes;
-
-use Bonaire\Admin\Includes as AdminIncludes;
+namespace CbParallax\Includes;
 
 /**
  * If this file is called directly, abort.
@@ -11,47 +9,41 @@ if ( ! defined( 'WPINC' ) ) {
 }
 
 /**
- * Include dependencies.
- */
-if ( ! class_exists( 'AdminIncludes\Bonaire_Options' ) ) {
-	require_once BONAIRE_ROOT_DIR . 'admin/includes/class-options.php';
-}
-
-/**
- * The class responsible for activating the plugin.
+ * Fired during plugin activation.
  *
- * @since      0.9.6
- * @package    Bonaire
- * @subpackage Bonaire/includes
- * @author     Demis Patti <demispatti@gmail.com>
+ * @link
+ * @since             0.1.0
+ * @package           cb_parallax
+ * @subpackage        cb_parallax/includes
+ * Author:            Demis Patti <demis@demispatti.ch>
+ * Author URI:        http://demispatti.ch
+ * License:           GPL-2.0+
+ * License URI:       http://www.gnu.org/licenses/gpl-2.0.txt
  */
-class Bonaire_Activator {
+class cb_parallax_activator {
 	
 	/**
-	 * Instantiates the class responsible for activating the plugin.
+	 * The variable that holds the name of the capability necessary to interact with this plugin.
+	 *
+	 * @since    0.1.0
+	 * @access   static
+	 * @var      string $capability
+	 */
+	public static $capability = 'cb_parallax_edit';
+	
+	/**
+	 * Adds the capability necessary to interact with this plugin to the user, if the user has the role of an administrator.
 	 *
 	 * @return void
-	 * @since 0.9.6
 	 */
-	public function activate() {
+	public static function activate() {
 		
 		// Gets the administrator role.
 		$role = get_role( 'administrator' );
 		
 		// If the acting user has admin rights, the capability gets added.
 		if ( ! empty( $role ) ) {
-			// Adds default settings data if there are no options stored yet.
-			if ( false === get_option( 'bonaire_options' ) || '1' === get_transient( 'bonaire_reset_settings' ) ) {
-				delete_option( 'bonaire_options' );
-				$Bonaire_Options = new AdminIncludes\Bonaire_Options( 'bonaire' );
-				
-				$options[0] = (array) $Bonaire_Options->default_options->{0};
-				$options[1] = (array) $Bonaire_Options->default_options->{1};
-				
-				add_option( 'bonaire_options', $options, '', true );
-				delete_transient( 'bonaire_reset_settings' );
-			}
+			$role->add_cap( self::$capability );
 		}
 	}
-	
 }

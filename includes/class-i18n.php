@@ -1,5 +1,5 @@
 <?php
-namespace Bonaire\Includes;
+namespace CbParallax\Includes;
 
 /**
  * If this file is called directly, abort.
@@ -9,42 +9,46 @@ if ( ! defined( 'WPINC' ) ) {
 }
 
 /**
- * The class responsible for internationalizing functionality.
+ * Defines the internationalization functionality.
+ * Loads and defines the internationalization files for this plugin.
  *
- * @since      0.9.6
- * @package    Bonaire
- * @subpackage Bonaire/includes
- * @author     Demis Patti <demispatti@gmail.com>
+ * @link
+ * @since             0.1.0
+ * @package           cb_parallax
+ * @subpackage        cb_parallax/includes
+ * Author:            Demis Patti <demis@demispatti.ch>
+ * Author URI:        http://demispatti.ch
+ * License:           GPL-2.0+
+ * License URI:       http://www.gnu.org/licenses/gpl-2.0.txt
  */
-class Bonaire_i18n {
+class cb_parallax_i18n {
 	
 	/**
 	 * The domain of the plugin.
 	 *
-	 * @var      string $domain
-	 * @since    0.9.6
+	 * @var string $domain
+	 * @since    0.1.0
 	 * @access   private
 	 */
 	private $domain;
 	
 	/**
-	 * Bonaire_i18n constructor.
+	 * cb_parallax_i18n constructor.
 	 *
 	 * @param string $domain
-	 *
-	 * @return void
-	 * @since 0.9.6
 	 */
 	public function __construct( $domain ) {
 		
 		$this->domain = $domain;
+		
+		$this->add_hooks();
 	}
 	
 	/**
 	 * Registers the methods that need to be hooked with WordPress.
 	 *
+	 * @since 0.9.0
 	 * @return void
-	 * @since 0.9.6
 	 */
 	public function add_hooks() {
 		
@@ -52,10 +56,7 @@ class Bonaire_i18n {
 	}
 	
 	/**
-	 * Loads the plugin text domain for translation.
-	 *
-	 * @return void
-	 * @since 0.9.6
+	 * Calls the WordPress function that loads this plugin's translated strings.
 	 */
 	public function load_plugin_textdomain() {
 		

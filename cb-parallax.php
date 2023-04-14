@@ -11,7 +11,8 @@ if ( ! defined( 'WPINC' ) ) {
 }
 
 /**
- * The plugin bootstrap file.
+ * The plugin bootstrap file
+ *
  * This is a plugin for custom backgrounds on single posts, products and pages, with a parallax effect.
  * The parallax effect requires an image with a width of at least 1920px and a height of at least 1200px for vertical parallax effect
  * Have Fun!
@@ -20,25 +21,25 @@ if ( ! defined( 'WPINC' ) ) {
  * which is now maintained by Devin Vinson.
  * https://github.com/DevinVinson/WordPress-Plugin-Boilerplate
  *
- * @link              https://wordpress.org/plugins/cb-parallax/
+ * @wordpress-plugin
+ * @package:          cbParallax
  * @since             0.1.0
  * @package           cb_parallax
  * @author            Demis Patti
- * @wordpress-plugin
- * Plugin Name:       cbParallax
+ * @link:             https://wordpress.org/plugins/cb-parallax/
  * Plugin URI:        https://wordpress.org/plugins/cb-parallax/
+ * Plugin Name:       cbParallax
  * Description:       Lets you add <a href="http://codex.wordpress.org/Custom_Backgrounds" target="_blank">custom background</a> - with or without vertical or horizontal parallax effect - for single posts, pages and products. It requires your theme to support the WordPress <code>custom-background</code> feature. It also requires you to set your theme's layout to "boxed" and / or to add a transparency to the container that holds the content in order to make the background image visible / shine trough.
- * Author:            Demis Patti
  * License:           GPL-2.0+
- * License URI:       https://www.gnu.org/licenses/gpl-2.0.txt
+ * License URI:       http://www.gnu.org/licenses/gpl-2.0.txt
+ * Text Domain:       cb-parallax
+ * Domain Path:       /languages
  * Version:           0.9.7
  * Stable tag:        0.9.7
- * Requires at least: 5.3
+ * Requires at least: 5.5
  * Tested up to:      6.1.1
  * Requires PHP:      5.6
  * Max. PHP version:  7.4.21
- * Text Domain:       cb-parallax
- * Domain Path:       /languages
  */
 
 /**

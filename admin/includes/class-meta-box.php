@@ -1,8 +1,13 @@
 <?php
-namespace Bonaire\Admin\Includes;
+namespace CbParallax\Admin\Includes;
 
-use Bonaire\Admin\Includes as AdminIncludes;
-use Bonaire\Admin\Partials as AdminPartials;
+use CbParallax\Admin\Menu\Includes as MenuIncludes;
+use CbParallax\Admin\Partials as Partials;
+use WP_Post;
+
+if ( ! class_exists( 'Partials\cb_parallax_settings_display' ) ) {
+	require_once CBPARALLAX_ROOT_DIR . 'admin/partials/class-settings-display.php';
+}
 
 /**
  * If this file is called directly, abort.
@@ -12,285 +17,279 @@ if ( ! defined( 'WPINC' ) ) {
 }
 
 /**
- * Include dependencies.
- */
-if ( ! class_exists( 'AdminPartials\Bonaire_Message_Display' ) ) {
-	require_once BONAIRE_ROOT_DIR . 'admin/partials/class-message-display.php';
-}
-if ( ! class_exists( 'AdminPartials\Bonaire_Reply_Form_Display' ) ) {
-	require_once BONAIRE_ROOT_DIR . 'admin/partials/class-reply-form-display.php';
-}
-
-/**
- * The class responsible for creating and displaying the meta box containing the reply form.
+ * Defines and displays the meta box.
  *
- * @since             0.9.6
- * @package           bonaire
- * @subpackage        bonaire/admin/includes
- * @author            Demis Patti <demis@demispatti.ch>
+ * @link
+ * @since             0.1.0
+ * @package           cb_parallax
+ * @subpackage        cb_parallax/admin/includes
+ * Author:            Demis Patti <demis@demispatti.ch>
+ * Author URI:        http://demispatti.ch
+ * License:           GPL-2.0+
+ * License URI:       http://www.gnu.org/licenses/gpl-2.0.txt
  */
-class Bonaire_Meta_Box {
+class cb_parallax_meta_box {
 	
 	/**
 	 * The domain of the plugin.
 	 *
-	 * @var      string $domain
-	 * @since    0.9.6
+	 * @var string $domain
+	 * @since    0.1.0
 	 * @access   private
 	 */
 	private $domain;
 	
 	/**
-	 * Holds the instance that's responsible for displaying the reply form.
+	 * Whether the theme has a custom backround callback for 'wp_head' output.
 	 *
-	 * @var AdminPartials\Bonaire_Reply_Form_Display $Bonaire_Reply_Form_Display
-	 * @since    0.9.6
-	 * @access   private
+	 * @since  0.1.0
+	 * @access public
+	 * @var    bool
 	 */
-	private $Bonaire_Reply_Form_Display;
+	public $theme_has_callback = false;
 	
 	/**
-	 * Holds the instance that's responsible for connecting to Contact Form 7 and Flamingo.
+	 * The reference to the options class.
 	 *
-	 * @var AdminIncludes\Bonaire_Adapter Bonaire_Adapter
-	 * @since    0.9.6
-	 * @access   private
+	 * @since  0.6.0
+	 * @access private
+	 * @var    MenuIncludes\cb_parallax_options $options
 	 */
-	private $Bonaire_Adapter;
+	private $options;
 	
 	/**
-	 * Holds the instance that's responsible for handling the user options.
+	 * Maintains the allowed option values for the image.
 	 *
-	 * @var AdminIncludes\Bonaire_Options $Bonaire_Options
-	 * @since    0.9.6
-	 * @access   private
+	 * @since  0.1.0
+	 * @access public
+	 * @var    array $allowed_image_options
 	 */
-	private $Bonaire_Options;
+	public $allowed_image_options;
 	
 	/**
-	 * Sets the instance responsible for displaying the reply form.
+	 * Maintains the default image image_options.
 	 *
-	 * @return void
-	 * @since 0.9.6
+	 * @since  0.1.0
+	 * @access public
+	 * @var    array $default_image_options
 	 */
-	private function set_reply_form_display_instance() {
+	public $default_image_options;
+	
+	/**
+	 * The array holding the names of the supported post types.
+	 *
+	 * @since    0.7.4
+	 * @access   private
+	 * @var      array $screen_ids
+	 */
+    private $screen_ids;
+	
+	/**
+	 * cb_parallax_meta_box constructor.
+	 *
+	 * @param string $domain
+	 * @param array $screen_ids
+	 * @param MenuIncludes\cb_parallax_options $options
+	 */
+	public function __construct( $domain, $screen_ids, $options ) {
 		
-		$this->Bonaire_Reply_Form_Display = new AdminPartials\Bonaire_Reply_Form_Display( $this->domain );
+		$this->domain = $domain;
+		$this->screen_ids = $screen_ids;
+		$this->options = $options;
+		
+		/* If the current user can't edit custom backgrounds, bail early. */
+		if ( ! current_user_can( 'cb_parallax_edit' ) && ! current_user_can( 'edit_theme_options' ) ) {
+			return;
+		}
+		
+		$this->add_hooks();
+		$this->retrieve_options();
 	}
 	
 	/**
-	 * Bonaire_Meta_Box constructor.
-	 *
-	 * @param string $domain
-	 * @param AdminIncludes\Bonaire_Adapter $Bonaire_Adapter
-	 * @param AdminIncludes\Bonaire_Options $Bonaire_Options
+	 * Retrieves and sets the white-listed image options and the default options.
 	 *
 	 * @return void
-	 * @since 0.9.6
 	 */
-	public function __construct( $domain, $Bonaire_Adapter, $Bonaire_Options ) {
+	private function retrieve_options() {
 		
-		$this->domain          = $domain;
-		$this->Bonaire_Adapter = $Bonaire_Adapter;
-		$this->Bonaire_Options = $Bonaire_Options;
-		
-		$this->set_reply_form_display_instance();
+		$this->allowed_image_options = $this->options->get_image_options_whitelist();
+		$this->default_image_options = $this->options->get_default_image_options();
 	}
 	
 	/**
 	 * Registers the methods that need to be hooked with WordPress.
 	 *
+	 * @since 0.9.0
 	 * @return void
-	 * @since 0.9.6
 	 */
 	public function add_hooks() {
+
+		/* Only load on the edit post screen. */
+		add_action( 'load-post.php', array( $this, 'load_post' ) );
+		add_action( 'load-post-new.php', array( $this, 'load_post' ) );
 		
-		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_styles' ) );
-		add_action( 'admin_enqueue_scripts', array( $this, 'localize_script' ), 20 );
+		add_action( 'add_meta_boxes', array( $this, 'add_meta_box' ) );
+		// Save meta data.
+		add_action( 'save_post', array( $this, 'save_post' ), 10, 2 );
+	}
+	
+	/**
+	 * Adds the actions that add the meta box and add the callback for when the user saves a page or post.
+	 */
+	public function load_post() {
 		
-		// Show this meta box anyway since it hosts some user messages [for now] in case the plugin isn\'t configured propperly.
-		add_action( 'load-flamingo_page_flamingo_inbound', array( $this, 'add_reply_form_meta_box' ), 11 );
+		$screen = get_current_screen();
 		
-		// Show this meta box only if the Bonaire is configured propperly and the user can indeed respond to this message.
-		if(false === $this->can_reply()){
-			
+		/* If the current theme doesn't support custom backgrounds, bail. */
+		if ( ! current_theme_supports( 'custom-background' ) || ! post_type_supports( $screen->post_type, 'custom-background' ) ) {
 			return;
 		}
-		add_action( 'load-flamingo_page_flamingo_inbound', array( $this, 'add_message_meta_box' ), 10 );
+		
+		/* Get the 'wp_head' callback. */
+		$wp_head_callback = get_theme_support( 'custom-background', 'wp-head-callback' );
+		
+		/* Checks if the theme has set up a custom callback. */
+		$this->theme_has_callback = empty( $wp_head_callback ) || '_custom_background_cb' === $wp_head_callback ? false : true;
+		
+		// Add the meta box
+		add_action( 'add_meta_boxes', array( $this, 'add_meta_box' ), 5 );
+		
+		// Save meta data.
+		add_action( 'save_post', array( $this, 'save_post' ), 10, 2 );
 	}
 	
 	/**
-	 * Checks if all criteria is met to send a reply.
+	 * Calls the WordPress function to add the meta box,
+	 * if we're on a white-listed screen.
 	 *
-	 * @return bool
-	 * @since 1.0.0
-	 */
-	private function can_reply() {
-		
-		$post_id = isset( $_REQUEST['post'] ) && is_int( (int) $_REQUEST['post'] ) ? (int) $_REQUEST['post'] : false;
-		if(false === $post_id) {
-			
-			return false;
-		}
-		$stored_options                  = $this->Bonaire_Options->get_stored_options();
-		$Bonaire_Account_Settings_Status = new Bonaire_Settings_Status( $this->domain );
-		$smtp_status                     = $Bonaire_Account_Settings_Status->get_settings_status( 'smtp', true );
-		$imap_status                     = $Bonaire_Account_Settings_Status->get_settings_status( 'imap', true );
-		$save_reply                      = isset( $stored_options->save_reply ) ? $stored_options->save_reply : 'no';
-		$recipient_email_address         = $this->Bonaire_Adapter->get_recipient_email_address( $post_id );
-		$uniqid                          = $this->Bonaire_Adapter->get_meta_field( $post_id, 'posted_data_uniqid' );
-		
-		if ( ( false === $uniqid || false === $recipient_email_address ) ||
-		     false === $this->Bonaire_Adapter->is_same_email_address( $post_id ) ||
-		     ( 'yes' === $save_reply && false === $imap_status || 'no' === $save_reply && false === $smtp_status ) ||
-		     $this->Bonaire_Options->stored_options->{0}->from !== $this->Bonaire_Adapter->get_recipient_email_address( $post_id ) ) {
-			
-			return false;
-		}
-		
-		return true;
-	}
-	
-	/**
-	 * Register the stylesheets for the admin area.
+	 * @param string $post_type
 	 *
 	 * @return void
-	 * @since 0.9.6
 	 */
-	public function enqueue_styles() {
+	public function add_meta_box( $post_type ) {
 		
-		// Media Frame.
-		wp_enqueue_script( 'dashicons' );
+		$screen = get_current_screen();
+		
+		if ( in_array( $screen->base, $this->screen_ids ) ) {
+			
+			add_meta_box( 'cb-parallax-meta-box', __( 'cb Parallax', $this->domain ), array(
+				$this,
+				'edit_screen_display'
+			), $post_type, 'side', 'core' );
+		}
 	}
 	
 	/**
-	 * Registers the meta box with WordPress.
+	 * Retrieves the user-defined optuons and orchestrates the functions that display the form and the settings fields.
 	 *
-	 * @since 1.0.0
+	 * @param WP_Post $post
 	 */
-	public function add_message_meta_box() {
+	public function edit_screen_display( $post ) {
 		
-		add_meta_box(
-			'bonaire-message-meta-box',
-			__( 'Message', $this->domain ),
-			array( $this, 'display_message_meta_box' ),
-			'flamingo_page_flamingo_inbound'
-		);
+		global $post;
+		
+		$display = new Partials\cb_parallax_settings_display( $this->domain, $this->options, $this->allowed_image_options );
+		
+		if ( is_array( get_post_meta( $post->ID, 'cb_parallax', true ) ) ) {
+			$options = array_merge( $this->options->get_default_image_options(), get_post_meta( $post->ID, 'cb_parallax', true ) );
+		} else {
+			$options = $this->options->get_default_image_options();
+		}
+		$attachment_id = isset( $options['cb_parallax_attachment_id'] ) ? $options['cb_parallax_attachment_id'] : false;
+		
+		// Get image meta
+		$image = null;
+		if ( false !== $attachment_id ) {
+			$image = wp_get_attachment_image_src( absint( $attachment_id ), 'full' );
+		}
+		// Get the image URL.
+		$url = isset( $image[0] ) ? $image[0] : '';
+		
+		$nonce = wp_create_nonce( 'cb_parallax_manage_options_nonce' );
+		echo '<div id="cb_parallax_settings_form" data-nonce="' . $nonce . '" data-form="image"  data-postid="' . $post->ID . '">';
+		echo $display->get_hidden_fields_display( $attachment_id, $url );
+		$settings = $this->options->get_options_arguments( 'image' );
+		foreach ( $settings as $option_key => $args ) {
+			
+			$value = $options[ $option_key ];
+			
+			switch ( $args['input_type'] ) {
+				
+				case( $args['input_type'] == 'checkbox' );
+					
+					echo $display->get_checkbox_display( $value, $args );
+					if ( 'cb_parallax_parallax_enabled' === $option_key ) {
+						echo $display->get_settings_title( 'metabox' );
+					}
+					break;
+				
+				case( $args['input_type'] == 'color' );
+					
+					echo $display->get_color_picker_field( $value, $args );
+					break;
+				
+				case( $args['input_type'] == 'select' );
+					
+					echo $display->get_select_field( $value, $args );
+					break;
+				
+				case( $args['input_type'] == 'media' );
+					
+					echo $display->get_media_button_display();
+					echo $display->get_background_image_display( $url, 'image' );
+					
+					break;
+				
+				default:
+			}
+		}
+		echo '<input id="cb_parallax_form_submit" type="submit" value="' . __( 'Save' ) . '" class="button button-primary button-large" />';
+		echo '<input id="cb_parallax_form_reset" type="submit" value="' . __( 'Reset' ) . '" class="button button-secondary button-large" />';
+		echo '</div>';
 	}
 	
 	/**
-	 * Registers the meta box with WordPress.
+	 * Whenever a supported post type get's saved:
+	 * Retrieves the plugin-related input, preprocesses it and uses the reference of the options class to process and finally store the plugin-related data.
+	 *
+	 * @param int $post_id
+	 * @param WP_Post $post
 	 *
 	 * @return void
-	 * @since 0.9.6
 	 */
-	public function add_reply_form_meta_box() {
+	public function save_post( $post_id, $post ) {
 		
-		add_meta_box(
-			'bonaire-form-meta-box',
-			__( 'Reply', $this->domain ),
-			array( $this, 'display_reply_form_meta_box' ),
-			'flamingo_page_flamingo_inbound'
-		);
-	}
-	
-	/**
-	 * Sends meta box related data to the JavaScript file.
-	 *
-	 * @since 1.0.0
-	 */
-	public function localize_script() {
-		
-		$handle_divs = $this->can_reply() ? '1' : '0';
-		wp_localize_script( 'bonaire-admin-js', 'BonaireOptions', array( 'manage_handle_divs' => $handle_divs ) );
-	}
-	
-	/**
-	 * Creates and displays the meta box containing the reply form.
-	 *
-	 * @since 0.9.6
-	 * @echo  string $string
-	 */
-	public function display_message_meta_box() {
-		
-		$post_id = (int) isset($_REQUEST['post']) && is_int( (int)$_REQUEST['post']) ? $_REQUEST['post'] : false;
-		if(false === $post_id){
+		// Verify the nonce.
+		if ( ! isset( $_POST['cb_parallax_nonce'] ) || ! wp_verify_nonce( $_POST['cb_parallax_nonce'], 'cb_parallax_nonce_field' ) ) {
 			return;
 		}
 
-		$post_meta      = get_post_meta( $post_id );
-		$your_message   = isset($post_meta['_field_your-message'][0]) ? $post_meta['_field_your-message'][0] : __('*no content*', $this->domain);
-
 		/**
-		 * Display reply form.
+		 * Get the post type object.
+		 *
+		 * @var WP_Post $post_type
 		 */
-		$string = AdminPartials\Bonaire_Message_Display::message_display( $your_message );
-		echo $string;
-		
-		return;
-	}
-	
-	/**
-	 * Creates and displays the meta box containing the message text.
-	 *
-	 * @since 1.0.0
-	 * @echo  string $string
-	 */
-	public function display_reply_form_meta_box() {
-		
-		$post_id = isset( $_REQUEST['post'] ) && is_int( (int) $_REQUEST['post'] ) ? (int) $_REQUEST['post'] : false;
-		if ( false === $post_id ) {
+		$post_type = get_post_type_object( $post->post_type );
+		// Check if the current user has permission to edit the post.
+		if ( ! current_user_can( $post_type->cap->edit_post, $post_id ) ) {
+			return;
+		}
+		// Don't save if the post is only a revision.
+		if ( 'revision' == $post->post_type ) {
 			return;
 		}
 		
-		$stored_options                  = $this->Bonaire_Options->get_stored_options();
-		$Bonaire_Account_Settings_Status = new Bonaire_Settings_Status( $this->domain );
-		$cf7_status                      = $Bonaire_Account_Settings_Status->get_settings_status( 'cf7', true );
-		$smtp_status                     = $Bonaire_Account_Settings_Status->get_settings_status( 'smtp', true );
-		$imap_status                     = $Bonaire_Account_Settings_Status->get_settings_status( 'imap', true );
-		$save_reply                      = isset( $stored_options->save_reply ) ? $stored_options->save_reply : 'no';
-		$recipient_email_address         = $this->Bonaire_Adapter->get_recipient_email_address( $post_id );
-		$settings_page_link              = '<a href="' . esc_url( site_url() . '/wp-admin/options-general.php?page=bonaire.php' ) . '" target="_blank">' . __( 'Plugin Settings Page', $this->domain ) . '</a>';
-		$contactforms_page_link          = '<a href="' . esc_url( site_url() . '/wp-admin/admin.php?page=wpcf7' ) . '" target="_blank">' . __( 'Contact Forms Page', $this->domain ) . '</a>';
-		$uniqid                          = $this->Bonaire_Adapter->get_meta_field( $post_id, 'posted_data_uniqid' );
-		
-		/**
-		 * Checks if the message was preprocessed.
-		 * If not, a reply is not possible since we don't know the recipient's email address.
-		 */
-		if ( false === $uniqid || false === $recipient_email_address ) {
-			echo __( 'Please Note: This function is available for messages you received <i>after</i> installation and configuration of Bonaire Plugin with the respective contact form.', $this->domain ) . ' ' . __( 'The reason is that Contact Form 7 has no need to store the email address the message was recieved by.', $this->domain ) . ' ' . __( 'In order to send replies from the original email address, Bonaire post-processes recieved messages and tags the message with that email address to be able to associate the message with the configured email account.', $this->domain ) . ' ' . sprintf( __( 'Simply put, once you\'ve set up the contact form (%1$s) and configured the email account settings (%2$s), you\'ll be able to reply to any message you recieve trough the respective contact form.', $this->domain ), $contactforms_page_link, $settings_page_link);
-			
-			return;
+		$image_options_whitelist = $this->options->get_image_options_whitelist();
+		$posted_data = $_POST['cb_parallax_options'];
+		$posted_data['cb_parallax_background_image_url'] = $_POST['cb_parallax_options']['cb_parallax_background_image_url_hidden'];
+		unset( $posted_data['cb_parallax_background_image_url_hidden'] );
+		$data = array();
+		foreach ( $image_options_whitelist as $key => $args ) {
+			$data[ $key ] = isset( $posted_data[ $key ] ) ? $posted_data[ $key ] : null;
 		}
 		
-		/**
-		 * Checks if the necessary account settings are marked as valid.
-		 */
-		if ( 'yes' === $save_reply && false === $imap_status || 'no' === $save_reply && false === $smtp_status || false === $cf7_status ) {
-			printf( __( 'There seems to be a problem with your email settings (%s) or the contact form (%s).', $this->domain ), $settings_page_link, $contactforms_page_link );
-
-			return;
-		}
-		
-		/**
-		 * Checks if the recipient email address matches the one that is configured on the plugin settings page.
-		 */
-		if ( $stored_options->from !== $recipient_email_address ) {
-			printf( __( 'This message was recieved trough the following email account: <strong>%s</strong>. Bonaire is set to send answers via <strong>%s</strong>. Go to %s.', $this->domain ), $recipient_email_address, $stored_options->from, $settings_page_link);
-			
-			return;
-		}
-		
-		/**
-		 * Display reply form.
-		 */
-		$your_subject = $this->Bonaire_Adapter->get_post_field( $post_id, 'your-subject' );
-		$your_email   = $this->Bonaire_Adapter->get_meta_field( $post_id, 'post_author_email' );
-		$string       = AdminPartials\Bonaire_Reply_Form_Display::reply_form_display( $your_subject, $your_email, $this->Bonaire_Options->get_stored_options() );
-		echo $string;
-		
-		return;
+		$this->options->save_options( $data, (int) $post_id );
 	}
 	
 }

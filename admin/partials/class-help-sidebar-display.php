@@ -1,5 +1,7 @@
 <?php
-namespace Bonaire\Admin\Partials;
+namespace CbParallax\Admin\Partials;
+
+use WP_Screen;
 
 /**
  * If this file is called directly, abort.
@@ -11,36 +13,28 @@ if ( ! defined( 'WPINC' ) ) {
 /**
  * The class responsible for creating and displaying the help sidebar.
  *
- * @since             0.9.6
+ * @since             0.9.0
  * @package           bonaire
  * @subpackage        bonaire/admin/partials
  * @author            Demis Patti <demis@demispatti.ch>
  */
-class Bonaire_Help_Sidebar_Display {
+class cb_parallax_help_sidebar_display {
 	
 	/**
 	 * Returns a string containing the content of the 'Help Sidebar'.
 	 *
 	 * @param string $domain
-	 * @param \WP_Screen $current_screen
+	 * @param WP_Screen $current_screen
 	 *
 	 * @return string $html
-	 * @since 0.9.6
+	 *@since 0.9.0
 	 */
-	public static function help_sidebar_display( $domain, $current_screen ) {
+	public static function help_sidebar_display(WP_Screen $current_screen ): string
+    {
 		
 		$html = $current_screen->get_help_sidebar();
 		
 		ob_start();
-		?>
-
-        <p><?php esc_html_e( 'For more information on SALT-Keys, please read', $domain ) ?>
-            <a target="_blank"
-                href="https://www.elegantthemes.com/blog/tips-tricks/what-are-wordpress-salt-keys-and-how-can-you-change-them"><?php esc_html_e( 'What are wordpress salt keys and how can you change them', $domain ) ?></a>&nbsp;<?php esc_html_e( '(english)', $domain ) ?>
-            .
-        </p>
-		
-		<?php
 		$html .= ob_get_contents();
 		ob_end_clean();
 		

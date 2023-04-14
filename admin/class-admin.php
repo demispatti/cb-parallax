@@ -1,7 +1,10 @@
 <?php
-namespace Bonaire\Admin;
+namespace CbParallax\Admin;
 
-use Bonaire\Admin\Includes as AdminIncludes;
+use CbParallax\Includes as Includes;
+use CbParallax\Admin\Menu as AdminMenu;
+use CbParallax\Admin\Includes as AdminIncludes;
+use CbParallax\Admin\Menu\Includes as MenuIncludes;
 
 /**
  * If this file is called directly, abort.
@@ -11,388 +14,202 @@ if ( ! defined( 'WPINC' ) ) {
 }
 
 /**
- * Include dependencies.
+ * Require dependencies.
  */
-if ( ! class_exists( 'AdminIncludes\Bonaire_Settings_Page' ) ) {
-	require_once BONAIRE_ROOT_DIR . 'admin/includes/class-settings-page.php';
+if ( ! class_exists( 'AdminIncludes\cb_parallax_theme_support' ) ) {
+	require_once CBPARALLAX_ROOT_DIR . 'admin/includes/class-theme-support.php';
 }
-if ( ! class_exists( 'AdminIncludes\Bonaire_Dashboard_Widget' ) ) {
-	require_once BONAIRE_ROOT_DIR . 'admin/includes/class-dashboard-widget.php';
+if ( ! class_exists( 'AdminIncludes\cb_parallax_post_type_support' ) ) {
+	require_once CBPARALLAX_ROOT_DIR . 'admin/includes/class-post-type-support.php';
 }
-if ( ! class_exists( 'AdminIncludes\Bonaire_Post_Views' ) ) {
-	require_once BONAIRE_ROOT_DIR . 'admin/includes/class-post-views.php';
+if ( ! class_exists( 'AdminIncludes\cb_parallax_localisation' ) ) {
+	require_once CBPARALLAX_ROOT_DIR . 'admin/includes/class-localisation.php';
 }
-if ( ! class_exists( 'AdminIncludes\Bonaire_Contextual_Help' ) ) {
-	require_once BONAIRE_ROOT_DIR . 'admin/includes/class-contextual-help.php';
+if ( ! class_exists( 'MenuIncludes\cb_parallax_ajax' ) ) {
+	require_once CBPARALLAX_ROOT_DIR . 'admin/menu/includes/class-ajax.php';
 }
-if ( ! class_exists( 'AdminIncludes\Bonaire_Meta_Box' ) ) {
-	require_once BONAIRE_ROOT_DIR . 'admin/includes/class-meta-box.php';
+if ( ! class_exists( 'MenuIncludes\cb_parallax_validation' ) ) {
+	require_once CBPARALLAX_ROOT_DIR . 'admin/menu/includes/class-validation.php';
 }
-if ( ! class_exists( 'AdminIncludes\Bonaire_Mail' ) ) {
-	require_once BONAIRE_ROOT_DIR . 'admin/includes/class-mail.php';
+if ( ! class_exists( 'AdminIncludes\cb_parallax_contextual_help' ) ) {
+	require_once CBPARALLAX_ROOT_DIR . 'admin/includes/class-contextual-help.php';
 }
-if ( ! class_exists( 'AdminIncludes\Bonaire_Account_Evaluator' ) ) {
-	require_once BONAIRE_ROOT_DIR . 'admin/includes/class-settings-evaluator.php';
+if ( ! class_exists( 'AdminIncludes\cb_parallax_meta_box' ) ) {
+	require_once CBPARALLAX_ROOT_DIR . 'admin/includes/class-meta-box.php';
 }
-if ( ! class_exists( 'AdminIncludes\Bonaire_Settings_Status' ) ) {
-	require_once BONAIRE_ROOT_DIR . 'admin/includes/class-settings-status.php';
-}
-if ( ! class_exists( 'AdminIncludes\Bonaire_Ajax' ) ) {
-	require_once BONAIRE_ROOT_DIR . 'admin/includes/class-ajax.php';
-}
-if ( ! class_exists( 'AdminIncludes\Bonaire_Tooltips' ) ) {
-	require_once BONAIRE_ROOT_DIR . 'admin/includes/class-tooltips.php';
-}
-if ( ! class_exists( 'AdminIncludes\Bonaire_Options' ) ) {
-	require_once BONAIRE_ROOT_DIR . 'admin/includes/class-options.php';
-}
-if ( ! class_exists( 'AdminIncludes\Bonaire_Adapter' ) && file_exists( BONAIRE_PLUGINS_ROOT_DIR . 'flamingo/includes/class-inbound-message.php' ) ) {
-	require_once BONAIRE_ROOT_DIR . 'admin/includes/class-adapter.php';
+if ( ! class_exists( 'AdminMenu\cb_parallax_menu' ) ) {
+	require_once CBPARALLAX_ROOT_DIR . 'admin/menu/class-settings-page.php';
 }
 
 /**
- * The admin-specific functionality of the plugin.
- * Defines the plugin name, version, and two examples hooks for how to
- * enqueue the admin-specific stylesheet and JavaScript.
+ * The admin part of the plugin.
  *
- * @since      0.9.6
- * @package    Bonaire
- * @subpackage Bonaire/admin
- * @author     Demis Patti <demispatti@gmail.com>
+ * @link
+ * @since             0.1.0
+ * @package           cb_parallax
+ * @subpackage        cb_parallax/admin
+ * Author:            Demis Patti <demis@demispatti.ch>
+ * Author URI:        http://demispatti.ch
+ * License:           GPL-2.0+
+ * License URI:       http://www.gnu.org/licenses/gpl-2.0.txt
  */
-class Bonaire_Admin {
-	
-	/**
-	 * The name of the plugin.
-	 *
-	 * @var      string $name
-	 * @since    0.9.6
-	 * @access   public
-	 */
-	public $name;
+class cb_parallax_admin {
 	
 	/**
 	 * The domain of the plugin.
 	 *
-	 * @var      string $domain
-	 * @since    0.9.6
-	 * @access   public
+	 * @var string $domain
+	 * @since    0.1.0
+	 * @access   private
 	 */
-	public $domain;
+	private $domain;
 	
 	/**
-	 * The version of the plugin.
+	 * The current version of the plugin.
 	 *
-	 * @var      string $version
-	 * @since    0.9.6
-	 * @access   public
+	 * @var string $version
+	 * @since    0.1.0
+	 * @access   private
 	 */
-	public $version;
+	private $version;
 	
 	/**
-	 * Holds the whitelisted hook suffixes which determine
-	 * if the Contextual Help will be displayed or not
-	 * on the requested page.
+	 * The reference to the options class.
 	 *
-	 * @var      array $plugin_hook_suffixes
-	 * @since    0.9.6
-	 * @access   public static
+	 * @since  0.6.0
+	 * @access private
+	 * @var    MenuIncludes\cb_parallax_options $options
 	 */
-	public static $plugin_hook_suffixes = array(
-		'settings_page' => 'settings_page_bonaire',
-		'flamingo_inbound' => 'flamingo_page_flamingo_inbound',
-		'dashboard' => 'index.php',
-		'doing_ajax' => 'admin-ajax.php'
+	private $options;
+	
+	/**
+	 * Holds a list of supported post types.
+	 *
+	 * @var array $screen_ids
+	 */
+	private $screen_ids = array(
+		'post',
+		'page',
+		'settings_page_cb-parallax'
 	);
 	
 	/**
-	 * Holds the names (slugs) of the pages
-	 * the plugin will load its related classes (or not).
+	 * cb_parallax_admin constructor.
 	 *
-	 * @var      array $plugin_pages
-	 * @since    0.9.6
-	 * @access   public static
-	 */
-	public static $plugin_pages = array(
-		'dashboard' => 'index.php',
-		'flamingo_inbound' => 'flamingo_inbound',
-		'settings_page' => 'bonaire.php'
-	);
-	
-	/**
-	 * Holds the instance of the class responsible for handling the user options.
-	 *
-	 * @var AdminIncludes\Bonaire_Options $Bonaire_Options
-	 * @since    0.9.6
-	 * @access   private
-	 */
-	private $Bonaire_Options;
-	
-	/**
-	 * Holds the instance of the class responsible for keeping track of the message views.
-	 *
-	 * @var AdminIncludes\Bonaire_Post_Views $Bonaire_Post_Views
-	 * @since    0.9.6
-	 * @access   public
-	 */
-	public $Bonaire_Post_Views;
-	
-	/**
-	 * Holds the instance of the class responsible for connecting to Contact Form 7 and Flamingo.
-	 *
-	 * @var AdminIncludes\Bonaire_Adapter Bonaire_Adapter
-	 * @since    0.9.6
-	 * @access   public
-	 */
-	public $Bonaire_Adapter;
-	
-	/**
-	 * Holds the instance of the class responsible for sending messages.
-	 *
-	 * @var AdminIncludes\Bonaire_Mail $Bonaire_Mail
-	 * @since    0.9.6
-	 * @access   private
-	 */
-	private $Bonaire_Mail;
-	
-	/**
-	 * Holds the instance of the class responsible for evaluating the email account settings.
-	 *
-	 * @var AdminIncludes\Bonaire_Settings_Evaluator $Bonaire_Account_Evaluator
-	 * @since    1.0.0
-	 * @access   private
-	 */
-	private $Bonaire_Account_Evaluator;
-	
-	/**
-	 * Holds the instance of the class responsible for handling the email account settings status.
-	 *
-	 * @var AdminIncludes\Bonaire_Settings_Status $Bonaire_Settings_Status
-	 * @since    1.0.0
-	 * @access   private
-	 */
-	private $Bonaire_Settings_Status;
-	
-	/**
-	 * Set the options instance.
-	 *
-	 * @return void
-	 * @since 0.9.6
-	 */
-	private function set_options_instance() {
-		
-		$this->Bonaire_Options = new AdminIncludes\Bonaire_Options( $this->domain );
-	}
-	
-	/**
-	 * Set the post views instance.
-	 *
-	 * @return void
-	 * @since 0.9.6
-	 */
-	private function set_post_views_instance() {
-		
-		$this->Bonaire_Post_Views = new AdminIncludes\Bonaire_Post_Views( $this->domain );
-	}
-	
-	/**
-	 * Bonaire_Admin constructor.
-	 *
-	 * @param string $name
 	 * @param string $domain
 	 * @param string $version
-	 *
-	 * @return void
-	 * @since 0.9.6
+	 * @param MenuIncludes\cb_parallax_options $options
 	 */
-	public function __construct( $name, $domain, $version ) {
+	public function __construct( $domain, $version, $options ) {
 		
-		$this->name    = $name;
-		$this->domain  = $domain;
+		$this->domain = $domain;
 		$this->version = $version;
+		$this->options = $options;
 		
-		$this->set_options_instance();
-		$this->set_post_views_instance();
+		$this->include_post_type_support();
+		$this->include_theme_support();
+		$this->include_contextual_help();
+		$this->include_settings_page();
+		$this->include_ajax_functionality();
 	}
 	
 	/**
 	 * Registers the methods that need to be hooked with WordPress.
 	 *
+	 * @since 0.9.0
 	 * @return void
-	 * @since 0.9.6
 	 */
 	public function add_hooks() {
 		
-		add_action( 'init', array( $this, 'init_dependencies' ), 10 );
+		add_action( 'admin_init', array( $this, 'include_meta_box' ), 20 );
 		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_styles' ), 10 );
-		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_scripts' ), 11 );
-		add_action( 'admin_enqueue_scripts', array( $this, 'maybe_update_post' ), 11 );
-		add_filter( 'plugin_row_meta', array( $this, 'plugin_row_meta' ), 10, 2 );
+		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_scripts' ), 10 );
+		add_action( 'admin_enqueue_scripts', array( $this, 'include_script_localisation' ), 20 );
+		add_action( 'plugin_row_meta', array( $this, 'filter_plugin_row_meta' ), 10, 2 );
+		add_action( 'upgrader_process_complete', array($this, 'run_cb_parallax_upgrade'), 10, 2 );
 	}
 	
 	/**
-	 * Adds the recipient email address as post meta data to the newly recieved message(s).
+	 * Registers the stylesheets with WordPress.
 	 *
+	 * @since 0.9.0
 	 * @return void
-	 * @since 0.9.6
 	 */
-	public function maybe_update_post() {
+	public function enqueue_styles() {
+
+		$screen = get_current_screen();
 		
-		if ( false !== get_transient( 'bonaire_wpcf7_queue' ) ) {
-			$Bonaire_Adapter = new AdminIncludes\Bonaire_Adapter( $this->domain, $this->Bonaire_Options->get_stored_options( 1 ) );
-			$Bonaire_Adapter->update_post();
-		}
-	}
-	
-	/**
-	 * Loads the dependencies this plugin relies on.
-	 *
-	 * @return void
-	 * @since 0.9.6
-	 */
-	public function init_dependencies() {
-		
-		if ( defined( 'FLAMINGO_PLUGIN' ) && defined( 'WPCF7_PLUGIN' ) && current_user_can( 'administrator' ) ) {
+		if ( in_array( $screen->base, $this->screen_ids, true ) ) {
+
+			wp_enqueue_style( 'jquery-ui-smoothness-theme',
+				CBPARALLAX_ROOT_URL . 'vendor/jquery-ui/themes/jquery-ui.min.css',
+				array(),
+				'all',
+				'all'
+			);
 			
-			// Display on Dashboard, Message Edit Screen or on the Plugin Settings Page
-			if ( is_admin() ) {
-				$this->include_options();
-				$this->include_bonaire_mail();
-				$this->include_account_evaluator();
-				$this->include_settings_status();
-				$this->include_ajax();
-				$this->include_contextual_help();
-				$this->include_tooltips();
-			}
-			$this->include_settings_page();
-			$this->include_post_views();
-			
-			// Dashboard
-			if ( is_admin() ) {
-				$this->include_dashboard_widget();
-			}
-			
-			// Flamingo Inbound
-			if ( ( isset( $_REQUEST['action'] ) && $_REQUEST['action'] === 'edit' ) && ( isset( $_REQUEST['page'] ) && self::$plugin_pages['flamingo_inbound'] === $_REQUEST['page'] ) ) {
-				$this->include_required_plugins_adapter();
-				$this->include_meta_box();
-			}
-		}
-	}
-	
-	/**
-	 * Register the stylesheets for the admin area.
-	 *
-	 * @param string $hook_suffix
-	 *
-	 * @return void
-	 * @since 0.9.6
-	 */
-	public function enqueue_styles( $hook_suffix ) {
-		
-		$prefix = ( defined( 'BONAIRE_SCRIPT_DEBUG' ) ) ? '' : '.min';
-		
-		if ( in_array( $hook_suffix, self::$plugin_hook_suffixes, true ) ) {
-			
+			// Dashicons
 			wp_enqueue_style( 'dashicons' );
 			
-			wp_enqueue_style( 'jquery-ui-smoothness',
-				BONAIRE_ROOT_URL . "vendor/jquery-ui/jquery-ui.min.css",
+			// Color Picker
+			wp_enqueue_style( 'wp-color-picker' );
+			
+			// Fancy Select
+			wp_enqueue_style( 'cb-parallax-inc-fancy-select-css',
+				CBPARALLAX_ROOT_URL . 'vendor/fancy-select/fancySelect.css',
 				array(),
 				'all',
 				'all'
 			);
 			
-			// Tooltipster
-			wp_enqueue_style( 'bonaire-inc-tooltipster-core-css',
-				BONAIRE_ROOT_URL . 'vendor/tooltipster/css/tooltipster.core' . $prefix . '.css',
-				array(),
-				'all',
-				'all'
-			);
-			wp_enqueue_style( 'bonaire-inc-tooltipster-bundle-css',
-				BONAIRE_ROOT_URL . 'vendor/tooltipster/css/tooltipster.bundle' . $prefix . '.css',
-				array(),
-				'all',
-				'all'
-			);
-			wp_enqueue_style( 'bonaire-inc-tooltipster-theme-shadow-css',
-				BONAIRE_ROOT_URL . 'vendor/tooltipster/css/plugins/tooltipster/sideTip/themes/tooltipster-sideTip-shadow.min.css',
-				array(),
-				'all',
-				'all'
-			);
-			
-			// Alertify
-			wp_enqueue_style( 'bonaire-inc-alertify-min-css',
-				BONAIRE_ROOT_URL . 'vendor/alertify/css/alertify' . $prefix . '.css',
-				array(),
-				'all',
-				'all'
-			);
-			wp_enqueue_style( 'bonaire-inc-alertify-theme-bootstrap-min-css',
-				BONAIRE_ROOT_URL . 'vendor/alertify/css/themes/bootstrap' . $prefix . '.css',
-				array(),
-				'all',
-				'all'
-			);
+			// Metabox Display
+			if( 'settings_page_cb-parallax' !== $screen->base ) {
+				wp_enqueue_style( 'cb-parallax-metabox-display-css',
+					CBPARALLAX_ROOT_URL . 'admin/css/metabox-display.css',
+					array(),
+					'all',
+					'all'
+				);
+			}
 		}
-		
-		// Admin
-		wp_enqueue_style( 'bonaire-admin-css',
-			BONAIRE_ROOT_URL . 'admin/css/bonaire-admin' . $prefix . '.css',
-			array(),
-			'all',
-			'all'
-		);
 	}
 	
 	/**
-	 * Registers the JavaScript for the admin area.
+	 * Registers the javascript files with WordPress.
 	 *
-	 * @param string $hook_suffix
-	 *
+	 * @since 0.9.0
 	 * @return void
-	 * @since 0.9.6
 	 */
-	public function enqueue_scripts( $hook_suffix ) {
+	public function enqueue_scripts() {
 		
-		$prefix = ( defined( 'BONAIRE_SCRIPT_DEBUG' ) ) ? '' : '.min';
+		$screen = get_current_screen();
 		
-		if ( in_array( $hook_suffix, self::$plugin_hook_suffixes, true ) ) {
+		if ( in_array( $screen->base, $this->screen_ids, true ) ) {
 			
-			// Tooltipster
-			wp_enqueue_script( 'bonaire-inc-tooltipster-core-min-js',
-				BONAIRE_ROOT_URL . 'vendor/tooltipster/js/tooltipster.core' . $prefix . '.js',
-				array( 'jquery' ),
-				'all',
-				true
-			);
-			wp_enqueue_script( 'bonaire-inc-tooltipster-svg-min-js',
-				BONAIRE_ROOT_URL . 'vendor/tooltipster/js/plugins/tooltipster/SVG/tooltipster-SVG' . $prefix . '.js',
-				array( 'jquery', 'bonaire-inc-tooltipster-core-min-js' ),
-				'all',
-				true
-			);
-			wp_enqueue_script( 'bonaire-inc-tooltipster-bundle-min-js',
-				BONAIRE_ROOT_URL . 'vendor/tooltipster/js/tooltipster.bundle' . $prefix . '.js',
-				array( 'jquery', 'bonaire-inc-tooltipster-svg-min-js' ),
+			// Color picker.
+			wp_enqueue_script( 'wp-color-picker' );
+			wp_enqueue_script( 'wp-color-picker-alpha',
+				CBPARALLAX_ROOT_URL . 'vendor/color-picker-alpha/wp-color-picker-alpha.min.js',
+				array(
+					'jquery',
+					'wp-color-picker'
+				),
 				'all',
 				true
 			);
 			
-			// Tooltips
-			wp_enqueue_script( 'bonaire-tooltips-js',
-				BONAIRE_ROOT_URL . 'admin/js/tooltips' . $prefix . '.js',
-				array( 'jquery', 'bonaire-inc-tooltipster-bundle-min-js' ),
-				'all',
-				true
-			);
+			// Media Frame.
+			wp_enqueue_script( 'media-views' );
 			
-			// Alertify
-			wp_enqueue_script( 'bonaire-inc-alertify-min-js',
-				BONAIRE_ROOT_URL . 'vendor/alertify/alertify' . $prefix . '.js',
-				array( 'jquery' ),
+			// Media upload engine.
+			wp_enqueue_media();
+			
+			// Fancy Select.
+			wp_enqueue_script( 'cb-parallax-inc-fancy-select-js',
+				CBPARALLAX_ROOT_URL . 'vendor/fancy-select/fancySelect.js',
+				array(
+					'jquery'
+				),
 				'all',
 				true
 			);
@@ -404,218 +221,135 @@ class Bonaire_Admin {
 			wp_enqueue_script( 'jquery-ui-widget' );
 			wp_enqueue_script( 'jquery-effects-core' );
 			
-			// Admin
-			wp_enqueue_script( 'bonaire-admin-js',
-				BONAIRE_ROOT_URL . 'admin/js/bonaire-admin' . $prefix . '.js',
+			// Admin part.
+			wp_enqueue_script( 'cb-parallax-settings-display-js',
+				CBPARALLAX_ROOT_URL . 'admin/js/settings-display.js',
 				array(
 					'jquery',
+					//
+					'wp-color-picker',
 					'media-views',
+					//
 					'jquery-ui-core',
 					'jquery-ui-tabs',
 					'jquery-ui-widget',
 					'jquery-effects-core',
-					'bonaire-inc-alertify-min-js'
+					//
+					'cb-parallax-inc-fancy-select-js',
 				),
-				'all',
-				true
+				'all'
 			);
 		}
 	}
 	
 	/**
-	 * Includes the class that connects to Contact Form 7 and Flamingo.
+	 * Includes the class responsible for pots type support.
 	 *
 	 * @return void
-	 * @since 0.9.6
 	 */
-	private function include_required_plugins_adapter() {
+	private function include_post_type_support() {
 		
-		if ( file_exists( BONAIRE_PLUGINS_ROOT_DIR . 'flamingo/includes/class-inbound-message.php' ) ) {
-			/**
-			 * The class responsible for interacting with 'Contact Form 7' and 'Flamingo'.
-			 */
-			$this->Bonaire_Adapter = new AdminIncludes\Bonaire_Adapter( $this->domain, $this->Bonaire_Options->get_stored_options( 0 ) );
-		}
+		$post_type_support = new AdminIncludes\cb_parallax_post_type_support();
+		$post_type_support->add_hooks();
 	}
 	
 	/**
-	 * Includes the dashboard widget.
+	 * Includes the class responsible for theme support.
 	 *
 	 * @return void
-	 * @since 0.9.6
 	 */
-	private function include_dashboard_widget() {
+	private function include_theme_support() {
 		
-		/**
-		 * The class responsible for the dashboard widget.
-		 */
-		$Bonaire_Dashboard_Widget = new AdminIncludes\Bonaire_Dashboard_Widget( $this->domain, $this->Bonaire_Options );
-		$Bonaire_Dashboard_Widget->add_hooks();
+		$wp_support = new AdminIncludes\cb_parallax_theme_support();
+		$wp_support->add_hooks();
 	}
 	
 	/**
-	 * Includes the settings page.
+	 * Includes the class responsible for displaying the meta box.
 	 *
 	 * @return void
-	 * @since 0.9.6
+	 */
+	public function include_meta_box() {
+		
+		$meta_box = new AdminIncludes\cb_parallax_meta_box( $this->domain, $this->screen_ids, $this->options );
+		$meta_box->add_hooks();
+	}
+	
+	/**
+	 * Includes the class responsible for localizing the javascript file.
+	 *
+	 * @return void
+	 */
+	public function include_script_localisation() {
+		
+		$script_localisation = new AdminIncludes\cb_parallax_localisation( $this->domain, $this->screen_ids, $this->options );
+		$script_localisation->add_hooks();
+	}
+	
+	/**
+	 * Includes the class responsible for displaying the contextual help.
+	 *
+	 * @return void
+	 */
+	private function include_contextual_help() {
+
+		$Help_Tab = new AdminIncludes\cb_parallax_contextual_help( $this->domain );
+		$Help_Tab->add_hooks();
+	}
+	
+	/**
+	 * Includes the class responsible for displaying the settings page.
+	 *
+	 * @return void
 	 */
 	private function include_settings_page() {
 		
-		/**
-		 * The class responsible for the settings page.
-		 */
-		$Bonaire_Settings_Page = new AdminIncludes\Bonaire_Settings_Page( $this->domain, $this->Bonaire_Options );
-		$Bonaire_Settings_Page->add_hooks();
+		$menu = new AdminMenu\cb_parallax_settings_page( $this->domain, $this->screen_ids, $this->options );
+		$menu->add_hooks();
 	}
 	
 	/**
-	 * Includes the class responsible for sending emails.
+	 * Includes the class responsible for receiving the ajax requests.
 	 *
 	 * @return void
-	 * @since 0.9.6
 	 */
-	private function include_bonaire_mail() {
+	private function include_ajax_functionality() {
 		
-		/**
-		 * The class responsible for the mailing functionality.
-		 */
-		$this->Bonaire_Mail = new AdminIncludes\Bonaire_Mail( $this->domain, $this->Bonaire_Options );
+		$ajax = new MenuIncludes\cb_parallax_ajax( $this->domain, $this->options );
+		$ajax->add_hooks();
 	}
 	
 	/**
-	 * Includes the class responsible for sending emails.
-	 *
-	 * @return void
-	 * @since 1.0.0
-	 */
-	private function include_account_evaluator() {
-		
-		/**
-		 * The class responsible for the mailing functionality.
-		 */
-		$this->Bonaire_Account_Evaluator = new AdminIncludes\Bonaire_Settings_Evaluator( $this->domain, $this->Bonaire_Options );
-	}
-	
-	/**
-	 * The class responsible for handling the email account settings status.
-	 *
-	 * @return void
-	 * @since 1.0.0
-	 */
-	private function include_settings_status() {
-		
-		$this->Bonaire_Settings_Status = new AdminIncludes\Bonaire_Settings_Status( $this->domain );
-	}
-	
-	/**
-	 * Includes the meta box.
-	 *
-	 * @return void
-	 * @since 0.9.6
-	 */
-	private function include_meta_box() {
-		
-		/**
-		 * The class responsible for the meta box containing the reply form.
-		 */
-		$Bonaire_Meta_Box = new AdminIncludes\Bonaire_Meta_Box( $this->domain, $this->Bonaire_Adapter, $this->Bonaire_Options );
-		$Bonaire_Meta_Box->add_hooks();
-	}
-	
-	/**
-	 * includes the help tab.
-	 *
-	 * @return void
-	 * @since 0.9.6
-	 */
-	private function include_contextual_help() {
-		
-		/**
-		 * The class responsible for the help tab.
-		 */
-		$Bonaire_Contextual_Help = new AdminIncludes\Bonaire_Contextual_Help( $this->domain );
-		$Bonaire_Contextual_Help->add_hooks();
-	}
-	
-	/**
-	 * Tracks the post views in order to
-	 * display or hide the message excerpt in the dashboard widget.
-	 *
-	 * @return void
-	 * @since 0.9.6
-	 */
-	private function include_post_views() {
-		
-		/**
-		 * The class responsible for tracking read messages.
-		 */
-		$this->Bonaire_Post_Views->add_hooks();
-	}
-	
-	/**
-	 * Includes the class responsible for handling the stored options.
-	 *
-	 * @return void
-	 * @since 0.9.6
-	 */
-	private function include_options() {
-		
-		/**
-		 * The class that manages the options.
-		 */
-		$this->Bonaire_Options->add_hooks();
-	}
-	
-	/**
-	 * Includes the ajax functionality.
-	 *
-	 * @return void
-	 * @since 0.9.6
-	 */
-	private function include_ajax() {
-		
-		/**
-		 * The class responsible for this plugin's ajax functionality.
-		 */
-		$Bonaire_Ajax = new AdminIncludes\Bonaire_Ajax( $this->domain, $this->Bonaire_Options, $this->Bonaire_Post_Views, $this->Bonaire_Mail, $this->Bonaire_Account_Evaluator, $this->Bonaire_Settings_Status );
-		$Bonaire_Ajax->add_hooks();
-	}
-	
-	/**
-	 * Includes the tooltips displayed on the settings page.
-	 *
-	 * @return void
-	 * @since 0.9.6
-	 */
-	private function include_tooltips() {
-		
-		/**
-		 * The class responsible for this plugin's tooltips.
-		 */
-		$Bonaire_Tooltips = new AdminIncludes\Bonaire_Tooltips( $this->domain, $this->Bonaire_Options->get_options_meta() );
-		$Bonaire_Tooltips->add_hooks();
-	}
-	
-	/**
-	 * Adds support, rating, and donation links to the plugin row meta to the plugins admin screen.
+	 * Displays the plugin row content.
 	 *
 	 * @param array $meta
 	 * @param string $file
 	 *
-	 * @return array  $meta
-	 * @since  1.0.0
+	 * @return array $meta
 	 */
-	public function plugin_row_meta( $meta, $file ) {
+	public function filter_plugin_row_meta( $meta, $file ) {
 		
-		$plugin = plugin_basename( 'bonaire/bonaire.php' );
+		$plugin = plugin_basename( 'cb-parallax/cb-parallax.php' );
 		
-		if ( $file === $plugin ) {
-			$meta[] = '<a href="https://wordpress.org/support/plugin/bonaire" target="_blank">' . __( 'Plugin Support', $this->domain ) . '</a>';
-			$meta[] = '<a href="https://wordpress.org/support/view/plugin-reviews/bonaire" target="_blank">' . __( 'Rate Plugin', $this->domain ) . '</a>';
-			$meta[] = '<a href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=XLMMS7C62S76Q" target="_blank">' . __( 'Donate', $this->domain ) . '</a>';
+		if ( $file == $plugin ) {
+			$meta[] = '<a href="https://wordpress.org/support/plugin/cb-parallax" target="_blank">' . __( 'Plugin support', $this->domain ) . '</a>';
+			$meta[] = '<a href="https://wordpress.org/plugins/cb-parallax" target="_blank">' . __( 'Rate plugin', $this->domain ) . '</a>';
+			$meta[] = '<a href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=XLMMS7C62S76Q" target="_blank">' . __( 'Buy me a beer!', $this->domain ) . '</a>';
 		}
 		
 		return $meta;
 	}
 	
+	/**
+	 * Instantiates the class responsible for the options upgrades
+	 * and runs it.
+	 */
+	public function run_cb_parallax_upgrade() {
+		
+		if ( ! class_exists( 'Includes\cb_parallax_upgrade' ) ) {
+			require_once CBPARALLAX_ROOT_DIR . 'includes/class-cb-parallax-upgrade.php';
+		}
+		$upgrader = new Includes\cb_parallax_upgrade( $this->domain, $this->version );
+		$upgrader->run();
+	}
 }
