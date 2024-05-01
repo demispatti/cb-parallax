@@ -1,7 +1,7 @@
 === cbParallax ===
 Tags: parallax, responsive, fullscreen, image, background, Hintergrund, Bild, Hintergrundbild
-Requires at least: 5.5
-Tested up to: 6.1.1
+Requires at least: 5.6
+Tested up to: 6.5.2
 Requires PHP: 5.6+
 Stable tag: 0.9.7
 Version: 0.9.7
