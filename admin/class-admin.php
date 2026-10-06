@@ -144,7 +144,7 @@ class cb_parallax_admin {
 			wp_enqueue_style( 'jquery-ui-smoothness-theme',
 				CBPARALLAX_ROOT_URL . 'vendor/jquery-ui/themes/jquery-ui.min.css',
 				array(),
-				'all',
+				'1.14.2',
 				'all'
 			);
 			
@@ -194,7 +194,7 @@ class cb_parallax_admin {
 					'jquery',
 					'wp-color-picker'
 				),
-				'all',
+				'2.1.4',
 				true
 			);
 			

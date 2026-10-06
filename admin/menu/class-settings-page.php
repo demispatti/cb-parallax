@@ -158,7 +158,7 @@ class cb_parallax_settings_page {
 			wp_enqueue_script( 'wp-color-picker-alpha', CBPARALLAX_ROOT_URL . 'vendor/color-picker-alpha/wp-color-picker-alpha.min.js', array(
 				'jquery',
 				'wp-color-picker'
-			), 'all', true );
+			), '2.1.4', true );
 			
 			// Media Frame.
 			wp_enqueue_script( 'media-views' );

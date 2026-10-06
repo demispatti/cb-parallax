@@ -152,7 +152,7 @@ class cb_parallax_public {
 			'cb-parallax-inc-smoothscroll-min-js',
 			CBPARALLAX_ROOT_URL . 'vendor/smoothscroll/smoothscroll.js',
 			array( 'jquery' ),
-			'all',
+			'0.4.4',
 			true
 		);
 		
