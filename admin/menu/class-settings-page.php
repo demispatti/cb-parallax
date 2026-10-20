@@ -78,10 +78,8 @@ class cb_parallax_settings_page
         $this->domain = $domain;
         $this->screen_ids = $screen_ids;
         $this->options = $options;
-        $this->add_hooks();
-        $this->init();
     }
-    
+
     /**
      * Registers the methods that need to be hooked with WordPress.
      *
@@ -110,24 +108,6 @@ class cb_parallax_settings_page
             $this,
             'add_body_class'
         ), 10, 1);
-    }
-    
-    /**
-     * Adds the actions for registering the stylesheets and javascript files with WordPress,
-     * if we're on a white-listed screen.
-     */
-    private function init() : void
-    {
-        if (in_array($this->screen_id, $this->screen_ids, true)) {
-            add_action('admin_enqueue_scripts', array(
-                $this,
-                'enqueue_styles'
-            ), 10);
-            add_action('admin_enqueue_scripts', array(
-                $this,
-                'enqueue_scripts'
-            ), 10);
-        }
     }
     
     /**

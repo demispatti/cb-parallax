@@ -106,7 +106,6 @@ class cb_parallax_meta_box
             return;
         }
         
-        $this->add_hooks();
         $this->retrieve_options();
     }
     
