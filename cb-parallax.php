@@ -14,7 +14,7 @@
  * Plugin Name:       cbParallax
  * Plugin URI:        https://wordpress.org/plugins/cb-parallax/
  * Description:       Lets you add custom background images with or without vertical or horizontal parallax effect for single posts, pages and products.
- * Version:           1.1.0
+ * Version:           1.1.1
  * Requires at least: 6.7
  * Tested up to:      7.1
  * Requires PHP:      8.0
@@ -37,7 +37,7 @@ if (!defined('WPINC')) {
  * Current plugin version.
  */
 if (!defined('CBPARALLAX_VERSION')) {
-    define('CBPARALLAX_VERSION', '1.1.0');
+    define('CBPARALLAX_VERSION', '1.1.1');
 }
 
 /**

@@ -4,7 +4,7 @@ Tags: parallax, background, fullscreen, scroll, custom background
 Requires at least: 6.7
 Tested up to: 7.1
 Requires PHP: 8.0
-Stable tag: 1.1.0
+Stable tag: 1.1.1
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -73,6 +73,12 @@ Yes! There's an option in the settings to disable the parallax effect on mobile 
 
 == Changelog ==
 
+= 1.1.1 =
+* Corrected the bundled WP Color Picker Alpha version to 3.0.4.
+* Updated SweetAlert2 to 11.26.25, Smooth Scroll to 0.4.4, and jQuery UI to 1.14.2.
+* Added third-party license and source documentation.
+* Improved output escaping, internationalization, and WordPress coding-standards compliance.
+
 = 1.1.0 =
 * Security: Removed global suppression of WordPress doing-it-wrong notices.
 * Security: Rejects unauthorized AJAX requests before nonce and input processing.
@@ -99,6 +105,9 @@ Yes! There's an option in the settings to disable the parallax effect on mobile 
 * Previous stable release
 
 == Upgrade Notice ==
+
+= 1.1.1 =
+Dependency, licensing, and WordPress Plugin Check maintenance update.
 
 = 1.1.0 =
 Compatibility and lifecycle fixes for current WordPress and PHP releases.
