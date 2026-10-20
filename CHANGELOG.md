@@ -9,6 +9,10 @@
 - Removed duplicate settings-page and meta-box hook registration
 - Restored the scoped visual stylesheet required by the production package
 
+### Fixed
+
+- Recalculate and redraw the parallax canvas when iOS browser chrome changes the visual viewport
+
 ## Version 0.9.8
 
 ### Changed

@@ -12,6 +12,7 @@
     function CbParallaxPublic()
     {
         this.cbParallaxPublic = Cb_Parallax_Public;
+        const viewportDimensions = window.CbParallaxViewport.getDimensions(window, document);
 
         this.defaultOptions = {
             background_image_url: '',
@@ -31,8 +32,8 @@
             horizontal_alignment: 'center',
             vertical_alignment: 'center',
             overlay_image: '',
-            image_width: viewport.innerWidth(),
-            image_height: viewport.innerHeight(),
+            image_width: viewportDimensions.width,
+            image_height: viewportDimensions.height,
             overlay_path: '',
             overlay_opacity: '0.3',
             overlay_color: '',
@@ -74,12 +75,12 @@
         this.canvasDim.y = this.getCanvasDimensions()[y];*/
         this.context = null;
         this.img = null;
-        this.scaleFactor = undefined !== this.cbParallaxPublic.scale_factor ? this.cbParallaxPublic.scale_factor : 1.5;
         this.imageAspectRatio = null/* = this.getBackgroundImageAspectRatio()*/;
         this.scrollFactor = parseFloat('1.2');
-        this.viewport = [];
-        this.viewport.x = Math.max(document.documentElement.clientWidth || 0, window.innerWidth || 0);
-        this.viewport.y = Math.max(document.documentElement.clientHeight || 0, window.innerHeight || 0);
+        this.viewport = {
+            x: viewportDimensions.width,
+            y: viewportDimensions.height
+        };
         $instance = this;
     }
 
@@ -90,8 +91,12 @@
             //let viewport = $(window);
             if ('1' === $instance.canParallax && '1' === $instance.parallaxEnabled) {
                 viewport.on('scroll', {context: this}, $instance.parallaxOnScroll);
-                //viewport.on('scroll', {context: this}, $instance.actionOnScroll);
                 viewport.on('resize', {context: this}, $instance.parallaxOnResize);
+                viewport.on('orientationchange', {context: this}, $instance.parallaxOnResize);
+
+                if (window.visualViewport) {
+                    $(window.visualViewport).on('resize', {context: this}, $instance.parallaxOnResize);
+                }
             }
         },
 
@@ -203,79 +208,15 @@
                 $instance.setupOverlay();
                 $instance.addCss();
 
-                let imageDim = $instance.getImageDimensions();
-                //this.canvasDim = this.getCanvasDimensions();
-                let canvasDim = $instance.getCanvasDimensions();
-                let canvas = document.getElementById('cb_parallax_canvas');
-                let context = canvas.getContext('2d');
                 $instance.img = new Image();
-                let sx = 0;
-                let sy = 0;
-                let sWidth = imageDim.width;
-                let sHeight = imageDim.height;
-                let dx = -((imageDim.width - viewport.width()) / 2).toFixed(0);
-                let dy = 0;
-                let dWidth = viewport.innerWidth()/*imageDim.width*/;
-                let dHeight = viewport.innerHeight()/*Math.abs((parseInt(imageDim.height) + parseInt(imageDim.height / $instance.scrollFactor)))*/;
 
                 $instance.img.onload = function() {
-                    let image = this;
-                    context.drawImage(this, 0, 0, canvasDim.x, canvasDim.y);
-
-                    //context.drawImage(image, sx, sy, sWidth, sHeight, dx, dy, dWidth, dHeight);
-                    //context.drawImage(image, sx, sy, sWidth, sHeight, dx, dy, dWidth, dHeight);
-                    //context.drawImage(this, dx, dy, dWidth, dHeight);
-                    //context.drawImage(image, 0, 0);
-                    /*context.drawImage(
-                        this,
-                        /!*(-imageDim.width * 1).toFixed(0)*!/0,
-                        /!*(-imageDim.height * 1).toFixed(0)*!/0,
-                        (imageDim.width * 2).toFixed(0),
-                        (imageDim.height * 2).toFixed(0),
-                        0,
-                        0,
-                        (canvasDim.x * 2).toFixed(0),
-                        (canvasDim.y * 2).toFixed(0)
-                    );*/
+                    $instance.updateCanvasDimensions();
                     $instance.doParallaxBackgroundImageMovement();
-                    //$instance.parallaxOnResize();
                 };
                 $instance.img.src = $instance.image.src + '?' + encodeURIComponent(new Date().toDateString());
             }
         },
-
-        /*doBackground: function() {
-            $('html').attr('class', 'cbpHtml');
-            $('body').attr('class', 'cbpBody');
-            $instance.setupCanvas();
-            $instance.setupOverlay();
-            $instance.addCss();
-            let imageDim = $instance.getImageDimensions();
-            //this.canvasDim = this.getCanvasDimensions();
-            let canvasDim = $instance.getCanvasDimensions();
-            let canvas = document.getElementById('cb_parallax_canvas');
-            let context = canvas.getContext('2d');
-            $instance.img = new Image();
-            //let $this = this;
-
-            $instance.img.onload = function() {
-                context.drawImage(this, 0, 0, imageDim.width, imageDim.height);
-                /!*context.drawImage(
-                    this,
-                    /!*(-imageDim.width * 1).toFixed(0)*!/0,
-                    /!*(-imageDim.height * 1).toFixed(0)*!/0,
-                    (imageDim.width * 2).toFixed(0),
-                    (imageDim.height * 2).toFixed(0),
-                    0,
-                    0,
-                    (canvasDim.x * 2).toFixed(0),
-                    (canvasDim.y * 2).toFixed(0)
-                );*!/
-                $instance.doParallaxBackgroundImageMovement();
-                $instance.parallaxOnResize();
-            };
-            $instance.img.src = $instance.image.src + '?' + encodeURIComponent(new Date().toDateString());
-        },*/
 
         setupCanvas: function() {
             if (0 === $('#cb_parallax_canvas').length) {
@@ -309,52 +250,6 @@
 
             return mode;
         },*/
-
-        /// Image Scaling
-        scaleImageForVerticalScrolling: function(imgW, imgH, viewportW, viewportH, scaleFactor) {
-            const targetW = viewportW;
-            const targetH = viewportH * scaleFactor;
-
-            let newW = targetW;
-            let newH = imgH / imgW * targetW;
-
-            // Skalieren der Bildbreite und -höhe auf die Mindestmasse
-            if (newH < targetH || newW < viewportW) {
-                while (newW < viewportW || newH < targetH) {
-                    newW += 1;
-                    newH += 1;
-                }
-            }
-
-            return {
-                width: newW.toFixed(0),
-                height: newH.toFixed(0)
-            };
-        },
-
-        scaleImageForHorizontalScrolling: function(imgW, imgH, viewportW, viewportH, scaleFactor) {
-            // Zielbreite: 125% der Viewport-Breite
-            const targetWidth = viewportW * scaleFactor;
-
-            // Berechne Skalierung, um Breite zu erreichen
-            const scale = targetWidth / imgW;
-
-            // Skaliere Höhe entsprechend
-            let newWidth = imgW * scale;
-            let newHeight = imgH * scale;
-
-            // Wenn neue Höhe kleiner als Viewport-Höhe → anpassen
-            if (newHeight < viewportH) {
-                const scaleH = viewportH / imgH;
-                newWidth = imgW * scaleH;
-                newHeight = imgH * scaleH;
-            }
-
-            return {
-                width: newWidth.toFixed(0),
-                height: newHeight.toFixed(0)
-            };
-        },
 
         /// Moves
         doParallaxBackgroundImageMovement: function() {
@@ -445,6 +340,15 @@
             if (undefined !== event) {
                 $this = event.data.context;
             }
+
+            if ($this.updateViewportDimensions()) {
+                $this.parallaxOnResize();
+            }
+
+            if ('1' === $this.isScrolling) {
+                return;
+            }
+
             $this.isScrolling = '1';
             requestAnimationFrame($this.scrollParallaxBackgroundImage);
         },
@@ -454,15 +358,21 @@
                 $instance.doParallaxTranslate3DTransform($instance.getParallaxTransform());
             }
             $instance.isScrolling = '0';
-            requestAnimationFrame($instance.scrollParallaxBackgroundImage);
         },
 
         parallaxOnResize: function(event) {
             let $this = $instance;
-            $this.canvasDim = $this.getCanvasDimensions();
             if (undefined !== event) {
                 $this = event.data.context;
             }
+
+            $this.updateViewportDimensions();
+            $this.canvasDim = $this.getCanvasDimensions();
+
+            if ('1' === $this.isResizing) {
+                return;
+            }
+
             $this.isResizing = '1';
             requestAnimationFrame($this.resizeParallaxBackgroundImage);
         },
@@ -475,7 +385,6 @@
                 $instance.updateParallaxAxis();
             }
             $instance.isResizing = '0';
-            requestAnimationFrame($instance.resizeParallaxBackgroundImage);
         },
 
         /// Image Parallax Hepler Functions
@@ -483,9 +392,9 @@
             let posX = null;
             let canvasDim = $instance.getCanvasDimensions();
             let aspectRatio = $instance.getViewportAspectRatio();
+            let viewportDim = $instance.getViewportDimensions();
             let landscape = aspectRatio >= $instance.imageAspectRatio ? '1' : '0';
             let portrait = aspectRatio < $instance.imageAspectRatio ? '1' : '0';
-            //let viewport = $(window);
 
             if ('vertical' === $instance.direction) {
                 if ('to top' === $instance.verticalScrollDirection) {
@@ -495,10 +404,10 @@
                                 posX = '0';
                                 break;
                             case 'center':
-                                posX = (viewport.innerWidth() / 2) - (canvasDim.x / 2);
+                                posX = (viewportDim.width / 2) - (canvasDim.x / 2);
                                 break;
                             case 'right':
-                                posX = viewport.innerWidth() - canvasDim.x;
+                                posX = viewportDim.width - canvasDim.x;
                                 break;
                         }
                         return parseInt(posX) + 'px';
@@ -508,10 +417,10 @@
                                 posX = '0';
                                 break;
                             case 'center':
-                                posX = (viewport.innerWidth() / 2) - (canvasDim.x / 2);
+                                posX = (viewportDim.width / 2) - (canvasDim.x / 2);
                                 break;
                             case 'right':
-                                posX = viewport.innerWidth() - canvasDim.x;
+                                posX = viewportDim.width - canvasDim.x;
                                 break;
                         }
                         return parseInt(posX) + 'px';
@@ -523,10 +432,10 @@
                                 posX = '0';
                                 break;
                             case 'center':
-                                posX = (viewport.innerWidth() / 2) - (canvasDim.x / 2);
+                                posX = (viewportDim.width / 2) - (canvasDim.x / 2);
                                 break;
                             case 'right':
-                                posX = viewport.innerWidth() - canvasDim.x;
+                                posX = viewportDim.width - canvasDim.x;
                                 break;
                         }
                         return parseInt(posX) + 'px';
@@ -536,10 +445,10 @@
                                 posX = '0';
                                 break;
                             case 'center':
-                                posX = (viewport.innerWidth() / 2) - (canvasDim.x / 2);
+                                posX = (viewportDim.width / 2) - (canvasDim.x / 2);
                                 break;
                             case 'right':
-                                posX = viewport.innerWidth() - canvasDim.x;
+                                posX = viewportDim.width - canvasDim.x;
                                 break;
                         }
                         return parseInt(posX) + 'px';
@@ -552,9 +461,9 @@
             let posY = null;
             let canvasDim = $instance.getCanvasDimensions();
             let aspectRatio = $instance.getViewportAspectRatio();
+            let viewportDim = $instance.getViewportDimensions();
             let landscape = aspectRatio >= $instance.imageAspectRatio ? '1' : '0';
             let portrait = aspectRatio < $instance.imageAspectRatio ? '1' : '0';
-            //let viewport = $(window);
 
             if ('horizontal' === $instance.direction) {
                 if ('to the left' === $instance.horizontalScrollDirection) {
@@ -564,11 +473,10 @@
                                 posY = '0';
                                 break;
                             case 'center':
-                                //posY = -( canvasDim.y / 2 ) - ($( window ).innerHeight() / 2 );
-                                posY = (viewport.innerHeight() / 2) - (canvasDim.y / 2);
+                                posY = (viewportDim.height / 2) - (canvasDim.y / 2);
                                 break;
                             case 'bottom':
-                                posY = viewport.innerHeight() - canvasDim.y;
+                                posY = viewportDim.height - canvasDim.y;
                                 break;
                         }
                         return parseInt(posY) + 'px';
@@ -578,11 +486,10 @@
                                 posY = '0';
                                 break;
                             case 'center':
-                                posY = (viewport.innerHeight() / 2) - (canvasDim.y / 2);
-                                //posY = - ( ( canvasDim.y / 2 ) - $( window ).innerHeight() / 2 ) / 2;
+                                posY = (viewportDim.height / 2) - (canvasDim.y / 2);
                                 break;
                             case 'bottom':
-                                posY = -viewport.innerHeight() + canvasDim.y;
+                                posY = -viewportDim.height + canvasDim.y;
                                 break;
                         }
                         return parseInt(posY) + 'px';
@@ -594,11 +501,10 @@
                                 posY = '0';
                                 break;
                             case 'center':
-                                //posY = ( $( window ).innerHeight() / 2 ) - ( canvasDim.y / 2 );
-                                posY = (viewport.innerHeight() / 2) - (canvasDim.y / 2);
+                                posY = (viewportDim.height / 2) - (canvasDim.y / 2);
                                 break;
                             case 'bottom':
-                                posY = viewport.innerHeight() - canvasDim.y;
+                                posY = viewportDim.height - canvasDim.y;
                                 break;
                         }
                         return parseInt(posY) + 'px';
@@ -608,11 +514,10 @@
                                 posY = '0';
                                 break;
                             case 'center':
-                                //posY = - ( canvasDim.y / 2 ) + ($( window ).innerHeight() / 2 );
-                                posY = (viewport.innerHeight() / 2) - (canvasDim.y / 2);
+                                posY = (viewportDim.height / 2) - (canvasDim.y / 2);
                                 break;
                             case 'bottom':
-                                posY = viewport.innerHeight() - canvasDim.y;
+                                posY = viewportDim.height - canvasDim.y;
                                 break;
                         }
                         return parseInt(posY) + 'px';
@@ -623,26 +528,43 @@
 
         getScrollRatio: function() {
             let canvasDim = $instance.getCanvasDimensions();
-            let documentOffsetX = null;
+            let viewportDim = $instance.getViewportDimensions();
+            let documentOffset = $(document).innerHeight() - viewportDim.height;
             let imageOffsetY = null;
             let imageOffsetX = null;
-            let ratio = null;
-            //let viewport = $(window);
+
+            if (documentOffset <= 0) {
+                return 0;
+            }
 
             if ('vertical' === $instance.direction) {
-                documentOffsetX = $(document).innerHeight() - viewport.innerHeight();
-                imageOffsetY = canvasDim.y - viewport.height();
-                ratio = (imageOffsetY / documentOffsetX);
+                imageOffsetY = canvasDim.y - viewportDim.height;
+                return imageOffsetY / documentOffset;
             } else if ('horizontal' === $instance.direction) {
-                documentOffsetX = $(document).innerHeight() - viewport.innerHeight();
-                imageOffsetX = canvasDim.x - viewport.innerWidth();
-                ratio = (imageOffsetX / documentOffsetX);
+                imageOffsetX = canvasDim.x - viewportDim.width;
+                return imageOffsetX / documentOffset;
             }
-            return ratio;
+
+            return 0;
+        },
+
+        getViewportDimensions: function() {
+            return window.CbParallaxViewport.getDimensions(window, document);
+        },
+
+        updateViewportDimensions: function() {
+            const dimensions = $instance.getViewportDimensions();
+            const changed = dimensions.width !== $instance.viewport.x || dimensions.height !== $instance.viewport.y;
+
+            $instance.viewport.x = dimensions.width;
+            $instance.viewport.y = dimensions.height;
+
+            return changed;
         },
 
         getCanvasDimensions: function() {
-            let displayRatio = viewport.innerWidth() / viewport.innerHeight();
+            let viewportDim = $instance.getViewportDimensions();
+            let displayRatio = viewportDim.width / viewportDim.height;
             let imageRatio = $instance.image.width / $instance.image.height;
             let imageHeight = 0;
             let imageWidth = 0;
@@ -650,10 +572,10 @@
             if ('vertical' === $instance.direction) {
 
                 if (imageRatio < displayRatio) {
-                    imageWidth = viewport.innerWidth();
+                    imageWidth = viewportDim.width;
                     imageHeight = imageWidth / $instance.image.width * $instance.image.height;
                 } else {
-                    imageHeight = viewport.innerHeight() * $instance.scrollFactor;
+                    imageHeight = viewportDim.height * $instance.scrollFactor;
                     imageWidth = imageHeight / $instance.image.height * $instance.image.width;
                 }
                 return {x: imageWidth.toFixed(0), y: imageHeight.toFixed(0)};
@@ -661,37 +583,32 @@
             if ('horizontal' === $instance.direction) {
 
                 if (imageRatio < displayRatio) {
-                    imageWidth = viewport.innerWidth() * $instance.scrollFactor;
+                    imageWidth = viewportDim.width * $instance.scrollFactor;
                     imageHeight = imageWidth / $instance.image.width * $instance.image.height;
                 } else {
-                    imageHeight = viewport.innerHeight();
+                    imageHeight = viewportDim.height;
                     imageWidth = imageHeight / $instance.image.height * $instance.image.width;
                 }
                 return {x: imageWidth.toFixed(0), y: imageHeight.toFixed(0)};
             }
         },
 
-        getImageDimensions: function() {
-            const viewportW = window.innerWidth;
-            const viewportH = window.innerHeight;
-            const imgW = parseInt($instance.image.width);
-            const imgH = parseInt($instance.image.height);
-            let scaleFactor = {x: 1.25, y: 1.25};
-            if ('vertical' === $instance.direction) {
-                return $instance.scaleImageForVerticalScrolling(imgW, imgH, viewportW, viewportH, scaleFactor.x);
-            }
-            if ('horizontal' === $instance.direction) {
-                return $instance.scaleImageForHorizontalScrolling(imgW, imgH, viewportW, viewportH, scaleFactor.y);
-            }
-        },
-
         updateCanvasDimensions: function() {
             let canvasDim = $instance.getCanvasDimensions();
-            let canvas = $("#cb_parallax_canvas");
+            let canvas = document.getElementById('cb_parallax_canvas');
             let canvasWidth = parseInt(canvasDim.x);
             let canvasHeight = parseInt(canvasDim.y);
-            canvas.width(canvasWidth);
-            canvas.height(canvasHeight);
+
+            if (!canvas) {
+                return;
+            }
+
+            canvas.width = canvasWidth;
+            canvas.height = canvasHeight;
+
+            if ($instance.img && $instance.img.complete && 0 < $instance.img.naturalWidth) {
+                canvas.getContext('2d').drawImage($instance.img, 0, 0, canvasWidth, canvasHeight);
+            }
         },
 
         addCss: function() {
@@ -718,7 +635,7 @@
                 posX = 0;
                 return posX.toString() + 'px';
             } else if ('to the right' === $instance.horizontalScrollDirection) {
-                let number = $(window).innerWidth() - canvasDimensions.x;
+                let number = $instance.getViewportDimensions().width - canvasDimensions.x;
                 posX = parseInt(number.toFixed());
                 return posX.toString() + 'px';
             }
@@ -732,7 +649,7 @@
                 posY = 0;
                 return posY.toString() + 'px';
             } else if ('to bottom' === $instance.verticalScrollDirection) {
-                let number = $(window).innerHeight() - canvasDimensions.y;
+                let number = $instance.getViewportDimensions().height - canvasDimensions.y;
                 posY = parseInt(number.toFixed());
                 return posY.toString() + 'px';
             }
@@ -744,8 +661,8 @@
         },
 
         getViewportAspectRatio: function() {
-            //let viewport = $(window);
-            return (viewport.innerWidth() / viewport.innerHeight()).toFixed(2);
+            const viewportDim = $instance.getViewportDimensions();
+            return (viewportDim.width / viewportDim.height).toFixed(2);
         },
 
         extractOpacity: function(string) {
