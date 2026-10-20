@@ -317,7 +317,7 @@ class cb_parallax_settings_display
                         data-key="<?php echo esc_attr($option_key); ?>"
                         data-input="cb-parallax" id="cb_parallax_options[<?php echo esc_attr($option_key); ?>]">
                     <?php foreach ($select_values as $select_value) : ?>
-                        <option value="<?php echo esc_attr($select_value); ?>" <?php selected($value, $select_value); ?>><?php echo esc_html(translate($select_value, 'cb-parallax')); ?></option>
+                        <option value="<?php echo esc_attr($select_value); ?>" <?php selected($value, $select_value); ?>><?php echo esc_html($select_value); ?></option>
                     <?php endforeach; ?>
                 </select>
             </p>

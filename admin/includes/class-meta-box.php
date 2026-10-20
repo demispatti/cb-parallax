@@ -196,7 +196,7 @@ class cb_parallax_meta_box
         $screen = get_current_screen();
         
         if (in_array($screen->id, $this->screen_ids)) {
-            add_meta_box('cb-parallax-meta-box', __('cb Parallax', $this->domain), array(
+            add_meta_box('cb-parallax-meta-box', __('cb Parallax', "cb-parallax"), array(
                 $this,
                 'meta_box_display'
             ), $post_type, 'side', 'core');

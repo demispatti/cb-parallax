@@ -272,34 +272,34 @@ class cb_parallax_localisation
     public function get_strings() : array
     {
         return array_merge(array(
-            'vertical_string' => __('vertical', $this->domain)
+            'vertical_string' => __('vertical', "cb-parallax")
         ), array(
-            'save_options_ok'     => __('Background image settings saved.', $this->domain),
-            'save_options_error'  => __('Error saving the background image settings.', $this->domain).' '.__('Please reload the page and try again.', $this->domain),
-            'reset_options_ok'    => __('Background image settings resetted.', $this->domain),
-            'reset_options_error' => __('Error resetting the background image settings.', $this->domain).' '.__('Please reload the page and try again.', $this->domain)
+            'save_options_ok'     => __('Background image settings saved.', "cb-parallax"),
+            'save_options_error'  => __('Error saving the background image settings.', "cb-parallax").' '.__('Please reload the page and try again.', "cb-parallax"),
+            'reset_options_ok'    => __('Background image settings resetted.', "cb-parallax"),
+            'reset_options_error' => __('Error resetting the background image settings.', "cb-parallax").' '.__('Please reload the page and try again.', "cb-parallax")
         ), array(
-            'reset_options_confirmation' => __('Reset the settings to default?', $this->domain)
+            'reset_options_confirmation' => __('Reset the settings to default?', "cb-parallax")
         ), // Switches Texts
             array(
                 'locale'        => get_locale(),
                 'switches_text' => array(
-                    'On'  => __('On', $this->domain),
-                    'Off' => __('Off', $this->domain)
+                    'On'  => __('On', "cb-parallax"),
+                    'Off' => __('Off', "cb-parallax")
                 ),
             ), // Background Color Texts
             array(
-                'background_color_text' => __('Background Color', $this->domain),
-                'overlay_color_text'    => __('Overlay Color', $this->domain),
-                'none_string'           => __('none', $this->domain),
+                'background_color_text' => __('Background Color', "cb-parallax"),
+                'overlay_color_text'    => __('Overlay Color', "cb-parallax"),
+                'none_string'           => __('none', "cb-parallax"),
             ), // Heading Texts
             array(
-                'image_title_text'          => __('Background Image', $this->domain),
-                'image_section_title_text'  => __('Background Image Settings', $this->domain),
-                'plugin_section_title_text' => __('General Settings', $this->domain)
+                'image_title_text'          => __('Background Image', "cb-parallax"),
+                'image_section_title_text'  => __('Background Image Settings', "cb-parallax"),
+                'plugin_section_title_text' => __('General Settings', "cb-parallax")
             ), // Reset Settings Confirmation
             array(
-                'reset_settings_confirmation' => __('Do you really want to reset the settings?', $this->domain)
+                'reset_settings_confirmation' => __('Do you really want to reset the settings?', "cb-parallax")
             ));
     }
     /**
@@ -325,8 +325,8 @@ class cb_parallax_localisation
     public function localize_media_frame() : void
     {
         wp_localize_script('cb-parallax-settings-display-js', 'cbParallaxMediaFrame', array(
-            'title'  => __('Set Background Image', $this->domain),
-            'button' => __('Set background image', $this->domain),
+            'title'  => __('Set Background Image', "cb-parallax"),
+            'button' => __('Set background image', "cb-parallax"),
         ));
     }
 }

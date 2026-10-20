@@ -36,7 +36,7 @@ class cb_parallax_help_sidebar_display
         ob_start();
         ?>
 
-        <p><?php /*echo __( 'More Info', $domain )*/ ?></p>
+        <p><?php /*echo __( 'More Info', "cb-parallax" )*/ ?></p>
         
         <?php
         $html .= ob_get_contents();

@@ -241,7 +241,7 @@ class cb_parallax_settings_page
      */
     public function add_options_page() : void
     {
-        add_options_page(__('cbParallax Settings Page', $this->domain), 'cbParallax', 'manage_options', 'cb-parallax.php', array(
+        add_options_page(__('cbParallax Settings Page', "cb-parallax"), 'cbParallax', 'manage_options', 'cb-parallax.php', array(
                 $this,
                 'settings_display'
             ));
@@ -286,7 +286,9 @@ class cb_parallax_settings_page
         $nonce = wp_create_nonce('cb_parallax_manage_options_nonce');
         echo '<div class="wrap cb-parallax-settings-shell">';
         echo '<form id="cb_parallax_settings_form" data-nonce="'.esc_attr($nonce).'" method="post" data-form="" data-postid="">';
+        // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- The display class escapes every value while assembling the form markup.
         echo $display->get_hidden_fields_display($attachment_id, $url, $canParallax, $parallax_enabled);
+        // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- The display class returns trusted, static heading markup.
         echo $display->get_form_title();
         $settings = $this->options->get_options_arguments();
         foreach ($settings as $option_key => $args) {
@@ -298,38 +300,44 @@ class cb_parallax_settings_page
                         break;
                     }
                     if ('cb_parallax_boxed_layout' === $option_key) {
-                        echo '<h3 id="cb_parallax_boxed_layout_settings_title" class="parallax">'.__('Boxed Layout', $this->domain).'</h3>';
+                        echo '<h3 id="cb_parallax_boxed_layout_settings_title" class="parallax">'.esc_html__('Boxed Layout', 'cb-parallax').'</h3>';
                     }
                     if ('cb_parallax_allow_override' === $option_key) {
-                        echo '<h3 id="cb_parallax_allow_override_settings_title" class="parallax">'.__('Individual Background Images', $this->domain).'</h3>';
+                        echo '<h3 id="cb_parallax_allow_override_settings_title" class="parallax">'.esc_html__('Individual Background Images', 'cb-parallax').'</h3>';
                     }
                     if ('cb_parallax_disable_on_mobile' === $option_key) {
-                        echo '<h3 id="cb_parallax_disable_on_mobile_settings_title" class="parallax">'.__('Disable On Mobile Devices', $this->domain).'</h3>';
+                        echo '<h3 id="cb_parallax_disable_on_mobile_settings_title" class="parallax">'.esc_html__('Disable On Mobile Devices', 'cb-parallax').'</h3>';
                     }
                     if ('cb_parallax_parallax_enabled' === $option_key) {
+                        // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- The display class returns trusted, static heading markup.
                         echo $display->get_settings_title('plugin');
                     }
+                    // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- The display class escapes every value while assembling the field markup.
                     echo $display->get_checkbox_display($value, $args);
                     break;
                 
                 case 'color':
                     
+                    // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- The display class escapes every value while assembling the field markup.
                     echo $display->get_color_picker_field($value, $args);
                     break;
                 
                 case 'select':
                     
+                    // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- The display class escapes every value while assembling the field markup.
                     echo $display->get_select_field($value, $args);
                     break;
                 
                 case 'media':
                     
+                    // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- The display class escapes every value while assembling the button markup.
                     echo $display->get_media_button_display();
+                    // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- The display class escapes the image URL while assembling the preview markup.
                     echo $display->get_background_image_display($url, 'plugin');
                     break;
             }
         }
-        echo submit_button(esc_html__('Save', 'cb-parallax'), 'primary', 'submit', false, array(
+        submit_button(esc_html__('Save', 'cb-parallax'), 'primary', 'submit', true, array(
             'id'    => 'cb_parallax_form_submit',
             'class' => 'button button-primary button-large',
         ));

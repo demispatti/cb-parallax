@@ -362,9 +362,9 @@ class cb_parallax_admin
         $plugin = plugin_basename('cb-parallax/cb-parallax.php');
         
         if ($file == $plugin) {
-            $meta[] = '<a href="https://wordpress.org/support/plugin/cb-parallax" target="_blank">'.__('Plugin support', $this->domain).'</a>';
-            $meta[] = '<a href="https://wordpress.org/plugins/cb-parallax" target="_blank">'.__('Rate plugin', $this->domain).'</a>';
-            $meta[] = '<a href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=XLMMS7C62S76Q" target="_blank">'.__('Buy me a beer!', $this->domain).'</a>';
+            $meta[] = '<a href="https://wordpress.org/support/plugin/cb-parallax" target="_blank">'.__('Plugin support', "cb-parallax").'</a>';
+            $meta[] = '<a href="https://wordpress.org/plugins/cb-parallax" target="_blank">'.__('Rate plugin', "cb-parallax").'</a>';
+            $meta[] = '<a href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=XLMMS7C62S76Q" target="_blank">'.__('Buy me a beer!', "cb-parallax").'</a>';
         }
         
         return $meta;

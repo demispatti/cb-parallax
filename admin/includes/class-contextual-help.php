@@ -108,7 +108,7 @@ class cb_parallax_contextual_help
         
         $current_screen->add_help_tab(array(
                 'id'      => 'cb-parallax-help-tab',
-                'title'   => __('cbParallax Help', $this->domain),
+                'title'   => __('cbParallax Help', "cb-parallax"),
                 'content' => AdminPartials\cb_parallax_help_tab_display::help_tab_display($this->domain)
             ));
         

@@ -138,50 +138,50 @@ class cb_parallax_options
         
         // Image image_options for a static background image.
         $image_options_whitelist['cb_parallax_position_x'] = array(
-            'left'   => __('left', $this->domain),
-            'center' => __('center', $this->domain),
-            'right'  => __('right', $this->domain),
+            'left'   => __('left', "cb-parallax"),
+            'center' => __('center', "cb-parallax"),
+            'right'  => __('right', "cb-parallax"),
         );
         
         $image_options_whitelist['cb_parallax_position_y'] = array(
-            'top'    => __('top', $this->domain),
-            'center' => __('center', $this->domain),
-            'bottom' => __('bottom', $this->domain),
+            'top'    => __('top', "cb-parallax"),
+            'center' => __('center', "cb-parallax"),
+            'bottom' => __('bottom', "cb-parallax"),
         );
         
         $image_options_whitelist['cb_parallax_background_attachment'] = array(
-            'fixed'  => __('fixed', $this->domain),
-            'scroll' => __('scroll', $this->domain),
+            'fixed'  => __('fixed', "cb-parallax"),
+            'scroll' => __('scroll', "cb-parallax"),
         );
         
         $image_options_whitelist['cb_parallax_direction'] = array(
-            'vertical'   => __('vertical', $this->domain),
-            'horizontal' => __('horizontal', $this->domain),
+            'vertical'   => __('vertical', "cb-parallax"),
+            'horizontal' => __('horizontal', "cb-parallax"),
         );
         
         $image_options_whitelist['cb_parallax_vertical_scroll_direction'] = array(
-            'top'    => __('to top', $this->domain),
-            'bottom' => __('to bottom', $this->domain),
+            'top'    => __('to top', "cb-parallax"),
+            'bottom' => __('to bottom', "cb-parallax"),
         );
         
         $image_options_whitelist['cb_parallax_horizontal_scroll_direction'] = array(
-            'left'  => __('to the left', $this->domain),
-            'right' => __('to the right', $this->domain),
+            'left'  => __('to the left', "cb-parallax"),
+            'right' => __('to the right', "cb-parallax"),
         );
         
         $image_options_whitelist['cb_parallax_horizontal_alignment'] = array(
-            'left'   => __('left', $this->domain),
-            'center' => __('center', $this->domain),
-            'right'  => __('right', $this->domain),
+            'left'   => __('left', "cb-parallax"),
+            'center' => __('center', "cb-parallax"),
+            'right'  => __('right', "cb-parallax"),
         );
         
         $image_options_whitelist['cb_parallax_vertical_alignment'] = array(
-            'top'    => __('top', $this->domain),
-            'center' => __('center', $this->domain),
-            'bottom' => __('bottom', $this->domain),
+            'top'    => __('top', "cb-parallax"),
+            'center' => __('center', "cb-parallax"),
+            'bottom' => __('bottom', "cb-parallax"),
         );
         
-        $image_options_whitelist['cb_parallax_overlay_image'] = array_merge($this->convert_overlay_image_names_for_display($this->retrieve_overlay_image_names()), array('none' => __('none', $this->domain)));
+        $image_options_whitelist['cb_parallax_overlay_image'] = array_merge($this->convert_overlay_image_names_for_display($this->retrieve_overlay_image_names()), array('none' => __('none', "cb-parallax")));
         
         $image_options_whitelist['cb_parallax_overlay_opacity'] = array(
             '0.1' => '0.1',
@@ -193,7 +193,7 @@ class cb_parallax_options
             '0.7' => '0.7',
             '0.8' => '0.8',
             '0.9' => '0.9',
-            '0.0' => __('none', $this->domain)
+            '0.0' => __('none', "cb-parallax")
         );
         
         $image_options_whitelist['cb_parallax_overlay_color'] = '';
@@ -251,7 +251,7 @@ class cb_parallax_options
         if ($handle = opendir($path)) {
             while (false !== ($entry = readdir($handle))) {
                 if (!in_array($entry, $excluded)) {
-                    $names_list[] = strip_tags($entry);
+                    $names_list[] = wp_strip_all_tags($entry);
                 }
             }
             closedir($handle);
@@ -327,10 +327,10 @@ class cb_parallax_options
         return array_merge(array(
             'cb_parallax_boxed_layout'                                    => array(
                 'option_key'     => 'cb_parallax_boxed_layout',
-                'name'           => __('Boxed Layout', $this->domain),
+                'name'           => __('Boxed Layout', "cb-parallax"),
                 'callback'       => 'render_settings_field_callback',
                 'settings_group' => 'background-image',
-                'description'    => __('Sets a boxed layout with the following margin around the body html tag.', $this->domain),
+                'description'    => __('Sets a boxed layout with the following margin around the body html tag.', "cb-parallax"),
                 'default_value'  => '1',
                 'input_type'     => 'checkbox',
                 'notice_level'   => 'none',
@@ -338,10 +338,10 @@ class cb_parallax_options
             ),
             'cb_parallax_boxed_layout_margin'                             => array(
                 'option_key'     => 'cb_parallax_boxed_layout_margin',
-                'name'           => __('Margin In Pixels', $this->domain),
+                'name'           => __('Margin In Pixels', "cb-parallax"),
                 'callback'       => 'render_settings_field_callback',
                 'settings_group' => 'plugin',
-                'description'    => __('The margin for the body tag.', $this->domain),
+                'description'    => __('The margin for the body tag.', "cb-parallax"),
                 'default_value' => $this->plugin_options_whitelist['cb_parallax_boxed_layout_margin']['200 150'],
                 'input_type'     => 'select',
                 'notice_level'   => 'none',
@@ -349,10 +349,10 @@ class cb_parallax_options
             ),
             'cb_parallax_boxed_layout_content_container_background_color' => array(
                 'option_key'     => 'cb_parallax_boxed_layout_content_container_background_color',
-                'name'           => __('Boxed Layout Background Color', $this->domain),
+                'name'           => __('Boxed Layout Background Color', "cb-parallax"),
                 'callback'       => 'render_settings_field_callback',
                 'settings_group' => 'plugin',
-                'description'    => __('Set a background color for the boxed Layout.', $this->domain),
+                'description'    => __('Set a background color for the boxed Layout.', "cb-parallax"),
                 'default_value' => '#ffffff',
                 'input_type'     => 'color',
                 'notice_level'   => 'none',
@@ -360,10 +360,10 @@ class cb_parallax_options
             ),
             'cb_parallax_uses_assumed_background_color'                   => array(
                 'option_key'     => 'cb_parallax_uses_assumed_background_color',
-                'name'           => __('Assume Background Color', $this->domain),
+                'name'           => __('Assume Background Color', "cb-parallax"),
                 'callback'       => 'render_settings_field_callback',
                 'settings_group' => 'plugin',
-                'description'    => __('Assumes a background image for the content container and applies it.', $this->domain),
+                'description'    => __('Assumes a background image for the content container and applies it.', "cb-parallax"),
                 'default_value'  => '1',
                 'input_type'     => 'checkbox',
                 'notice_level'   => 'none',
@@ -371,10 +371,10 @@ class cb_parallax_options
             ),
             'cb_parallax_allow_override'                                  => array(
                 'option_key'     => 'cb_parallax_allow_override',
-                'name'           => __('Enable Individual Background Images For Pages And Posts', $this->domain),
+                'name'           => __('Enable Individual Background Images For Pages And Posts', "cb-parallax"),
                 'callback'       => 'render_settings_field_callback',
                 'settings_group' => 'plugin',
-                'description'    => __('Individual settings on a per post -/ per page basis will be used instead of this image and it\'s settings. On pages where no background image is defined, the main background image will be displayed, if one is defined.', $this->domain),
+                'description'    => __('Individual settings on a per post -/ per page basis will be used instead of this image and it\'s settings. On pages where no background image is defined, the main background image will be displayed, if one is defined.', "cb-parallax"),
                 'default_value'  => '0',
                 'input_type'     => 'checkbox',
                 'notice_level'   => 'none',
@@ -382,10 +382,10 @@ class cb_parallax_options
             ),
             'cb_parallax_disable_on_mobile'                               => array(
                 'option_key'     => 'cb_parallax_disable_on_mobile',
-                'name'           => __('Disable Parallax Effect On Mobile Devices', $this->domain),
+                'name'           => __('Disable Parallax Effect On Mobile Devices', "cb-parallax"),
                 'callback'       => 'render_settings_field_callback',
                 'settings_group' => 'plugin',
-                'description'    => __('Disable parallax-effect on mobile devices. This may be useful <i>if</i> you encounter performance issues.', $this->domain),
+                'description'    => __('Disable parallax-effect on mobile devices. This may be useful <i>if</i> you encounter performance issues.', "cb-parallax"),
                 'default_value'  => '1',
                 'input_type'     => 'checkbox',
                 'notice_level'   => 'none',
@@ -404,10 +404,10 @@ class cb_parallax_options
         return array(
             'cb_parallax_parallax_enabled'            => array(
                 'option_key'     => 'cb_parallax_parallax_enabled',
-                'name'           => __('Enable Parallax Features', $this->domain),
+                'name'           => __('Enable Parallax Features', "cb-parallax"),
                 'callback'       => 'render_settings_field_callback',
                 'settings_group' => 'background-image',
-                'description'    => __('Enable parallax', $this->domain),
+                'description'    => __('Enable parallax', "cb-parallax"),
                 'default_value'  => '0',
                 'input_type'     => 'checkbox',
                 'notice_level'   => 'none',
@@ -415,7 +415,7 @@ class cb_parallax_options
             ),
             'cb_parallax_attachment_id'               => array(
                 'option_key'     => 'cb_parallax_attachment_id',
-                'name'           => __('Attachment ID', $this->domain),
+                'name'           => __('Attachment ID', "cb-parallax"),
                 'callback'       => 'render_settings_field_callback',
                 'settings_group' => 'background-image',
                 'description'    => '',
@@ -426,7 +426,7 @@ class cb_parallax_options
             ),
             'cb_parallax_background_image_url'        => array(
                 'option_key'     => 'cb_parallax_background_image_url',
-                'name'           => __('Background Image', $this->domain),
+                'name'           => __('Background Image', "cb-parallax"),
                 'callback'       => 'render_settings_field_callback',
                 'settings_group' => 'background-image',
                 'description'    => '',
@@ -437,10 +437,10 @@ class cb_parallax_options
             ),
             'cb_parallax_overlay_color'               => array(
                 'option_key'     => 'cb_parallax_overlay_color',
-                'name'           => __('Overlay Color', $this->domain),
+                'name'           => __('Overlay Color', "cb-parallax"),
                 'callback'       => 'render_settings_field_callback',
                 'settings_group' => 'background-image',
-                'description'    => __('Select overlay color.', $this->domain),
+                'description'    => __('Select overlay color.', "cb-parallax"),
                 'default_value'  => '',
                 'input_type'     => 'color',
                 'notice_level'   => 'none',
@@ -448,10 +448,10 @@ class cb_parallax_options
             ),
             'cb_parallax_position_x'                  => array(
                 'option_key'     => 'cb_parallax_position_x',
-                'name'           => __('Horizontal Position', $this->domain),
+                'name'           => __('Horizontal Position', "cb-parallax"),
                 'callback'       => 'render_settings_field_callback',
                 'settings_group' => 'background-image',
-                'description'    => __('Set the horizontal position of the background image.', $this->domain),
+                'description'    => __('Set the horizontal position of the background image.', "cb-parallax"),
                 'default_value'  => $this->image_options_whitelist['cb_parallax_position_x']['center'],
                 'input_type'     => 'select',
                 'notice_level'   => 'none',
@@ -459,10 +459,10 @@ class cb_parallax_options
             ),
             'cb_parallax_position_y'                  => array(
                 'option_key'     => 'cb_parallax_position_y',
-                'name'           => __('Vertical Position', $this->domain),
+                'name'           => __('Vertical Position', "cb-parallax"),
                 'callback'       => 'render_settings_field_callback',
                 'settings_group' => 'background-image',
-                'description'    => __('Set the vertical position of the background image.', $this->domain),
+                'description'    => __('Set the vertical position of the background image.', "cb-parallax"),
                 'default_value'  => $this->image_options_whitelist['cb_parallax_position_y']['center'],
                 'input_type'     => 'select',
                 'notice_level'   => 'none',
@@ -470,10 +470,10 @@ class cb_parallax_options
             ),
             'cb_parallax_background_attachment'       => array(
                 'option_key'     => 'cb_parallax_background_attachment',
-                'name'           => __('Background Attachment', $this->domain),
+                'name'           => __('Background Attachment', "cb-parallax"),
                 'callback'       => 'render_settings_field_callback',
                 'settings_group' => 'background-image',
-                'description'    => __('Set the attachment.', $this->domain),
+                'description'    => __('Set the attachment.', "cb-parallax"),
                 'default_value'  => $this->image_options_whitelist['cb_parallax_background_attachment']['fixed'],
                 'input_type'     => 'select',
                 'notice_level'   => 'none',
@@ -481,10 +481,10 @@ class cb_parallax_options
             ),
             'cb_parallax_direction'                   => array(
                 'option_key'     => 'cb_parallax_direction',
-                'name'           => __('Image Moving Direction', $this->domain),
+                'name'           => __('Image Moving Direction', "cb-parallax"),
                 'callback'       => 'render_settings_field_callback',
                 'settings_group' => 'background-image',
-                'description'    => __('Choose horizontal or vertical parallax direction.', $this->domain),
+                'description'    => __('Choose horizontal or vertical parallax direction.', "cb-parallax"),
                 'default_value'  => $this->image_options_whitelist['cb_parallax_direction']['vertical'],
                 'input_type'     => 'select',
                 'notice_level'   => 'none',
@@ -492,10 +492,10 @@ class cb_parallax_options
             ),
             'cb_parallax_vertical_scroll_direction'   => array(
                 'option_key'     => 'cb_parallax_vertical_scroll_direction',
-                'name'           => __('While Scrolling Down The Background Image Moves', $this->domain),
+                'name'           => __('While Scrolling Down The Background Image Moves', "cb-parallax"),
                 'callback'       => 'render_settings_field_callback',
                 'settings_group' => 'background-image',
-                'description'    => __('Choose whether the image should move up or downwards on page scroll.', $this->domain),
+                'description'    => __('Choose whether the image should move up or downwards on page scroll.', "cb-parallax"),
                 'default_value'  => $this->image_options_whitelist['cb_parallax_vertical_scroll_direction']['top'],
                 'input_type'     => 'select',
                 'notice_level'   => 'none',
@@ -503,10 +503,10 @@ class cb_parallax_options
             ),
             'cb_parallax_horizontal_scroll_direction' => array(
                 'option_key'     => 'cb_parallax_horizontal_scroll_direction',
-                'name'           => __('While Scrolling Down The Background Image Moves', $this->domain),
+                'name'           => __('While Scrolling Down The Background Image Moves', "cb-parallax"),
                 'callback'       => 'render_settings_field_callback',
                 'settings_group' => 'background-image',
-                'description'    => __('Choose whether the image should move to the left or to the right on page scroll.', $this->domain),
+                'description'    => __('Choose whether the image should move to the left or to the right on page scroll.', "cb-parallax"),
                 'default_value'  => $this->image_options_whitelist['cb_parallax_horizontal_scroll_direction']['left'],
                 'input_type'     => 'select',
                 'notice_level'   => 'none',
@@ -514,10 +514,10 @@ class cb_parallax_options
             ),
             'cb_parallax_horizontal_alignment'        => array(
                 'option_key'     => 'cb_parallax_horizontal_alignment',
-                'name'           => __('Horizontal Alignment', $this->domain),
+                'name'           => __('Horizontal Alignment', "cb-parallax"),
                 'callback'       => 'render_settings_field_callback',
                 'settings_group' => 'background-image',
-                'description'    => __('Align the image horizontally.', $this->domain),
+                'description'    => __('Align the image horizontally.', "cb-parallax"),
                 'default_value'  => $this->image_options_whitelist['cb_parallax_horizontal_alignment']['center'],
                 'input_type'     => 'select',
                 'notice_level'   => 'none',
@@ -525,10 +525,10 @@ class cb_parallax_options
             ),
             'cb_parallax_vertical_alignment'          => array(
                 'option_key'     => 'cb_parallax_vertical_alignment',
-                'name'           => __('Vertical Alignment', $this->domain),
+                'name'           => __('Vertical Alignment', "cb-parallax"),
                 'callback'       => 'render_settings_field_callback',
                 'settings_group' => 'background-image',
-                'description'    => __('Align the image vertically.', $this->domain),
+                'description'    => __('Align the image vertically.', "cb-parallax"),
                 'default_value'  => $this->image_options_whitelist['cb_parallax_vertical_alignment']['center'],
                 'input_type'     => 'select',
                 'notice_level'   => 'none',
@@ -536,10 +536,10 @@ class cb_parallax_options
             ),
             'cb_parallax_overlay_image'               => array(
                 'option_key'     => 'cb_parallax_overlay_image',
-                'name'           => __('Overlay Image', $this->domain),
+                'name'           => __('Overlay Image', "cb-parallax"),
                 'callback'       => 'render_settings_field_callback',
                 'settings_group' => 'background-image',
-                'description'    => __('Select an overlay image if you like.', $this->domain),
+                'description'    => __('Select an overlay image if you like.', "cb-parallax"),
                 'default_value'  => $this->image_options_whitelist['cb_parallax_overlay_image']['none'],
                 'input_type'     => 'select',
                 'notice_level'   => 'none',
@@ -547,10 +547,10 @@ class cb_parallax_options
             ),
             'cb_parallax_overlay_opacity'             => array(
                 'option_key'     => 'cb_parallax_overlay_opacity',
-                'name'           => __('Overlay Opacity', $this->domain),
+                'name'           => __('Overlay Opacity', "cb-parallax"),
                 'callback'       => 'render_settings_field_callback',
                 'settings_group' => 'background-image',
-                'description'    => __('Set overlay opacity.', $this->domain),
+                'description'    => __('Set overlay opacity.', "cb-parallax"),
                 'default_value'  => $this->image_options_whitelist['cb_parallax_overlay_opacity']['0.4'],
                 'input_type'     => 'select',
                 'notice_level'   => 'none',
@@ -558,10 +558,10 @@ class cb_parallax_options
             ),
             'cb_parallax_can_parallax'                => array(
                 'option_key'     => 'cb_parallax_can_parallax',
-                'name'           => __('', $this->domain),
+                'name'           => '',
                 'callback'       => 'render_settings_field_callback',
                 'settings_group' => 'background-image',
-                'description'    => __('', $this->domain),
+                'description'    => '',
                 'default_value'  => '0',
                 'input_type'     => 'checkbox',
                 'notice_level'   => 'none',
@@ -581,18 +581,18 @@ class cb_parallax_options
     {
         $background_image_heading = array(
             'option_key'     => 'cb_parallax_image_options',
-            'name'           => __('Background Image', $this->domain),
+            'name'           => __('Background Image', "cb-parallax"),
             'settings_group' => 'background-image',
-            'description'    => __('Customize the background image image_options.', $this->domain),
+            'description'    => __('Customize the background image image_options.', "cb-parallax"),
             'callback'       => 'background_image_settings_section_callback',
             'class'          => 'icon icon-equalizer',
         );
         
         $plugin_heading = array(
             'option_key'     => 'cb_parallax_parallax_options',
-            'name'           => __('General Settings', $this->domain),
+            'name'           => __('General Settings', "cb-parallax"),
             'settings_group' => 'plugin',
-            'description'    => __('General settings.', $this->domain),
+            'description'    => __('General settings.', "cb-parallax"),
             'callback'       => 'plugin_settings_section_callback',
             'class'          => 'icon icon-equalizer',
         );
@@ -848,10 +848,10 @@ class cb_parallax_options
             }
             $diff = array_diff($data, $stored_options);
             if (empty($diff)) {
-                return new WP_Error(-1, __('There\'s nothing new to save.', $this->domain));
+                return new WP_Error(-1, __('There\'s nothing new to save.', "cb-parallax"));
             }
             
-            return new WP_Error(-2, __('Failed to save settings.', $this->domain));
+            return new WP_Error(-2, __('Failed to save settings.', "cb-parallax"));
         }
         
         return true;
@@ -877,7 +877,7 @@ class cb_parallax_options
         }
         
         if (false === $result) {
-            return new WP_Error(-3, __('Failed to reset settings. Please refresh the page and try again.', $this->domain));
+            return new WP_Error(-3, __('Failed to reset settings. Please refresh the page and try again.', "cb-parallax"));
         }
         
         return true;

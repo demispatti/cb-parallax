@@ -182,7 +182,7 @@ class cb_parallax_public_localisation
         $this->set_plugin_options($post);
         $this->set_image_options();
         
-        $none_string = array('none_string' => __('none', $this->domain));
+        $none_string = array('none_string' => __('none', "cb-parallax"));
         $stored_image_options = $this->options->get_image_options();
         $stored_plugin_options = $this->options->get_plugin_options($post);
         $attachment_id = $stored_image_options['cb_parallax_attachment_id'] ?? '';
