@@ -1,4 +1,4 @@
-ýK®ÏÝzh¬¥«m‹úï›û®*m³úï›oh¥êÚ¶*'ž‹iz¹¢¶×¦ÏÔ±êìý×¦ŠÊZ¶Ø¿®ù¿±Êâ¦Û?®ù¶öŠ^­«b¢yè¶—«š+myÚl<?php
+<?php
 namespace CbParallax\Admin\Menu;
 
 use CbParallax\Admin\Includes as AdminIncludes;
