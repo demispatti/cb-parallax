@@ -484,3 +484,11 @@ msgstr ""
 #. Author URI of the plugin/theme
 msgid "https://demispatti.ch"
 msgstr ""
+
+#: admin/partials/class-settings-display.php
+msgid "Background atmosphere"
+msgstr ""
+
+#: admin/partials/class-settings-display.php
+msgid "Create depth and gentle movement without losing focus on your content."
+msgstr ""

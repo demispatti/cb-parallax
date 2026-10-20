@@ -1,11 +1,12 @@
 <?php
+
 namespace CbParallax\Admin\Includes;
 
 /**
  * If this file is called directly, abort.
  */
-if ( ! defined( 'WPINC' ) ) {
-	die;
+if (!defined('WPINC')) {
+    die;
 }
 
 /**
@@ -20,34 +21,36 @@ if ( ! defined( 'WPINC' ) ) {
  * License:           GPL-2.0+
  * License URI:       http://www.gnu.org/licenses/gpl-2.0.txt
  */
-class cb_parallax_theme_support {
-	
-	/**
-	 * The feature we want the post types to work with.
-	 *
-	 * @since    0.1.0
-	 * @access   private
-	 * @var      string $feature
-	 */
-	private $feature = 'custom-background';
-	
-	/**
-	 * Registers the methods that need to be hooked with WordPress.
-	 *
-	 * @since 0.9.0
-	 * @return void
-	 */
-	public function add_hooks() {
-		
-		add_action( 'after_setup_theme', array( $this, 'add_theme_support' ) );
-	}
-	
-	/**
-	 * Calls the WordPress function that adds theme support for the given feature.
-	 */
-	public function add_theme_support() {
-		
-		add_theme_support( $this->feature );
-	}
-	
+class cb_parallax_theme_support
+{
+    /**
+     * The feature we want the post types to work with.
+     *
+     * @since    0.1.0
+     * @access   private
+     * @var      string $feature
+     */
+    private string $feature = 'custom-background';
+    
+    /**
+     * Registers the methods that need to be hooked with WordPress.
+     *
+     * @return void
+     * @since 0.9.0
+     */
+    public function add_hooks() : void
+    {
+        add_action('after_setup_theme', array(
+            $this,
+            'add_theme_support'
+        ));
+    }
+    
+    /**
+     * Calls the WordPress function that adds theme support for the given feature.
+     */
+    public function add_theme_support() : void
+    {
+        add_theme_support($this->feature);
+    }
 }
