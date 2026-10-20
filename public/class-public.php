@@ -189,12 +189,15 @@ class cb_parallax_public
         wp_enqueue_script('cb-parallax-inc-raf-js', CBPARALLAX_ROOT_URL.'vendor/raf/raf.js', ['jquery'], $this->version, true);
         
         wp_enqueue_script('cb-parallax-inc-smoothscroll-js', CBPARALLAX_ROOT_URL.'vendor/smoothscroll/smoothscroll.js', ['jquery'], $this->version, true);
+
+        wp_enqueue_script('cb-parallax-viewport-js', CBPARALLAX_ROOT_URL.'public/js/viewport.js', [], $this->version, true);
         
         // Parallax script
         wp_enqueue_script('cb-parallax-public-js', CBPARALLAX_ROOT_URL.'public/js/public.js', [
             'jquery',
             'cb-parallax-inc-raf-js',
-            'cb-parallax-inc-smoothscroll-js'
+            'cb-parallax-inc-smoothscroll-js',
+            'cb-parallax-viewport-js'
         ], $this->version, true);
     }
 }
