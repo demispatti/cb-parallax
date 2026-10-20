@@ -245,7 +245,8 @@ class cb_parallax_settings_display
                        class="label-for-cb-parallax-switch"><?php echo esc_html($name); ?></label>
 
                 <label class="cb-parallax-switch">
-                    <input type="checkbox" id="cb_parallax_options[<?php echo esc_attr($option_key); ?>]"
+                    <input type="checkbox" role="switch" aria-label="<?php echo esc_attr($name); ?>"
+                           id="cb_parallax_options[<?php echo esc_attr($option_key); ?>]"
                            class="cb-parallax-switch-input cb-parallax-input-checkbox <?php echo esc_attr($option_key); ?>"
                            name="cb_parallax_options[<?php echo esc_attr($option_key); ?>]"
                            value="<?php echo esc_attr($value); ?>"
@@ -278,14 +279,16 @@ class cb_parallax_settings_display
         ?>
         <div class="cb-parallax-single-option-container" id="<?php echo esc_attr($option_key); ?>_container"
              title="<?php echo esc_attr($description); ?>">
-            <p class="cb-parallax-input-container">
+            <p class="cb-parallax-input-container cb-parallax-color-field">
                 <label for="<?php echo esc_attr($option_key); ?>"><?php echo esc_html($args['name']); ?></label>
                 <input type="text" id="<?php echo esc_attr($option_key); ?>" title="<?php echo esc_attr($description); ?>"
                        name="cb_parallax_options[<?php echo esc_attr($option_key); ?>]"
                        placeholder="<?php echo esc_attr($placeholder); ?>"
                        value="<?php echo esc_attr($value); ?>"
                        class="<?php echo esc_attr($option_key); ?> cb-parallax-color-picker cb-parallax-input-color-picker"
-                       data-alpha="true" data-key="<?php echo esc_attr($option_key); ?>"
+                       data-alpha="true" data-alpha-enabled="true"
+                       data-default-color="<?php echo esc_attr($placeholder); ?>"
+                       data-key="<?php echo esc_attr($option_key); ?>"
                        data-input="color-picker"/>
             </p>
         </div>

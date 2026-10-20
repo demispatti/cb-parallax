@@ -1,0 +1,662 @@
+/*
+ * Warm, quiet visual layer for the cbParallax settings page and editor meta box.
+ * All rules are scoped to plugin-owned containers.
+ */
+.cb-parallax-settings-page,
+#cb-parallax-meta-box {
+  --cbp-canvas: #f6f4ee;
+  --cbp-surface: #fffdf9;
+  --cbp-surface-soft: #efede5;
+  --cbp-surface-moss: #e1eadf;
+  --cbp-text: #28312c;
+  --cbp-text-soft: #69736d;
+  --cbp-primary: #365b42;
+  --cbp-primary-strong: #294634;
+  --cbp-border: #d8d5cc;
+  --cbp-danger: #a1443e;
+  --cbp-shadow: 0 20px 52px rgba(53, 67, 57, .09), 0 2px 8px rgba(53, 67, 57, .05);
+}
+
+body.cb-parallax-settings-page {
+  background: var(--cbp-canvas);
+  color: var(--cbp-text);
+}
+
+.cb-parallax-settings-page #wpcontent {
+  background: radial-gradient(circle at 87% 6%, rgba(205, 222, 201, 0.48), transparent 31rem), var(--cbp-canvas);
+}
+
+.cb-parallax-settings-shell {
+  box-sizing: border-box;
+  max-width: 980px;
+  margin: 28px 32px 56px 12px;
+}
+
+.cb-parallax-settings-page #cb_parallax_settings_form {
+  box-sizing: border-box;
+  display: block;
+  width: 100%;
+  max-width: 900px;
+  margin: 0;
+  padding: 28px 44px 42px;
+  border: 1px solid rgba(54, 91, 66, 0.1);
+  border-radius: 24px;
+  background: var(--cbp-surface);
+  box-shadow: var(--cbp-shadow);
+  overflow: visible;
+}
+
+.cb-parallax-page-heading {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  margin: 0 0 38px;
+  padding: 26px 28px;
+  border: 1px solid rgba(54, 91, 66, 0.1);
+  border-radius: 20px;
+  background: linear-gradient(135deg, #f1f1e9, #e1eadf);
+}
+
+.cb-parallax-page-mark {
+  position: relative;
+  display: block;
+  width: 68px;
+  height: 68px;
+  flex: 0 0 68px;
+  border: 1px solid rgba(54, 91, 66, 0.14);
+  border-radius: 22px;
+  background: rgba(255, 253, 249, 0.72);
+  box-shadow: 0 12px 28px rgba(54, 91, 66, 0.1);
+  overflow: hidden;
+}
+
+.cb-parallax-page-mark::before,
+.cb-parallax-page-mark::after,
+.cb-parallax-page-mark span {
+  content: "";
+  position: absolute;
+  left: 12px;
+  right: 12px;
+  height: 22px;
+  border: 3px solid var(--cbp-primary);
+  border-top: 0;
+  border-radius: 0 0 50% 50%;
+  transform: rotate(-8deg);
+}
+
+.cb-parallax-page-mark::before {
+  top: 9px;
+  opacity: 0.38;
+}
+
+.cb-parallax-page-mark span {
+  top: 22px;
+  opacity: 0.65;
+}
+
+.cb-parallax-page-mark::after {
+  top: 35px;
+  opacity: 0.95;
+}
+
+.cb-parallax-page-eyebrow {
+  margin: 0 0 4px;
+  color: var(--cbp-primary);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  line-height: 1.4;
+  text-transform: uppercase;
+}
+
+.cb-parallax-settings-page #cb_parallax_settings_form .cb-parallax-page-heading h1 {
+  margin: 0;
+  padding: 0;
+  color: var(--cbp-text);
+  font-family: ui-serif, "Iowan Old Style", "Palatino Linotype", Georgia, serif;
+  font-size: clamp(30px, 4vw, 40px);
+  font-weight: 500;
+  letter-spacing: -0.025em;
+  line-height: 1.08;
+}
+
+.cb-parallax-page-description {
+  max-width: 590px;
+  margin: 8px 0 0;
+  color: var(--cbp-text-soft);
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+#cb_parallax_settings_form h3.parallax,
+#cb_parallax_settings_form h3.static {
+  margin: 42px 0 14px !important;
+  padding: 28px 0 0;
+  border: 0;
+  border-top: 1px solid var(--cbp-border);
+  color: var(--cbp-text);
+  font-family: ui-serif, "Iowan Old Style", "Palatino Linotype", Georgia, serif;
+  font-size: 23px;
+  font-weight: 600;
+  letter-spacing: -0.015em;
+  line-height: 1.25;
+}
+
+#cb_parallax_settings_form .cb-parallax-single-option-container {
+  box-sizing: border-box;
+  width: 100%;
+  max-width: none;
+  height: auto;
+  max-height: none;
+  margin: 8px 0;
+  padding: 14px 16px;
+  border: 1px solid transparent;
+  border-radius: 14px;
+  background: #faf9f4;
+  overflow: visible;
+  transition: border-color 0.16s ease, background-color 0.16s ease, transform 0.16s ease;
+}
+
+#cb_parallax_settings_form .cb-parallax-single-option-container:hover {
+  border-color: rgba(54, 91, 66, 0.14);
+  background: #f7f6ef;
+}
+
+#cb_parallax_settings_form .cb-parallax-single-option-container[id$=_container] > div:first-child {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+#cb_parallax_settings_form .cb-parallax-input-container {
+  margin: 0;
+}
+
+#cb_parallax_settings_form .cb-parallax-input-container label,
+#cb_parallax-meta-box .cb-parallax-input-container label,
+#cb_parallax-meta-box .label-for-cb-parallax-switch,
+#cb_parallax_settings_form .label-for-cb-parallax-switch {
+  margin: 0;
+  padding: 0 16px 7px 0;
+  color: var(--cbp-text);
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1.45;
+}
+
+#cb_parallax_settings_form input[type=text],
+#cb_parallax_settings_form select,
+#cb-parallax-meta-box input[type=text],
+#cb-parallax-meta-box select,
+#cb_parallax_settings_form .fancy-select div.trigger,
+#cb-parallax-meta-box .fancy-select div.trigger {
+  box-sizing: border-box;
+  width: 100%;
+  min-height: 44px;
+  padding: 0 13px;
+  border: 1px solid var(--cbp-border);
+  border-radius: 11px;
+  background: #fff;
+  box-shadow: 0 1px 2px rgba(53, 67, 57, 0.04);
+  color: var(--cbp-text);
+  line-height: 42px;
+}
+
+#cb_parallax_settings_form input:focus,
+#cb_parallax_settings_form select:focus,
+#cb-parallax-meta-box input:focus,
+#cb-parallax-meta-box select:focus,
+#cb_parallax_settings_form .fancy-select select:focus + div.trigger,
+#cb-parallax-meta-box .fancy-select select:focus + div.trigger {
+  border-color: var(--cbp-primary);
+  box-shadow: 0 0 0 3px rgba(54, 91, 66, 0.15);
+  outline: 0;
+}
+
+#cb_parallax_settings_form .fancy-select div.trigger::after,
+#cb-parallax-meta-box .fancy-select div.trigger::after {
+  top: 19px;
+  right: 15px;
+  border-top-color: var(--cbp-primary);
+}
+
+#cb_parallax_settings_form .fancy-select ul.options,
+#cb-parallax-meta-box .fancy-select ul.options {
+  top: 46px !important;
+  border: 1px solid var(--cbp-border);
+  border-radius: 12px;
+  background: var(--cbp-surface);
+  box-shadow: 0 14px 32px rgba(53, 67, 57, 0.16);
+  overflow: hidden auto;
+}
+
+#cb_parallax_settings_form .fancy-select ul.options li,
+#cb-parallax-meta-box .fancy-select ul.options li {
+  box-sizing: border-box;
+  min-height: 40px;
+  padding: 10px 12px;
+  background: var(--cbp-surface) !important;
+  color: var(--cbp-text);
+}
+
+#cb_parallax_settings_form .fancy-select ul.options li.selected,
+#cb_parallax_settings_form .fancy-select ul.options li.hover,
+#cb-parallax-meta-box .fancy-select ul.options li.selected,
+#cb-parallax-meta-box .fancy-select ul.options li.hover {
+  background: var(--cbp-surface-moss) !important;
+  color: var(--cbp-primary-strong);
+}
+
+#cb_parallax_settings_form .cb-parallax-switch,
+#cb-parallax-meta-box .cb-parallax-switch {
+  box-sizing: border-box;
+  float: none;
+  width: 54px;
+  height: 30px;
+  margin: 0;
+  padding: 3px;
+  border: 1px solid #bec6c0;
+  border-radius: 999px;
+  background: #e1e3de;
+  background-image: none;
+  box-shadow: inset 0 1px 2px rgba(53, 67, 57, 0.1);
+  transition: border-color .16s ease, background-color .16s ease, box-shadow .16s ease;
+}
+
+#cb_parallax_settings_form .cb-parallax-switch:hover,
+#cb-parallax-meta-box .cb-parallax-switch:hover {
+  border-color: #91a095;
+  background: #d4d9d4;
+}
+
+#cb_parallax_settings_form .cb-parallax-switch:has(.cb-parallax-switch-input:checked),
+#cb-parallax-meta-box .cb-parallax-switch:has(.cb-parallax-switch-input:checked) {
+  border-color: var(--cbp-primary);
+  background: var(--cbp-primary);
+}
+
+#cb_parallax_settings_form .cb-parallax-switch-label,
+#cb-parallax-meta-box .cb-parallax-switch-label {
+  background: transparent;
+  box-shadow: none;
+}
+
+#cb_parallax_settings_form .cb-parallax-switch-input:checked ~ .cb-parallax-switch-label,
+#cb-parallax-meta-box .cb-parallax-switch-input:checked ~ .cb-parallax-switch-label {
+  background: var(--cbp-primary);
+  box-shadow: none;
+}
+
+#cb_parallax_settings_form .cb-parallax-switch-handle,
+#cb-parallax-meta-box .cb-parallax-switch-handle {
+  top: 4px;
+  left: 4px;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: #fff;
+  background-image: none;
+  box-shadow: 0 2px 6px rgba(39, 50, 44, 0.22);
+}
+
+#cb_parallax_settings_form .cb-parallax-switch-handle::before,
+#cb-parallax-meta-box .cb-parallax-switch-handle::before {
+  display: none;
+}
+
+#cb_parallax_settings_form .cb-parallax-switch-input:checked ~ .cb-parallax-switch-handle,
+#cb-parallax-meta-box .cb-parallax-switch-input:checked ~ .cb-parallax-switch-handle {
+  left: 28px;
+  box-shadow: 0 2px 6px rgba(39, 50, 44, 0.22);
+}
+
+#cb_parallax_settings_form .cb-parallax-switch-input:focus-visible ~ .cb-parallax-switch-label,
+#cb-parallax-meta-box .cb-parallax-switch-input:focus-visible ~ .cb-parallax-switch-label {
+  box-shadow: none;
+}
+
+#cb_parallax_settings_form .cb-parallax-switch:has(.cb-parallax-switch-input:focus-visible),
+#cb-parallax-meta-box .cb-parallax-switch:has(.cb-parallax-switch-input:focus-visible) {
+  box-shadow: 0 0 0 4px rgba(54, 91, 66, 0.2);
+}
+
+/* Alpha color picker: one cohesive field with an anchored popover. */
+#cb_parallax_settings_form .cb-parallax-color-field,
+#cb-parallax-meta-box .cb-parallax-color-field {
+  position: relative;
+  width: 100%;
+  max-width: 360px;
+  margin: 0;
+  overflow: visible;
+}
+
+#cb_parallax_settings_form .cb-parallax-color-field > label,
+#cb-parallax-meta-box .cb-parallax-color-field > label {
+  display: block;
+  height: auto;
+  margin: 0 0 9px;
+  padding: 0;
+}
+
+#cb_parallax_settings_form .cb-parallax-single-option-container:has(.cb-parallax-color-field),
+#cb-parallax-meta-box .cb-parallax-single-option-container:has(.cb-parallax-color-field) {
+  position: relative;
+  max-height: none;
+  overflow: visible;
+}
+
+#cb_parallax_settings_form .cb-parallax-single-option-container:has(.wp-picker-open),
+#cb-parallax-meta-box .cb-parallax-single-option-container:has(.wp-picker-open) {
+  z-index: 50;
+}
+
+#cb_parallax_settings_form .cb-parallax-color-field .wp-picker-container,
+#cb-parallax-meta-box .cb-parallax-color-field .wp-picker-container {
+  position: relative;
+  display: block;
+  width: 100%;
+  overflow: visible;
+}
+
+#cb_parallax_settings_form .cb-parallax-color-field .wp-color-result.button,
+#cb-parallax-meta-box .cb-parallax-color-field .wp-color-result.button {
+  position: relative;
+  display: flex;
+  align-items: center;
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 360px;
+  min-height: 44px;
+  margin: 0;
+  padding: 0 42px 0 58px;
+  overflow: hidden;
+  border: 1px solid var(--cbp-border);
+  border-radius: 11px;
+  background: #fff;
+  box-shadow: 0 1px 2px rgba(53, 67, 57, .04);
+  color: var(--cbp-text);
+  text-align: left;
+  line-height: 1.2;
+}
+
+#cb_parallax_settings_form .cb-parallax-color-field .wp-color-result.button::after,
+#cb-parallax-meta-box .cb-parallax-color-field .wp-color-result.button::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  right: 17px;
+  width: 7px;
+  height: 7px;
+  margin-top: -5px;
+  border-right: 2px solid var(--cbp-text-soft);
+  border-bottom: 2px solid var(--cbp-text-soft);
+  transform: rotate(45deg);
+  transition: margin-top .16s ease, transform .16s ease;
+}
+
+#cb_parallax_settings_form .cb-parallax-color-field .wp-color-result.button.wp-picker-open::after,
+#cb-parallax-meta-box .cb-parallax-color-field .wp-color-result.button.wp-picker-open::after {
+  margin-top: -1px;
+  transform: rotate(225deg);
+}
+
+#cb_parallax_settings_form .cb-parallax-color-field .wp-color-result.button:hover,
+#cb-parallax-meta-box .cb-parallax-color-field .wp-color-result.button:hover {
+  border-color: rgba(54, 91, 66, .44);
+  background: #fbfaf5;
+}
+
+#cb_parallax_settings_form .cb-parallax-color-field .wp-color-result.button:focus-visible,
+#cb_parallax_settings_form .cb-parallax-color-field .wp-color-result.button.wp-picker-open,
+#cb-parallax-meta-box .cb-parallax-color-field .wp-color-result.button:focus-visible,
+#cb-parallax-meta-box .cb-parallax-color-field .wp-color-result.button.wp-picker-open {
+  border-color: var(--cbp-primary);
+  box-shadow: 0 0 0 3px rgba(54, 91, 66, .16);
+  outline: 0;
+}
+
+#cb_parallax_settings_form .cb-parallax-color-field .wp-color-result-text,
+#cb-parallax-meta-box .cb-parallax-color-field .wp-color-result-text {
+  display: block;
+  padding: 0;
+  overflow: hidden;
+  border: 0;
+  background: transparent;
+  color: var(--cbp-text-soft);
+  font-weight: 600;
+  line-height: 42px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+#cb_parallax_settings_form .cb-parallax-color-field .wp-color-result .color-alpha,
+#cb-parallax-meta-box .cb-parallax-color-field .wp-color-result .color-alpha {
+  top: 0;
+  left: 0;
+  box-sizing: border-box;
+  width: 44px;
+  height: 100%;
+  border: 0;
+  border-right: 1px solid rgba(39, 50, 44, .12);
+  border-radius: 10px 0 0 10px;
+}
+
+#cb_parallax_settings_form .cb-parallax-color-field .wp-picker-input-wrap,
+#cb-parallax-meta-box .cb-parallax-color-field .wp-picker-input-wrap {
+  box-sizing: border-box;
+  width: 100%;
+  margin: 10px 0 0;
+  padding: 0;
+  white-space: nowrap;
+}
+
+#cb_parallax_settings_form .cb-parallax-color-field .wp-picker-input-wrap label,
+#cb-parallax-meta-box .cb-parallax-color-field .wp-picker-input-wrap label {
+  display: inline-block;
+  width: calc(100% - 104px);
+  margin: 0;
+  padding: 0;
+  vertical-align: top;
+}
+
+#cb_parallax_settings_form .cb-parallax-color-field .wp-picker-input-wrap input.wp-color-picker,
+#cb-parallax-meta-box .cb-parallax-color-field .wp-picker-input-wrap input.wp-color-picker {
+  box-sizing: border-box;
+  width: 100%;
+  max-width: none;
+  min-height: 40px;
+  margin: 0;
+  padding: 0 11px;
+  border: 1px solid var(--cbp-border);
+  border-radius: 9px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 12px;
+}
+
+#cb_parallax_settings_form .cb-parallax-color-field .wp-picker-input-wrap .button,
+#cb-parallax-meta-box .cb-parallax-color-field .wp-picker-input-wrap .button {
+  min-height: 40px;
+  margin: 0 0 0 8px;
+  padding: 0 14px;
+  border: 1px solid var(--cbp-border);
+  border-radius: 9px;
+  background: var(--cbp-surface-soft);
+  color: var(--cbp-text-soft);
+  line-height: 38px;
+}
+
+#cb_parallax_settings_form .cb-parallax-color-field .wp-picker-holder,
+#cb-parallax-meta-box .cb-parallax-color-field .wp-picker-holder {
+  position: absolute;
+  z-index: 100;
+  top: calc(100% + 10px);
+  left: 0;
+}
+
+#cb_parallax_settings_form .cb-parallax-color-field .iris-picker,
+#cb-parallax-meta-box .cb-parallax-color-field .iris-picker {
+  margin: 0;
+  overflow: hidden;
+  border: 1px solid var(--cbp-border);
+  border-radius: 14px;
+  background: var(--cbp-surface);
+  box-shadow: 0 18px 44px rgba(39, 50, 44, .2), 0 3px 10px rgba(39, 50, 44, .08);
+}
+
+#cb_parallax_settings_form .cb-parallax-image-container,
+#cb-parallax-meta-box .cb-parallax-image-container {
+  box-sizing: border-box;
+  margin: 10px 0 20px;
+  border: 1px dashed rgba(54, 91, 66, 0.34);
+  border-radius: 16px;
+  background-color: var(--cbp-surface-soft);
+  overflow: hidden;
+}
+
+#cb_parallax_settings_form .cb-parallax-media-url,
+#cb-parallax-meta-box .cb-parallax-media-url {
+  min-height: 120px;
+  border-radius: inherit;
+  background-color: var(--cbp-surface-soft);
+  overflow: hidden;
+}
+
+#cb_parallax_settings_form .cb-parallax-media-url img,
+#cb-parallax-meta-box .cb-parallax-media-url img {
+  display: block;
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+}
+
+#cb_parallax_settings_form .cb_parallax_placeholder_image.hidden,
+#cb_parallax-meta-box .cb_parallax_placeholder_image.hidden,
+#cb_parallax_settings_form .cb_parallax_placeholder_image[hidden],
+#cb-parallax-meta-box .cb_parallax_placeholder_image[hidden] {
+  display: none !important;
+}
+
+#cb_parallax_settings_form .cb_parallax_placeholder_image:not([hidden]),
+#cb-parallax-meta-box .cb_parallax_placeholder_image:not([hidden]) {
+  width: 254px;
+  max-width: 100%;
+  height: 159px;
+  margin: 0 auto;
+  object-fit: contain;
+}
+
+#cb_parallax_settings_form .cb-parallax-remove-media,
+#cb-parallax-meta-box .cb-parallax-remove-media {
+  right: 12px;
+  top: 30px;
+  background: rgba(255, 253, 249, 0.92);
+  box-shadow: 0 4px 12px rgba(53, 67, 57, 0.14);
+  color: var(--cbp-danger);
+}
+
+#cb_parallax_settings_form .button,
+#cb-parallax-meta-box .button {
+  min-height: 42px;
+  margin-top: 28px !important;
+  padding: 0 20px;
+  border-radius: 999px;
+  font-weight: 600;
+  line-height: 40px;
+  transition: background-color 0.16s ease, border-color 0.16s ease, box-shadow 0.16s ease, transform 0.16s ease;
+}
+
+#cb_parallax_settings_form .button-primary,
+#cb-parallax-meta-box .button-primary {
+  border-color: var(--cbp-primary);
+  background: var(--cbp-primary);
+  color: #fff;
+}
+
+#cb_parallax_settings_form .button-primary:hover,
+#cb-parallax-meta-box .button-primary:hover {
+  border-color: var(--cbp-primary-strong);
+  background: var(--cbp-primary-strong);
+  transform: translateY(-1px);
+}
+
+#cb_parallax_settings_form .button-secondary,
+#cb-parallax-meta-box .button-secondary {
+  border-color: var(--cbp-border);
+  background: var(--cbp-surface-soft);
+  color: var(--cbp-text);
+}
+
+#cb-parallax-meta-box {
+  border-color: var(--cbp-border);
+  border-radius: 14px;
+  background: var(--cbp-surface);
+  box-shadow: 0 10px 30px rgba(53, 67, 57, 0.07);
+  overflow: hidden;
+}
+
+#cb-parallax-meta-box .postbox-header {
+  border-bottom-color: var(--cbp-border);
+  background: linear-gradient(135deg, #faf9f4, #eef1e8);
+}
+
+#cb-parallax-meta-box .inside {
+  padding: 16px;
+}
+
+#cb-parallax-meta-box .cb-parallax-single-option-container {
+  padding: 10px 12px;
+  border-radius: 12px;
+  background: #faf9f4;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cb-parallax-settings-page *,
+  .cb-parallax-settings-page *::before,
+  .cb-parallax-settings-page *::after,
+  #cb-parallax-meta-box *,
+  #cb-parallax-meta-box *::before,
+  #cb-parallax-meta-box *::after {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+  }
+}
+@media (max-width: 782px) {
+  .cb-parallax-settings-shell {
+    margin: 20px 12px 40px 2px;
+  }
+  .cb-parallax-settings-page #cb_parallax_settings_form {
+    padding: 18px;
+    border-radius: 18px;
+  }
+  .cb-parallax-page-heading {
+    align-items: flex-start;
+    padding: 20px;
+  }
+  .cb-parallax-page-mark {
+    width: 56px;
+    height: 56px;
+    flex-basis: 56px;
+    border-radius: 18px;
+  }
+  .cb-parallax-page-mark::before,
+  .cb-parallax-page-mark::after,
+  .cb-parallax-page-mark span {
+    left: 10px;
+    right: 10px;
+  }
+  .cb-parallax-page-mark::before {
+    top: 5px;
+  }
+  .cb-parallax-page-mark span {
+    top: 17px;
+  }
+  .cb-parallax-page-mark::after {
+    top: 29px;
+  }
+  #cb_parallax_settings_form .cb-parallax-single-option-container[id$=_container] > div:first-child {
+    align-items: flex-start;
+  }
+}
+
+/*# sourceMappingURL=zenchime-ui.css.map */

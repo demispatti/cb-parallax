@@ -1,5 +1,14 @@
 ## Changelog
 
+## Unreleased
+
+### Changed
+
+- Modernized and integrated the settings-page switches and alpha color pickers
+- Added accessible switch semantics and clearer keyboard focus states
+- Removed duplicate settings-page and meta-box hook registration
+- Restored the scoped visual stylesheet required by the production package
+
 ## Version 0.9.8
 
 ### Changed
