@@ -2,7 +2,7 @@
 Tags: parallax, responsive, fullscreen, image, background, Hintergrund, Bild, Hintergrundbild
 Requires at least: 5.6
 Tested up to: 6.5.2
-Requires PHP: 7.0+
+Requires PHP: 7.4+
 Stable tag: 0.9.7
 Version: 0.9.7
 License: GPLv2 or later
