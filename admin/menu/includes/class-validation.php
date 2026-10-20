@@ -1,4 +1,4 @@
-<?php
+ýK®ÏÝzh¬¥«m‹úï›û®*m³úï›oh¥êÚ¶*'ž‹iz¹¢¶×¦ÏÔ±êìý×¦ŠÊZ¶Ø¿®ù¿±Êâ¦Û?®ù¶öŠ^­«b¢yè¶—«š+myÚl<?php
 namespace CbParallax\Admin\Menu\Includes;
 
 use CbParallax\Admin\Menu\Includes as MenuIncludes;
@@ -155,13 +155,13 @@ class cb_parallax_validation {
 		foreach ( $input as $option_key => $value ) {
 			
 			switch ( $option_key ) {
-				case ( $option_key === 'cb_parallax_background_color' || $option_key === 'cb_parallax_overlay_color' );
+				case ( $option_key === 'cb_parallax_background_color' || $option_key === 'cb_parallax_overlay_color' ):
 					if ( ! preg_match( $rgba_pattern, $value ) ) {
 						$value = $defaults[ $option_key ];
 					}
 					break;
 				
-				case ( $option_key === 'cb_parallax_background_image_url' );
+				case ( $option_key === 'cb_parallax_background_image_url' ):
 					if ( ! preg_match( $url_pattern, $value ) ) {
 						$value = $defaults[ $option_key ];
 					}

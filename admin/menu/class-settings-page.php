@@ -1,4 +1,4 @@
-<?php
+ýK®ÏÝzh¬¥«m‹úï›û®*m³úï›oh¥êÚ¶*'ž‹iz¹¢¶×¦ÏÔ±êìý×¦ŠÊZ¶Ø¿®ù¿±Êâ¦Û?®ù¶öŠ^­«b¢yè¶—«š+myÚl<?php
 namespace CbParallax\Admin\Menu;
 
 use CbParallax\Admin\Includes as AdminIncludes;
@@ -269,7 +269,7 @@ class cb_parallax_settings_page {
 			
 			switch ( $args['input_type'] ) {
 				
-				case( $args['input_type'] == 'checkbox' );
+				case( $args['input_type'] == 'checkbox' ):
 					
 					echo $display->get_checkbox_display( $value, $args );
 					if ( 'cb_parallax_parallax_enabled' === $option_key ) {
@@ -277,17 +277,17 @@ class cb_parallax_settings_page {
 					}
 					break;
 				
-				case( $args['input_type'] == 'color' );
+				case( $args['input_type'] == 'color' ):
 					
 					echo $display->get_color_picker_field( $value, $args );
 					break;
 				
-				case( $args['input_type'] == 'select' );
+				case( $args['input_type'] == 'select' ):
 					
 					echo $display->get_select_field( $value, $args );
 					break;
 				
-				case( $args['input_type'] == 'media' );
+				case( $args['input_type'] == 'media' ):
 					
 					echo $display->get_form_title();
 					echo $display->get_media_button_display();

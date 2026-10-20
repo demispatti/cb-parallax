@@ -1,4 +1,4 @@
-<?php
+ýK®ÏÝzh¬¥«m‹úï›û®*m³úï›oh¥êÚ¶*'ž‹iz¹¢¶×¦ÏÔ±êìý×¦ŠÊZ¶Ø¿®ù¿±Êâ¦Û?®ù¶öŠ^­«b¢yè¶—«š+myÚl<?php
 namespace CbParallax\Admin\Menu\Includes;
 
 use CbParallax\Admin\Menu\Includes as MenuIncludes;
@@ -588,11 +588,11 @@ class cb_parallax_options {
 		
 		switch ( $section ) {
 			
-			case( 'background-image' == $section );
+			case( 'background-image' == $section ):
 				$heading = $background_image_heading;
 				break;
 			
-			case( 'plugin' == $section );
+			case( 'plugin' == $section ):
 				$heading = $plugin_heading;
 				break;
 			default:
