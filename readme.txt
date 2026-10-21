@@ -77,6 +77,10 @@ Yes! There's an option in the settings to disable the parallax effect on mobile 
 * Corrected the bundled WP Color Picker Alpha version to 3.0.4.
 * Updated SweetAlert2 to 11.26.25, Smooth Scroll to 0.4.4, and jQuery UI to 1.14.2.
 * Added third-party license and source documentation.
+* Modernized and integrated the settings-page switches and alpha color pickers.
+* Added accessible switch semantics and clearer keyboard focus states.
+* Removed duplicate settings-page and meta-box hook registration.
+* Fixed parallax redraws when iOS browser chrome changes the visual viewport.
 * Improved output escaping, internationalization, and WordPress coding-standards compliance.
 
 = 1.1.0 =
